@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chunkz - Urban Streetwear</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- FLUTTERWAVE: loaded here so FlutterwaveCheckout is available globally -->
   <script src="https://checkout.flutterwave.com/v3.js"></script>
   <style>
@@ -18,7 +19,9 @@
     /* ── Header ── */
     header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
     .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:24px;font-weight:900;letter-spacing:4px;color:#fff;text-decoration:none}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo img{height:42px;width:42px;object-fit:cover;border-radius:50%}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
     .nav-links{display:flex;gap:24px;list-style:none}
     .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
     .nav-links a:hover{color:#fff}
@@ -132,10 +135,56 @@
     .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
     .toast.show{transform:translateX(-50%) translateY(0)}
 
+    /* ── Contact Section ── */
+    .contact-section{background:#fff;padding:72px 20px}
+    .contact-inner{max-width:1100px;margin:0 auto}
+    .contact-heading{font-size:28px;font-weight:800;text-align:center;margin-bottom:52px;letter-spacing:.5px}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px;align-items:start}
+    .contact-left-title{font-size:18px;font-weight:800;margin-bottom:10px}
+    .contact-left-desc{color:#4a6080;font-size:14px;line-height:1.7;margin-bottom:28px}
+    .contact-detail{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+    .contact-detail i{font-size:15px;color:var(--black);margin-top:2px;width:18px;flex-shrink:0}
+    .contact-detail-text strong{display:block;font-size:14px;font-weight:700;margin-bottom:2px}
+    .contact-detail-text span{font-size:13px;color:#4a6080}
+    .contact-follow-title{font-size:14px;font-weight:700;margin-bottom:12px;margin-top:28px}
+    .social-icons{display:flex;gap:16px}
+    .social-icons a{color:var(--black);font-size:18px;transition:color .2s;text-decoration:none}
+    .social-icons a:hover{color:var(--accent)}
+    .contact-right-title{font-size:18px;font-weight:800;margin-bottom:22px}
+    .contact-form .cf-group{margin-bottom:16px}
+    .contact-form .cf-group label{display:block;font-size:13px;color:#4a6080;margin-bottom:6px}
+    .contact-form .cf-group input,
+    .contact-form .cf-group textarea{width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;outline:none;font-family:inherit;color:var(--black);transition:border-color .2s;background:#fff}
+    .contact-form .cf-group input:focus,
+    .contact-form .cf-group textarea:focus{border-color:#94a3b8}
+    .contact-form .cf-group textarea{resize:vertical;min-height:110px}
+    .contact-submit{background:var(--black);color:#fff;border:none;padding:13px 32px;border-radius:30px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:4px}
+    .contact-submit:hover{background:#333}
+    @media(max-width:768px){
+      .contact-grid{grid-template-columns:1fr;gap:36px}
+      .contact-section{padding:50px 16px}
+    }
+
     /* ── Footer ── */
-    footer{background:var(--black);color:#fff;padding:40px 20px;text-align:center;margin-top:60px}
-    footer .ft-logo{font-size:22px;font-weight:900;letter-spacing:4px;margin-bottom:8px}
-    footer p{color:#666;font-size:13px}
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-logo img{height:42px;width:42px;object-fit:cover;border-radius:50%}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+    @media(max-width:768px){
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+      .ft-brand-desc{max-width:100%}
+    }
+    @media(max-width:460px){
+      .ft-inner{grid-template-columns:1fr 1fr;gap:24px}
+    }
 
     /* ── Responsive ── */
     @media(max-width:768px){
@@ -150,10 +199,14 @@
 </head>
 <body>
 
+
+
+
+    
 <!-- ══════════════ HEADER ══════════════ -->
 <header>
   <div class="hdr">
-    <a href="#" class="logo">CHUNKZ</a>
+    <a href="#" class="logo"><img src="CHUNKZLOGO.jpg" alt="Chunkz"><span class="logo-name">CHUNKZ</span></a>
     <nav><ul class="nav-links">
         <li><a href="#">Home</a></li>
       <li><a href="#products">Shop</a></li>
@@ -209,26 +262,132 @@
 </div>
 
 <!-- ══════════════ ABOUT ══════════════ -->
-<section id="about" style="background:#fff;padding:60px 20px;text-align:center">
+<!-- <section id="about" style="background:#fff;padding:60px 20px;text-align:center">
   <div style="max-width:600px;margin:0 auto">
     <h2 style="font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:16px">OUR STORY</h2>
     <p style="color:#555;line-height:1.8;margin-bottom:12px">Chunkz is a Lagos-born streetwear brand built on the belief that style should be accessible, expressive, and unapologetically bold. Every piece is crafted with premium materials designed to last.</p>
     <p style="color:#555;line-height:1.8">From graphic tees to tracksuits, we cover every corner of your wardrobe. Wear the culture.</p>
   </div>
-</section>
+</section> -->
 
 <!-- ══════════════ CONTACT ══════════════ -->
-<section id="contact" style="background:var(--gray-light);padding:60px 20px;text-align:center">
-  <h2 style="font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:10px">GET IN TOUCH</h2>
-  <p style="color:#555;margin-bottom:6px">📧 support@chunkz.com</p>
-  <p style="color:#555;margin-bottom:6px">📞 +234 800 000 0000</p>
-  <p style="color:#555">📍 Lagos, Nigeria</p>
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+    <h2 class="contact-heading">Contact Us</h2>
+    <div class="contact-grid">
+
+      <!-- Left: info -->
+      <div>
+        <h3 class="contact-left-title">Get in Touch</h3>
+        <p class="contact-left-desc">Have questions about our products or need assistance with your order? Reach out to our customer service team.</p>
+
+        <div class="contact-detail">
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="contact-detail-text">
+            <strong>Our Location</strong>
+            <span>123 Fashion Ave, Los Angeles, CA 90015</span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <i class="fas fa-envelope"></i>
+          <div class="contact-detail-text">
+            <strong>Email Us</strong>
+            <span>support@chunkz.com</span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <i class="fas fa-phone-alt"></i>
+          <div class="contact-detail-text">
+            <strong>Call Us</strong>
+            <span>(555) 123-4567</span>
+          </div>
+        </div>
+
+        <div class="contact-follow-title">Follow Us</div>
+        <div class="social-icons">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div>
+        <h3 class="contact-right-title">Send Us a Message</h3>
+        <form class="contact-form" onsubmit="sendContactMessage(event)">
+          <div class="cf-group">
+            <label>Name</label>
+            <input type="text" id="ctName" placeholder="Your full name">
+          </div>
+          <div class="cf-group">
+            <label>Email</label>
+            <input type="email" id="ctEmail" placeholder="your@email.com">
+          </div>
+          <div class="cf-group">
+            <label>Subject</label>
+            <input type="text" id="ctSubject" placeholder="How can we help?">
+          </div>
+          <div class="cf-group">
+            <label>Message</label>
+            <textarea id="ctMessage" placeholder="Write your message here…"></textarea>
+          </div>
+          <button type="submit" class="contact-submit">Send Message</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer>
-  <div class="ft-logo">CHUNKZ</div>
-  <p>© 2025 Chunkz. All rights reserved. | Urban Streetwear</p>
+  <div class="ft-inner">
+
+    <!-- Brand column -->
+    <div class="ft-col">
+      <div class="ft-brand-logo"><img src="CHUNKZLOGO.jpg" alt="Chunkz"><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+
+    <!-- Shop column -->
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="#products">All Products</a></li>
+        <li><a href="#products">New Arrivals</a></li>
+        <li><a href="#products">Best Sellers</a></li>
+        <li><a href="#products">Sale</a></li>
+      </ul>
+    </div>
+
+    <!-- Customer Service column -->
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#contact">FAQs</a></li>
+        <li><a href="#contact">Shipping &amp; Returns</a></li>
+        <li><a href="#contact">Size Guide</a></li>
+      </ul>
+    </div>
+
+    <!-- Legal column -->
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
 </footer>
 
 <!-- ══════════════ MOBILE CART DRAWER ══════════════ -->
@@ -874,7 +1033,7 @@ function proceedToPayment() {
       title: 'CHUNKZ Store',
       description: 'Payment for Chunkz order',
       /* PLACEHOLDER: Replace with your actual logo URL */
-      logo: 'https://via.placeholder.com/50x50/0a0a0a/ffffff?text=CZ'
+      logo: 'CHUNKZLOGO.jpg'
     }
   });
 }
@@ -887,6 +1046,20 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTACT FORM
+═══════════════════════════════════════════════════ */
+function sendContactMessage(e) {
+  e.preventDefault();
+  const name    = document.getElementById('ctName').value.trim();
+  const email   = document.getElementById('ctEmail').value.trim();
+  const subject = document.getElementById('ctSubject').value.trim();
+  const message = document.getElementById('ctMessage').value.trim();
+  if (!name && !message) { showToast('Please fill in your name and message.'); return; }
+  showToast('Message sent! We\'ll get back to you soon.');
+  e.target.reset();
 }
 
 /* ═══════════════════════════════════════════════════
