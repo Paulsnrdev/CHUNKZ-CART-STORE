@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chunkz - Urban Streetwear</title>
+  <!-- FLUTTERWAVE: loaded here so FlutterwaveCheckout is available globally -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;
+      --gray-mid:#e0e0e0;--gray-dark:#666;
+      --accent:#e63946;--success:#2a9d8f;
+    }
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    /* ── Header ── */
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:24px;font-weight:900;letter-spacing:4px;color:#fff;text-decoration:none}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+    .hdr-right{display:flex;align-items:center;gap:12px}
+    .cart-btn{background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;transition:background .2s}
+    .cart-btn:hover{background:rgba(255,255,255,.2)}
+    .cart-badge{background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .mob-menu{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
+
+    /* ── Hero ── */
+    .hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#16213e 100%);color:#fff;padding:80px 20px;text-align:center}
+    .hero h1{font-size:clamp(36px,7vw,78px);font-weight:900;letter-spacing:5px;margin-bottom:14px}
+    .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px}
+    .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
+    .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
+    .currency-pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:5px 14px;border-radius:20px;font-size:12px;color:#aaa;margin-top:18px;display:inline-block}
+
+    /* ── Layout ── */
+    .main-wrap{max-width:1400px;margin:0 auto;padding:36px 20px;display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+    .main-wrap.has-cart{grid-template-columns:1fr 340px}
+    @media(max-width:1040px){.main-wrap.has-cart{grid-template-columns:1fr}}
+
+    /* ── Section title ── */
+    .sec-title{font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:22px}
+
+    /* ── Product grid ── */
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+
+    /* ── Product card ── */
+    .pcard{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:transform .25s,box-shadow .25s}
+    .pcard:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.14)}
+    .pcard-img{width:100%;height:200px;object-fit:cover;display:block;background:#ddd}
+    .pcard-body{padding:13px}
+    .pcard-name{font-size:14px;font-weight:700;margin-bottom:4px}
+    .pcard-price{font-size:16px;font-weight:800;color:var(--accent);margin-bottom:10px}
+    .variant-select{width:100%;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:13px;margin-bottom:10px;background:#fff;cursor:pointer;outline:none;transition:border-color .2s;font-family:inherit}
+    .variant-select:focus{border-color:var(--black)}
+    .atc-btn{width:100%;background:var(--black);color:#fff;border:none;padding:10px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s,transform .1s}
+    .atc-btn:hover{background:#333}
+    .atc-btn:active{transform:scale(.98)}
+
+    /* ── Desktop Cart Panel ── */
+    .cart-panel{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);position:sticky;top:78px;display:none}
+    .has-cart .cart-panel{display:block}
+    .cp-head{background:var(--black);color:#fff;padding:15px 18px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center}
+    .cp-head h3{font-size:15px;font-weight:700;letter-spacing:1px}
+    .cp-body{padding:14px;max-height:420px;overflow-y:auto}
+    .cp-foot{padding:14px;border-top:2px solid var(--gray-mid)}
+    .cart-empty-msg{text-align:center;padding:28px 10px;color:#999;font-size:14px}
+    .c-item{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-mid);font-size:13px}
+    .c-item:last-child{border-bottom:none}
+    .c-item-name{font-weight:600;margin-bottom:2px;font-size:13px}
+    .c-item-sub{color:#888;font-size:11px;margin-bottom:2px}
+    .c-item-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;margin-left:8px}
+    .c-item-price{font-weight:700;font-size:13px}
+    .rm-btn{background:none;border:none;color:var(--accent);cursor:pointer;font-size:11px;font-weight:600;padding:0}
+    .rm-btn:hover{text-decoration:underline}
+    .cart-total-row{display:flex;justify-content:space-between;font-size:16px;font-weight:800;margin-bottom:13px}
+    .checkout-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:13px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s}
+    .checkout-btn:hover{background:#c1121f}
+
+    /* ── Mobile Cart Drawer ── */
+    .cart-drawer{display:none;position:fixed;top:0;right:0;width:100%;max-width:380px;height:100vh;background:#fff;z-index:220;transform:translateX(100%);transition:transform .3s ease;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,.2)}
+    .cart-drawer.open{transform:translateX(0)}
+    .drw-head{background:var(--black);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center}
+    .drw-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1}
+    .drw-body{padding:14px}
+    .drw-foot{padding:0 14px 14px}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200}
+    .overlay.on{display:block}
+    @media(max-width:1040px){
+      .cart-drawer{display:block}
+      .cart-panel{display:none}
+      .mob-menu{display:block}
+      .nav-links{display:none}
+    }
+
+    /* ── Modal ── */
+    .modal{display:none;position:fixed;inset:0;z-index:300;align-items:center;justify-content:center;padding:16px}
+    .modal.on{display:flex}
+    .modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.7)}
+    .modal-box{position:relative;background:#fff;border-radius:14px;padding:28px;max-width:520px;width:100%;max-height:92vh;overflow-y:auto;z-index:1}
+    .modal-title{font-size:20px;font-weight:800;margin-bottom:20px;letter-spacing:1px}
+    .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#666;line-height:1}
+    .modal-close:hover{color:#000}
+    .fg{margin-bottom:14px}
+    .fg label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#333;text-transform:uppercase;letter-spacing:.5px}
+    .fg input,.fg textarea{width:100%;padding:10px 13px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;outline:none;transition:border-color .2s;font-family:inherit}
+    .fg input:focus,.fg textarea:focus{border-color:var(--black)}
+    .fg textarea{resize:vertical;min-height:72px}
+    .req{color:var(--accent)}
+    .order-summary{background:var(--gray-light);border-radius:8px;padding:13px;margin-bottom:18px;font-size:13px}
+    .os-title{font-weight:700;margin-bottom:8px;font-size:14px}
+    .os-item{display:flex;justify-content:space-between;padding:3px 0;color:#555}
+    .os-total{display:flex;justify-content:space-between;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-mid);font-size:15px}
+    .place-btn{width:100%;background:var(--black);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s;margin-top:6px}
+    .place-btn:hover{background:#333}
+    .place-btn:disabled{background:#aaa;cursor:not-allowed}
+    .err-box{background:#fee2e2;color:#b91c1c;padding:10px 13px;border-radius:8px;font-size:13px;margin-bottom:12px}
+    .success-box{text-align:center;padding:16px 0}
+    .success-icon{font-size:48px;margin-bottom:14px}
+    .success-title{font-size:20px;font-weight:800;margin-bottom:8px;color:var(--success)}
+    .success-sub{color:#555;margin-bottom:22px;font-size:14px;line-height:1.6}
+    .pay-btn{background:var(--success);color:#fff;border:none;padding:13px 30px;border-radius:30px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+    .pay-btn:hover{background:#21867a}
+    .pay-result{display:none;text-align:center;padding:14px;border-radius:8px;margin-top:14px;font-weight:600;font-size:14px}
+    .pay-result.ok{background:#d1fae5;color:#065f46}
+    .pay-result.fail{background:#fee2e2;color:#b91c1c}
+
+    /* ── Toast ── */
+    .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+
+    /* ── Footer ── */
+    footer{background:var(--black);color:#fff;padding:40px 20px;text-align:center;margin-top:60px}
+    footer .ft-logo{font-size:22px;font-weight:900;letter-spacing:4px;margin-bottom:8px}
+    footer p{color:#666;font-size:13px}
+
+    /* ── Responsive ── */
+    @media(max-width:768px){
+      .hero{padding:60px 16px}
+      .products-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+      .main-wrap{padding:20px 14px}
+    }
+    @media(max-width:460px){
+      .products-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="hdr">
+    <a href="#" class="logo">CHUNKZ</a>
+    <nav><ul class="nav-links">
+      <li><a href="#products">Shop</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul></nav>
+    <div class="hdr-right">
+      <button class="cart-btn" id="cartToggle" onclick="toggleDrawer()">
+        🛒 Cart <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <button class="mob-menu" onclick="toggleDrawer()">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <h1>CHUNKZ</h1>
+  <p>Urban Streetwear. Premium Quality. Your Style.</p>
+  <a href="#products" class="hero-cta">Shop the Collection</a>
+  <div class="currency-pill" id="currPill">Detecting your location…</div>
+</section>
+
+<!-- ══════════════ MAIN LAYOUT ══════════════ -->
+<div class="main-wrap" id="mainWrap">
+
+  <!-- Products column -->
+  <div id="products">
+    <h2 class="sec-title">OUR COLLECTION</h2>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <!-- Desktop cart column -->
+  <div>
+    <div class="cart-panel">
+      <div class="cp-head">
+        <h3>🛒 YOUR CART</h3>
+        <span id="deskCount" style="font-size:12px;color:#aaa">0 items</span>
+      </div>
+      <div class="cp-body" id="deskCartBody">
+        <div class="cart-empty-msg">🛍️<br>Your cart is empty</div>
+      </div>
+      <div class="cp-foot" id="deskCartFoot" style="display:none">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span id="deskTotal">₦0</span>
+        </div>
+        <button class="checkout-btn" onclick="openCheckout()">CHECKOUT →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<section id="about" style="background:#fff;padding:60px 20px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <h2 style="font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:16px">OUR STORY</h2>
+    <p style="color:#555;line-height:1.8;margin-bottom:12px">Chunkz is a Lagos-born streetwear brand built on the belief that style should be accessible, expressive, and unapologetically bold. Every piece is crafted with premium materials designed to last.</p>
+    <p style="color:#555;line-height:1.8">From graphic tees to tracksuits, we cover every corner of your wardrobe. Wear the culture.</p>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<section id="contact" style="background:var(--gray-light);padding:60px 20px;text-align:center">
+  <h2 style="font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:10px">GET IN TOUCH</h2>
+  <p style="color:#555;margin-bottom:6px">📧 support@chunkz.com</p>
+  <p style="color:#555;margin-bottom:6px">📞 +234 800 000 0000</p>
+  <p style="color:#555">📍 Lagos, Nigeria</p>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="ft-logo">CHUNKZ</div>
+  <p>© 2025 Chunkz. All rights reserved. | Urban Streetwear</p>
+</footer>
+
+<!-- ══════════════ MOBILE CART DRAWER ══════════════ -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drw-head">
+    <span style="font-size:15px;font-weight:700;letter-spacing:1px">🛒 YOUR CART</span>
+    <button class="drw-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drw-body" id="mobileCartBody">
+    <div class="cart-empty-msg">🛍️<br>Your cart is empty</div>
+  </div>
+  <div class="drw-foot" id="mobileCartFoot" style="display:none">
+    <div class="cart-total-row" style="padding:14px 0 10px">
+      <span>Total</span>
+      <span id="mobileTotal">₦0</span>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout();closeDrawer()">CHECKOUT →</button>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<!-- ══════════════ CHECKOUT MODAL ══════════════ -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-bg" onclick="closeCheckout()"></div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+
+    <!-- FORM STATE -->
+    <div id="formState">
+      <h2 class="modal-title">CHECKOUT</h2>
+      <div class="order-summary">
+        <div class="os-title">Order Summary</div>
+        <div id="osSummaryItems"></div>
+        <div class="os-total">
+          <span>Total</span>
+          <span id="osSummaryTotal"></span>
+        </div>
+      </div>
+      <div class="err-box" id="formErr" style="display:none"></div>
+      <form id="checkoutForm" onsubmit="submitOrder(event)">
+        <div class="fg">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="cName" required placeholder="John Doe">
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" id="cEmail" placeholder="john@example.com">
+        </div>
+        <div class="fg">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="cPhone" required placeholder="+234 800 000 0000">
+        </div>
+        <div class="fg">
+          <label>Colour Preference</label>
+          <input type="text" id="cColour" placeholder="e.g. Black, Navy Blue, White">
+        </div>
+        <div class="fg">
+          <label>Description / Clarity Note</label>
+          <textarea id="cDesc" placeholder="Any special requests or notes for your order…"></textarea>
+        </div>
+        <div class="fg">
+          <label>Delivery Address <span class="req">*</span></label>
+          <textarea id="cAddress" required placeholder="123 Main Street, Ikeja, Lagos, Nigeria" style="min-height:70px"></textarea>
+        </div>
+        <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER (SEND TO MERCHANT) →</button>
+      </form>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="successState" style="display:none">
+      <div class="success-box">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Order Sent to Merchant!</div>
+        <p class="success-sub">Your order details have been received by our team.<br>Proceed to payment to complete your purchase.</p>
+        <button class="pay-btn" id="payBtn" onclick="proceedToPayment()">💳 PROCEED TO PAYMENT</button>
+        <div class="pay-result" id="payResult"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+/* ═══════════════════════════════════════════════════
+   PRODUCTS DATA
+   PLACEHOLDER: Adjust prices as needed per product
+═══════════════════════════════════════════════════ */
+const PRODUCTS = [
+  {
+    id:'shirts', name:'Shirts',
+    image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80',
+    sub:['Classic Fit Shirt','Oversized Shirt','Graphic Print Shirt','Plain Shirt','Striped Shirt'],
+    prices:{
+      NG:{amount:15000,currency:'NGN',symbol:'₦'},
+      US:{amount:15,currency:'USD',symbol:'$'},
+      GB:{amount:12,currency:'GBP',symbol:'£'},
+      CA:{amount:20,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'hoodie', name:'Hoodie',
+    image:'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&q=80',
+    sub:['Pullover Hoodie','Zip-Up Hoodie','Oversized Hoodie','Crop Hoodie','Graphic Hoodie'],
+    prices:{
+      NG:{amount:25000,currency:'NGN',symbol:'₦'},
+      US:{amount:25,currency:'USD',symbol:'$'},
+      GB:{amount:20,currency:'GBP',symbol:'£'},
+      CA:{amount:33,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'sweatpant', name:'Sweatpant',
+    image:'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&q=80',
+    sub:['Slim Fit Sweatpant','Relaxed Fit Sweatpant','Jogger Sweatpant','Wide Leg Sweatpant'],
+    prices:{
+      NG:{amount:20000,currency:'NGN',symbol:'₦'},
+      US:{amount:20,currency:'USD',symbol:'$'},
+      GB:{amount:16,currency:'GBP',symbol:'£'},
+      CA:{amount:27,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'tracksuit', name:'Tracksuit',
+    image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
+    sub:['Classic Tracksuit Set','Premium Tracksuit Set','Retro Tracksuit Set','Slim Fit Tracksuit'],
+    prices:{
+      NG:{amount:35000,currency:'NGN',symbol:'₦'},
+      US:{amount:35,currency:'USD',symbol:'$'},
+      GB:{amount:28,currency:'GBP',symbol:'£'},
+      CA:{amount:45,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'jersey', name:'Jersey',
+    image:'https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&q=80',
+    sub:['Basketball Jersey','Football Jersey','Mesh Jersey','Numbered Jersey','Graphic Jersey'],
+    prices:{
+      NG:{amount:18000,currency:'NGN',symbol:'₦'},
+      US:{amount:18,currency:'USD',symbol:'$'},
+      GB:{amount:14,currency:'GBP',symbol:'£'},
+      CA:{amount:24,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'tanktop', name:'Tanktop',
+    image:'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&q=80',
+    sub:['Ribbed Tanktop','Athletic Tanktop','Oversized Tanktop','Graphic Tanktop'],
+    prices:{
+      NG:{amount:10000,currency:'NGN',symbol:'₦'},
+      US:{amount:10,currency:'USD',symbol:'$'},
+      GB:{amount:8,currency:'GBP',symbol:'£'},
+      CA:{amount:13,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'croptop', name:'CropTop',
+    image:'https://images.unsplash.com/photo-1571455786673-9d9d6c194f90?w=400&q=80',
+    sub:['Classic Crop Top','Fitted Crop Top','Graphic Crop Top','Ribbed Crop Top'],
+    prices:{
+      NG:{amount:12000,currency:'NGN',symbol:'₦'},
+      US:{amount:12,currency:'USD',symbol:'$'},
+      GB:{amount:10,currency:'GBP',symbol:'£'},
+      CA:{amount:16,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'shorts', name:'Shorts',
+    image:'https://images.unsplash.com/photo-1591195853828-11db59a44f43?w=400&q=80',
+    sub:['Athletic Shorts','Cargo Shorts','Bermuda Shorts','Biker Shorts','Board Shorts'],
+    prices:{
+      NG:{amount:15000,currency:'NGN',symbol:'₦'},
+      US:{amount:15,currency:'USD',symbol:'$'},
+      GB:{amount:12,currency:'GBP',symbol:'£'},
+      CA:{amount:20,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'truckerhat', name:'Trucker Hat',
+    image:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&q=80',
+    sub:['Classic Logo Trucker','Embroidered Trucker','Flat Brim Trucker','Snapback Trucker'],
+    prices:{
+      NG:{amount:12000,currency:'NGN',symbol:'₦'},
+      US:{amount:12,currency:'USD',symbol:'$'},
+      GB:{amount:10,currency:'GBP',symbol:'£'},
+      CA:{amount:16,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'sweatshirt', name:'Sweatshirt',
+    image:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80',
+    sub:['Crewneck Sweatshirt','Graphic Sweatshirt','Oversized Sweatshirt','Vintage Sweatshirt'],
+    prices:{
+      NG:{amount:22000,currency:'NGN',symbol:'₦'},
+      US:{amount:22,currency:'USD',symbol:'$'},
+      GB:{amount:18,currency:'GBP',symbol:'£'},
+      CA:{amount:29,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'polo', name:'Polo',
+    image:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&q=80',
+    sub:['Classic Polo','Pique Polo','Longline Polo','Slim Fit Polo'],
+    prices:{
+      NG:{amount:18000,currency:'NGN',symbol:'₦'},
+      US:{amount:18,currency:'USD',symbol:'$'},
+      GB:{amount:14,currency:'GBP',symbol:'£'},
+      CA:{amount:24,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'jortscargo', name:'Jorts / Cargo',
+    image:'https://images.unsplash.com/photo-1624378441864-6359b5f09506?w=400&q=80',
+    sub:['Denim Jorts','Cargo Shorts','Multi-Pocket Cargo','Relaxed Cargo Pants'],
+    prices:{
+      NG:{amount:20000,currency:'NGN',symbol:'₦'},
+      US:{amount:20,currency:'USD',symbol:'$'},
+      GB:{amount:16,currency:'GBP',symbol:'£'},
+      CA:{amount:27,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'quarterzip', name:'Quarter Zip',
+    image:'https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=400&q=80',
+    sub:['Classic Quarter Zip','Fleece Quarter Zip','Lightweight Quarter Zip','Graphic Quarter Zip'],
+    prices:{
+      NG:{amount:28000,currency:'NGN',symbol:'₦'},
+      US:{amount:28,currency:'USD',symbol:'$'},
+      GB:{amount:22,currency:'GBP',symbol:'£'},
+      CA:{amount:37,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'raglanls', name:'Raglan Longsleeve',
+    image:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&q=80',
+    sub:['Classic Raglan LS','Striped Raglan LS','Graphic Raglan LS','Colourblock Raglan LS'],
+    prices:{
+      NG:{amount:18000,currency:'NGN',symbol:'₦'},
+      US:{amount:18,currency:'USD',symbol:'$'},
+      GB:{amount:14,currency:'GBP',symbol:'£'},
+      CA:{amount:24,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'raglanshirt', name:'Raglan Shirt',
+    image:'https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=400&q=80',
+    sub:['Classic Raglan Shirt','Striped Raglan Shirt','Graphic Raglan Shirt','Colourblock Raglan Shirt'],
+    prices:{
+      NG:{amount:15000,currency:'NGN',symbol:'₦'},
+      US:{amount:15,currency:'USD',symbol:'$'},
+      GB:{amount:12,currency:'GBP',symbol:'£'},
+      CA:{amount:20,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'socks', name:'Socks',
+    image:'https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=400&q=80',
+    sub:['Ankle Socks','Crew Socks','Long Socks','Gripper Socks'],
+    prices:{
+      NG:{amount:5000,currency:'NGN',symbol:'₦'},
+      US:{amount:5,currency:'USD',symbol:'$'},
+      GB:{amount:4,currency:'GBP',symbol:'£'},
+      CA:{amount:7,currency:'CAD',symbol:'CA$'}
+    }
+  },
+  {
+    id:'combo', name:'Chunkz Combo',
+    image:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80',
+    sub:['Hoodie + Sweatpant Set','Tracksuit Complete Set','Shirt + Shorts Set','Full Outfit Bundle'],
+    prices:{
+      NG:{amount:45000,currency:'NGN',symbol:'₦'},
+      US:{amount:45,currency:'USD',symbol:'$'},
+      GB:{amount:36,currency:'GBP',symbol:'£'},
+      CA:{amount:60,currency:'CAD',symbol:'CA$'}
+    }
+  }
+];
+
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+let cart = [];
+let userCountry = 'NG';
+let checkoutAmount = 0;
+let checkoutCurrency = 'NGN';
+let customer = {};
+
+/* ═══════════════════════════════════════════════════
+   COUNTRY DETECTION — tries 3 APIs in sequence
+   so a rate-limit or CORS block on one won't break it
+═══════════════════════════════════════════════════ */
+const GEO_APIS = [
+  {
+    url: 'https://ipinfo.io/json',
+    extract: d => ({ code: d.country, name: d.country })
+  },
+  {
+    url: 'https://ipapi.co/json/',
+    extract: d => ({ code: d.country_code || d.country, name: d.country_name || d.country })
+  },
+  {
+    url: 'https://freeipapi.com/api/json',
+    extract: d => ({ code: d.countryCode, name: d.countryName })
+  }
+];
+
+async function detectCountry() {
+  for (const api of GEO_APIS) {
+    try {
+      const res = await fetch(api.url, { signal: AbortSignal.timeout(5000) });
+      if (!res.ok) continue;
+      const data = await res.json();
+      const { code, name } = api.extract(data);
+      if (code && /^[A-Z]{2}$/i.test(code)) {
+        userCountry = code.toUpperCase();
+        document.getElementById('currPill').textContent =
+          'Showing prices for: ' + (name || userCountry);
+        renderProducts();
+        refreshCartUI();
+        return;
+      }
+    } catch (_) {
+      // try next API
+    }
+  }
+  // All APIs failed — stay on NGN default
+  userCountry = 'NG';
+  document.getElementById('currPill').textContent = 'Prices in NGN (₦)';
+  renderProducts();
+}
+
+function getPrice(p) {
+  return p.prices[userCountry] || p.prices['NG'];
+}
+
+function fmt(priceObj) {
+  return priceObj.symbol + priceObj.amount.toLocaleString();
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER PRODUCTS
+═══════════════════════════════════════════════════ */
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  PRODUCTS.forEach(p => {
+    const pr = getPrice(p);
+    const card = document.createElement('div');
+    card.className = 'pcard';
+    card.innerHTML =
+      '<img class="pcard-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy">' +
+      '<div class="pcard-body">' +
+        '<div class="pcard-name">' + p.name + '</div>' +
+        '<div class="pcard-price">' + fmt(pr) + '</div>' +
+        '<select class="variant-select" id="v-' + p.id + '">' +
+          '<option value="">— Select Style —</option>' +
+          p.sub.map(s => '<option value="' + s + '">' + s + '</option>').join('') +
+        '</select>' +
+        '<button class="atc-btn" onclick="addToCart(\'' + p.id + '\')">+ ADD TO CART</button>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CART OPERATIONS
+═══════════════════════════════════════════════════ */
+function addToCart(pid) {
+  const prod = PRODUCTS.find(p => p.id === pid);
+  if (!prod) return;
+  const sel = document.getElementById('v-' + pid);
+  const variant = sel ? sel.value : '';
+  if (!variant) { showToast('Please select a style first!'); if(sel)sel.focus(); return; }
+  const pr = getPrice(prod);
+  const key = pid + '|' + variant;
+  const existing = cart.find(i => i.key === key);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ key, pid, name: prod.name, variant, price: pr.amount, symbol: pr.symbol, currency: pr.currency, qty: 1 });
+  }
+  saveCart();
+  refreshCartUI();
+  showToast(variant + ' added to cart!');
+}
+
+function removeFromCart(key) {
+  cart = cart.filter(i => i.key !== key);
+  saveCart();
+  refreshCartUI();
+}
+
+function cartTotal() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
+
+function cartCount() {
+  return cart.reduce((s, i) => s + i.qty, 0);
+}
+
+function cartSymbol() {
+  if (cart.length) return cart[0].symbol;
+  return (PRODUCTS[0].prices[userCountry] || PRODUCTS[0].prices['NG']).symbol;
+}
+
+function cartCurrencyCode() {
+  if (cart.length) return cart[0].currency;
+  return (PRODUCTS[0].prices[userCountry] || PRODUCTS[0].prices['NG']).currency;
+}
+
+function saveCart() {
+  try { localStorage.setItem('chunkz_v2_cart', JSON.stringify(cart)); } catch(e){}
+}
+
+function loadCart() {
+  try {
+    const raw = localStorage.getItem('chunkz_v2_cart');
+    if (raw) cart = JSON.parse(raw);
+  } catch(e) { cart = []; }
+}
+
+/* ═══════════════════════════════════════════════════
+   CART HTML BUILDER
+═══════════════════════════════════════════════════ */
+function buildCartHTML() {
+  if (!cart.length) return '<div class="cart-empty-msg">🛍️<br>Your cart is empty</div>';
+  const sym = cartSymbol();
+  return cart.map(i =>
+    '<div class="c-item">' +
+      '<div>' +
+        '<div class="c-item-name">' + i.name + '</div>' +
+        '<div class="c-item-sub">' + i.variant + '</div>' +
+        '<div class="c-item-sub">' + sym + i.price.toLocaleString() + ' × ' + i.qty + '</div>' +
+      '</div>' +
+      '<div class="c-item-right">' +
+        '<div class="c-item-price">' + sym + (i.price * i.qty).toLocaleString() + '</div>' +
+        '<button class="rm-btn" onclick="removeFromCart(\'' + i.key.replace(/'/g,"\\'") + '\')">Remove</button>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   REFRESH ALL CART UI
+═══════════════════════════════════════════════════ */
+function refreshCartUI() {
+  const cnt = cartCount();
+  const tot = cartTotal();
+  const sym = cartSymbol();
+  const totStr = sym + tot.toLocaleString();
+  const html = buildCartHTML();
+  const hasItems = cart.length > 0;
+
+  // Toggle sidebar layout
+  const wrap = document.getElementById('mainWrap');
+  if (wrap) wrap.classList.toggle('has-cart', hasItems);
+
+  // Badge
+  const badge = document.getElementById('cartBadge');
+  if (badge) badge.textContent = cnt;
+
+  // Desktop
+  const deskBody = document.getElementById('deskCartBody');
+  if (deskBody) deskBody.innerHTML = html;
+  const deskCount = document.getElementById('deskCount');
+  if (deskCount) deskCount.textContent = cnt + ' item' + (cnt !== 1 ? 's' : '');
+  const deskFoot = document.getElementById('deskCartFoot');
+  if (deskFoot) deskFoot.style.display = hasItems ? 'block' : 'none';
+  const deskTot = document.getElementById('deskTotal');
+  if (deskTot) deskTot.textContent = totStr;
+
+  // Mobile drawer
+  const mobBody = document.getElementById('mobileCartBody');
+  if (mobBody) mobBody.innerHTML = html;
+  const mobFoot = document.getElementById('mobileCartFoot');
+  if (mobFoot) mobFoot.style.display = hasItems ? 'block' : 'none';
+  const mobTot = document.getElementById('mobileTotal');
+  if (mobTot) mobTot.textContent = totStr;
+}
+
+/* ═══════════════════════════════════════════════════
+   DRAWER TOGGLE
+═══════════════════════════════════════════════════ */
+function toggleDrawer() {
+  const d = document.getElementById('cartDrawer');
+  d.classList.contains('open') ? closeDrawer() : openDrawer();
+}
+function openDrawer() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+/* ═══════════════════════════════════════════════════
+   CHECKOUT MODAL
+═══════════════════════════════════════════════════ */
+function openCheckout() {
+  if (!cart.length) { showToast('Your cart is empty!'); return; }
+  // Reset to form
+  document.getElementById('formState').style.display = 'block';
+  document.getElementById('successState').style.display = 'none';
+  document.getElementById('formErr').style.display = 'none';
+  // Populate summary
+  const sym = cartSymbol();
+  document.getElementById('osSummaryItems').innerHTML =
+    cart.map(i =>
+      '<div class="os-item"><span>' + i.name + ' – ' + i.variant + ' ×' + i.qty + '</span>' +
+      '<span>' + sym + (i.price * i.qty).toLocaleString() + '</span></div>'
+    ).join('');
+  document.getElementById('osSummaryTotal').textContent = sym + cartTotal().toLocaleString();
+  document.getElementById('checkoutModal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+/* ═══════════════════════════════════════════════════
+   SUBMIT ORDER TO FORMSPREE
+   PLACEHOLDER endpoint: https://formspree.io/f/xvgqyrok
+═══════════════════════════════════════════════════ */
+async function submitOrder(e) {
+  e.preventDefault();
+  const name    = document.getElementById('cName').value.trim();
+  const email   = document.getElementById('cEmail').value.trim();
+  const phone   = document.getElementById('cPhone').value.trim();
+  const colour  = document.getElementById('cColour').value.trim();
+  const desc    = document.getElementById('cDesc').value.trim();
+  const address = document.getElementById('cAddress').value.trim();
+
+  if (!name || !phone || !address) {
+    showErr('Please fill in all required fields (Name, Phone, Delivery Address).');
+    return;
+  }
+
+  const sym = cartSymbol();
+  const total = cartTotal();
+  const currCode = cartCurrencyCode();
+
+  const itemLines = cart.map(i =>
+    i.name + ' – ' + i.variant + ' (x' + i.qty + ') @ ' + sym + i.price.toLocaleString() +
+    ' = ' + sym + (i.price * i.qty).toLocaleString()
+  ).join('\n');
+
+  const payload = {
+    customer_name:     name,
+    customer_email:    email || 'Not provided',
+    customer_phone:    phone,
+    colour_preference: colour || 'Not specified',
+    description_note:  desc || 'None',
+    delivery_address:  address,
+    order_items:       itemLines,
+    order_total:       sym + total.toLocaleString() + ' ' + currCode,
+    currency:          currCode,
+    order_date:        new Date().toLocaleString('en-NG')
+  };
+
+  const btn = document.getElementById('placeBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending Order…';
+
+  try {
+    /* PLACEHOLDER: Replace endpoint below with your actual Formspree URL if needed */
+    const res = await fetch('https://formspree.io/f/xvgqyrok', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      customer = { name, email, phone, address };
+      checkoutAmount = total;
+      checkoutCurrency = currCode;
+      // Clear cart
+      cart = [];
+      saveCart();
+      refreshCartUI();
+      // Show success
+      document.getElementById('formState').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      showErr(data.error || 'Order failed. Please try again.');
+    }
+  } catch(err) {
+    showErr('Network error. Check your connection and try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'PLACE ORDER (SEND TO MERCHANT) →';
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('formErr');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ═══════════════════════════════════════════════════
+   FLUTTERWAVE PAYMENT
+   PLACEHOLDER public key: FLWPUBK-9871f55d1138394925f7fe1b94eb0a85-X
+   Replace with your real key before going live.
+═══════════════════════════════════════════════════ */
+function proceedToPayment() {
+  const resultEl = document.getElementById('payResult');
+  resultEl.style.display = 'none';
+
+  FlutterwaveCheckout({
+    /* PLACEHOLDER: Replace with your actual Flutterwave public key */
+    public_key: 'FLWPUBK-9871f55d1138394925f7fe1b94eb0a85-X',
+    tx_ref: 'ORDER-' + Date.now(),
+    amount: checkoutAmount,
+    currency: checkoutCurrency,
+    payment_options: 'card, banktransfer, ussd',
+    customer: {
+      email:        customer.email || 'customer@chunkz.com',
+      phone_number: customer.phone,
+      name:         customer.name
+    },
+    callback: function(response) {
+      resultEl.className = 'pay-result ok';
+      resultEl.textContent = '✅ Payment successful! We\'ll process your order shortly.';
+      resultEl.style.display = 'block';
+      document.getElementById('payBtn').style.display = 'none';
+    },
+    onclose: function() {
+      resultEl.className = 'pay-result fail';
+      resultEl.textContent = '⚠️ Payment not completed. You can try again.';
+      resultEl.style.display = 'block';
+    },
+    customizations: {
+      title: 'CHUNKZ Store',
+      description: 'Payment for Chunkz order',
+      /* PLACEHOLDER: Replace with your actual logo URL */
+      logo: 'https://via.placeholder.com/50x50/0a0a0a/ffffff?text=CZ'
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+loadCart();
+renderProducts();   // render immediately with NG default so page isn't blank
+refreshCartUI();
+detectCountry();    // re-renders with correct local currency once IP resolves
+</script>
+</body>
+</html>
