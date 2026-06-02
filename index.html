@@ -1604,6 +1604,26 @@ loadCart();
 renderCategories();  // render immediately with NG default so page isn't blank
 refreshCartUI();
 detectCountry();     // re-renders with correct local currency once IP resolves
+
+// Set favicon as a perfect circle by drawing the logo onto a clipped canvas
+(function() {
+  const img = new Image();
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(32, 32, 32, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(img, 0, 0, 64, 64);
+    const link = document.querySelector("link[rel='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = canvas.toDataURL('image/png');
+    document.head.appendChild(link);
+  };
+  img.src = 'CHUNKZLOGO.jpg';
+})();
 </script>
 </body>
 </html>
