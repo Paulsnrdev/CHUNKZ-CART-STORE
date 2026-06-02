@@ -4,9 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chunkz - Urban Streetwear</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- FLUTTERWAVE: loaded here so FlutterwaveCheckout is available globally -->
-  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  
+  <meta name="description" content="Urban Streetwear. Premium quality clothing including tees, hoodies, tracksuits, jerseys and more.">
+  <meta property="og:title" content="Chunkz - Urban Streetwear" />
+  <meta property="og:description" content="Urban Streetwear. Premium quality tees, hoodies, tracksuits, jerseys and more." />
+  <meta property="og:image" content="CHUNKZLOGO.jpg" />
+  <meta property="og:url" content="https://chunkz-store.vercel.app" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg" />
+
+  <!-- Preconnect to speed up external resource fetches -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://checkout.flutterwave.com">
+  <link rel="dns-prefetch" href="https://ipinfo.io">
+  <link rel="dns-prefetch" href="https://ipapi.co">
+  <!-- Preload logo so header renders without delay -->
+  <link rel="preload" href="CHUNKZLOGO.jpg" as="image">
+  <!-- Font Awesome loaded async to avoid blocking render -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -563,6 +579,8 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- FLUTTERWAVE: deferred so it doesn't block page rendering -->
+<script src="https://checkout.flutterwave.com/v3.js" defer></script>
 
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
@@ -1097,7 +1115,7 @@ function renderCategories() {
     const card = document.createElement('div');
     card.className = 'cat-card';
     const imgHtml = cat.coverImage
-      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="lazy" onerror="this.style.display=\'none\'">'
+      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\'">'
       : '<div class="cat-img-placeholder"><span>' + cat.title[0] + '</span></div>';
     card.innerHTML =
       '<div class="cat-img-wrap">' + imgHtml + '</div>' +
@@ -1137,7 +1155,7 @@ function openGallery(catKey) {
       const name     = cleanImageName(src);
       return '<div class="prod-card">' +
         '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-          '<img src="' + esc(src) + '" alt="' + esc(name) + '" loading="lazy">' +
+          '<img src="' + esc(src) + '" alt="' + esc(name) + '" loading="lazy" decoding="async">' +
         '</div>' +
         '<div class="prod-body">' +
           '<div class="prod-name">' + name + '</div>' +
