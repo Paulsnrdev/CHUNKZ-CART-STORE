@@ -1246,7 +1246,7 @@ function appendGalleryItems(catKey, from, to) {
     card.className = 'prod-card';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-        '<img src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async" onload="markImageReady(this)">' +
+        '<img data-src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async">' +
       '</div>' +
       '<div class="prod-body">' +
         '<div class="prod-name">' + name + '</div>' +
@@ -1255,8 +1255,9 @@ function appendGalleryItems(catKey, from, to) {
         '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
       '</div>';
     const img = card.querySelector('img');
-    if (img.complete) markImageReady(img);
+    img.addEventListener('load', function() { markImageReady(this); });
     grid.appendChild(card);
+    if (galleryObserver) galleryObserver.observe(img);
   }
 }
 
