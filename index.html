@@ -1094,6 +1094,24 @@ function markImageReady(img) {
   if (img.parentElement) img.parentElement.classList.add('img-loaded');
 }
 
+var galleryObserver;
+function setupGalleryObserver() {
+  if (galleryObserver) galleryObserver.disconnect();
+  const isMobile = window.innerWidth < 600;
+  const margin = isMobile ? '200px 0px' : '400px 0px';
+  galleryObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+      }
+    });
+  }, { rootMargin: margin });
+}
+
 /* ═══════════════════════════════════════════════════
    COUNTRY DETECTION
 ═══════════════════════════════════════════════════ */
@@ -1246,7 +1264,7 @@ function appendGalleryItems(catKey, from, to) {
     card.className = 'prod-card';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-        '<img data-src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async">' +
+        '<img src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async" onload="markImageReady(this)">' +
       '</div>' +
       '<div class="prod-body">' +
         '<div class="prod-name">' + name + '</div>' +
@@ -1255,9 +1273,8 @@ function appendGalleryItems(catKey, from, to) {
         '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
       '</div>';
     const img = card.querySelector('img');
-    img.addEventListener('load', function() { markImageReady(this); });
+    if (img.complete) markImageReady(img);
     grid.appendChild(card);
-    if (galleryObserver) galleryObserver.observe(img);
   }
 }
 
