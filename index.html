@@ -1232,6 +1232,11 @@ function openGallery(catKey) {
   const atcBtn = document.getElementById('galAtcBtn');
   atcBtn.onclick = function() { addToCart(catKey); };
 
+  const modal = document.getElementById('galleryModal');
+  modal.classList.add('open');
+  modal.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
   setupGalleryObserver();
@@ -1241,9 +1246,6 @@ function openGallery(catKey) {
   } else {
     appendGalleryItems(catKey, 0, cat.images.length);
   }
-
-  document.getElementById('galleryModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
 
 function closeGallery() {
