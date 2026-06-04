@@ -1089,32 +1089,9 @@ let pendingOrder = null;
 // Gallery / lightbox state
 let activeGalleryCat = null;
 let activeLightboxIndex = 0;
-let galleryObserver = null;
-
 function markImageReady(img) {
   img.classList.add('img-ready');
   if (img.parentElement) img.parentElement.classList.add('img-loaded');
-}
-
-function setupGalleryObserver() {
-  if (galleryObserver) galleryObserver.disconnect();
-  const isMobile = window.innerWidth < 600;
-  const margin = isMobile ? '200px 0px' : '400px 0px';
-  galleryObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) return;
-      var img = entry.target;
-      if (img.dataset.src) {
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-      }
-      galleryObserver.unobserve(img);
-    });
-  }, {
-    root: document.getElementById('galleryModal'),
-    rootMargin: margin,
-    threshold: 0
-  });
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1243,23 +1220,11 @@ function openGallery(catKey) {
 
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
-  setupGalleryObserver();
 
   if (cat.images.length === 0) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;font-size:14px">Coming soon — designs dropping shortly!</div>';
   } else {
-    const itemsPerPage = window.innerWidth < 600 ? 8 : 12;
-    appendGalleryItems(catKey, 0, Math.min(itemsPerPage, cat.images.length));
-    if (cat.images.length > itemsPerPage) {
-      const loadMoreContainer = document.createElement('div');
-      loadMoreContainer.style.cssText = 'grid-column:1/-1;text-align:center;padding:20px';
-      const btn = document.createElement('button');
-      btn.className = 'load-more-btn';
-      btn.textContent = 'Load More';
-      btn.onclick = function() { loadMoreGalleryItems(catKey, Math.min(itemsPerPage, cat.images.length)); };
-      loadMoreContainer.appendChild(btn);
-      grid.appendChild(loadMoreContainer);
-    }
+    appendGalleryItems(catKey, 0, cat.images.length);
   }
 }
 
@@ -1271,7 +1236,6 @@ function closeGallery() {
 function appendGalleryItems(catKey, from, to) {
   const cat  = catalog[catKey];
   const grid = document.getElementById('galleryGrid');
-  const loadMoreBtn = grid.querySelector('.load-more-btn');
 
   for (var i = from; i < to; i++) {
     const entry  = cat.images[i];
@@ -1282,7 +1246,7 @@ function appendGalleryItems(catKey, from, to) {
     card.className = 'prod-card';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-        '<img data-src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async">' +
+        '<img src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async" onload="markImageReady(this)">' +
       '</div>' +
       '<div class="prod-body">' +
         '<div class="prod-name">' + name + '</div>' +
@@ -1291,26 +1255,8 @@ function appendGalleryItems(catKey, from, to) {
         '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
       '</div>';
     const img = card.querySelector('img');
-    img.addEventListener('load', function() { markImageReady(this); });
-    if (loadMoreBtn) {
-      grid.insertBefore(card, loadMoreBtn);
-    } else {
-      grid.appendChild(card);
-    }
-    if (galleryObserver) galleryObserver.observe(img);
-  }
-}
-
-function loadMoreGalleryItems(catKey, currentCount) {
-  const cat = catalog[catKey];
-  if (!cat) return;
-  const itemsPerPage = window.innerWidth < 600 ? 8 : 12;
-  const nextCount = Math.min(currentCount + itemsPerPage, cat.images.length);
-  appendGalleryItems(catKey, currentCount, nextCount);
-
-  if (nextCount >= cat.images.length) {
-    const loadMoreBtn = document.querySelector('.load-more-btn');
-    if (loadMoreBtn) loadMoreBtn.parentElement.remove();
+    if (img.complete) markImageReady(img);
+    grid.appendChild(card);
   }
 }
 
