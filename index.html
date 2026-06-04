@@ -78,7 +78,7 @@
     .cat-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.1);transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;display:flex;flex-direction:column}
     .cat-card:hover{transform:translateY(-6px);box-shadow:0 18px 42px rgba(0,0,0,.16)}
     .cat-img-wrap{overflow:hidden;aspect-ratio:3/2;background:#f0f0f0;flex-shrink:0}
-    .cat-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s ease}
+    .cat-img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s ease,transform .55s ease}
     .cat-card:hover .cat-img{transform:scale(1.07)}
     .cat-footer{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
     .cat-label{font-size:15px;font-weight:800;letter-spacing:.5px;color:var(--black);text-transform:uppercase}
@@ -148,7 +148,7 @@
     .prod-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .3s ease,box-shadow .3s ease}
     .prod-card:hover{transform:translateY(-5px);box-shadow:0 14px 34px rgba(0,0,0,.14)}
     .prod-img-wrap{aspect-ratio:1/1;overflow:hidden;background:#f0f0f0;cursor:pointer;position:relative}
-    .prod-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;padding:10px;transition:transform .4s ease}
+    .prod-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;padding:10px;opacity:0;transition:opacity .3s ease,transform .4s ease}
     .prod-card:hover .prod-img-wrap img{transform:scale(1.05)}
     .prod-body{padding:13px 15px 15px}
     .prod-name{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--black)}
@@ -292,6 +292,14 @@
     @media(max-width:380px){
       .cat-grid{gap:8px}
     }
+    /* ── Shimmer skeleton + image fade-in ── */
+    @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+    .cat-img-wrap,.prod-img-wrap{background:linear-gradient(90deg,#f0f0f0 25%,#e4e4e4 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite linear}
+    .cat-img-wrap.img-loaded,.prod-img-wrap.img-loaded{animation:none;background:#f0f0f0}
+    .cat-img.img-ready,.prod-img-wrap img.img-ready{opacity:1}
+    /* ── Load More button ── */
+    .load-more-btn{display:block;margin:4px auto 8px;padding:11px 36px;background:var(--black);color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background .2s}
+    .load-more-btn:hover{background:#333}
   </style>
 </head>
 <body>
@@ -561,6 +569,9 @@
   <div class="gallery-body">
     <p class="gallery-subtitle" id="galSubtitle"></p>
     <div class="gallery-grid" id="galleryGrid"></div>
+    <div id="loadMoreWrap" style="text-align:center;padding:20px 0 8px;display:none">
+      <button class="load-more-btn" onclick="loadMoreGallery()">Load More Designs</button>
+    </div>
   </div>
 </div>
 
@@ -1080,6 +1091,13 @@ let pendingOrder = null;
 // Gallery / lightbox state
 let activeGalleryCat = null;
 let activeLightboxIndex = 0;
+let galleryShownCount = 0;
+const GALLERY_PAGE_SIZE = 12;
+
+function markImageReady(img) {
+  img.classList.add('img-ready');
+  if (img.parentElement) img.parentElement.classList.add('img-loaded');
+}
 
 /* ═══════════════════════════════════════════════════
    COUNTRY DETECTION
@@ -1166,7 +1184,7 @@ function renderCategories() {
     const card = document.createElement('div');
     card.className = 'cat-card';
     const imgHtml = cat.coverImage
-      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\'">'
+      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="eager" decoding="async" onload="markImageReady(this)" onerror="this.style.display=\'none\'">'
       : '<div class="cat-img-placeholder"><span>' + cat.title[0] + '</span></div>';
     card.innerHTML =
       '<div class="cat-img-wrap">' + imgHtml + '</div>' +
@@ -1177,6 +1195,9 @@ function renderCategories() {
 
     card.addEventListener('click', function() { openGallery(key); });
     grid.appendChild(card);
+    // Handle already-cached cover images
+    const coverImg = card.querySelector('.cat-img');
+    if (coverImg && coverImg.complete) markImageReady(coverImg);
   });
 }
 
@@ -1197,25 +1218,18 @@ function openGallery(catKey) {
   atcBtn.onclick = function() { addToCart(catKey); };
 
   const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  galleryShownCount = 0;
+
   if (cat.images.length === 0) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;font-size:14px">Coming soon — designs dropping shortly!</div>';
+    document.getElementById('loadMoreWrap').style.display = 'none';
   } else {
-    grid.innerHTML = cat.images.map(function(entry, i) {
-      const src      = imgSrc(entry);
-      const itemPr   = getPrice({ prices: imgPrices(cat, entry) });
-      const name     = cleanImageName(src);
-      return '<div class="prod-card">' +
-        '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-          '<img src="' + esc(src) + '" alt="' + esc(name) + '" loading="lazy" decoding="async">' +
-        '</div>' +
-        '<div class="prod-body">' +
-          '<div class="prod-name">' + name + '</div>' +
-          '<div class="prod-sub">' + cat.subtitle + '</div>' +
-          '<div class="prod-price">' + fmt(itemPr) + '</div>' +
-          '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
-        '</div>' +
-      '</div>';
-    }).join('');
+    const firstBatch = Math.min(GALLERY_PAGE_SIZE, cat.images.length);
+    appendGalleryItems(catKey, 0, firstBatch);
+    galleryShownCount = firstBatch;
+    document.getElementById('loadMoreWrap').style.display =
+      cat.images.length > GALLERY_PAGE_SIZE ? 'block' : 'none';
   }
 
   document.getElementById('galleryModal').classList.add('open');
@@ -1225,6 +1239,44 @@ function openGallery(catKey) {
 function closeGallery() {
   document.getElementById('galleryModal').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+function appendGalleryItems(catKey, from, to) {
+  const cat  = catalog[catKey];
+  const grid = document.getElementById('galleryGrid');
+  for (var i = from; i < to; i++) {
+    const entry  = cat.images[i];
+    const src    = imgSrc(entry);
+    const itemPr = getPrice({ prices: imgPrices(cat, entry) });
+    const name   = cleanImageName(src);
+    const card   = document.createElement('div');
+    card.className = 'prod-card';
+    card.innerHTML =
+      '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
+        '<img src="' + esc(src) + '" alt="' + esc(name) + '" loading="lazy" decoding="async" onload="markImageReady(this)">' +
+      '</div>' +
+      '<div class="prod-body">' +
+        '<div class="prod-name">' + name + '</div>' +
+        '<div class="prod-sub">' + cat.subtitle + '</div>' +
+        '<div class="prod-price">' + fmt(itemPr) + '</div>' +
+        '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
+      '</div>';
+    const img = card.querySelector('img');
+    if (img.complete) markImageReady(img);
+    grid.appendChild(card);
+  }
+}
+
+function loadMoreGallery() {
+  const cat = catalog[activeGalleryCat];
+  if (!cat) return;
+  const from = galleryShownCount;
+  const to   = Math.min(from + GALLERY_PAGE_SIZE, cat.images.length);
+  appendGalleryItems(activeGalleryCat, from, to);
+  galleryShownCount = to;
+  if (galleryShownCount >= cat.images.length) {
+    document.getElementById('loadMoreWrap').style.display = 'none';
+  }
 }
 
 /* ═══════════════════════════════════════════════════
