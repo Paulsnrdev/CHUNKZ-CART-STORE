@@ -569,9 +569,6 @@
   <div class="gallery-body">
     <p class="gallery-subtitle" id="galSubtitle"></p>
     <div class="gallery-grid" id="galleryGrid"></div>
-    <div id="loadMoreWrap" style="text-align:center;padding:20px 0 8px;display:none">
-      <button class="load-more-btn" onclick="loadMoreGallery()">Load More Designs</button>
-    </div>
   </div>
 </div>
 
@@ -1091,12 +1088,30 @@ let pendingOrder = null;
 // Gallery / lightbox state
 let activeGalleryCat = null;
 let activeLightboxIndex = 0;
-let galleryShownCount = 0;
-const GALLERY_PAGE_SIZE = 12;
+let galleryObserver = null;
 
 function markImageReady(img) {
   img.classList.add('img-ready');
   if (img.parentElement) img.parentElement.classList.add('img-loaded');
+}
+
+function setupGalleryObserver() {
+  if (galleryObserver) galleryObserver.disconnect();
+  galleryObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var img = entry.target;
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      }
+      galleryObserver.unobserve(img);
+    });
+  }, {
+    root: document.getElementById('galleryModal'),
+    rootMargin: '400px 0px',
+    threshold: 0
+  });
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1219,17 +1234,12 @@ function openGallery(catKey) {
 
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
-  galleryShownCount = 0;
+  setupGalleryObserver();
 
   if (cat.images.length === 0) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;font-size:14px">Coming soon — designs dropping shortly!</div>';
-    document.getElementById('loadMoreWrap').style.display = 'none';
   } else {
-    const firstBatch = Math.min(GALLERY_PAGE_SIZE, cat.images.length);
-    appendGalleryItems(catKey, 0, firstBatch);
-    galleryShownCount = firstBatch;
-    document.getElementById('loadMoreWrap').style.display =
-      cat.images.length > GALLERY_PAGE_SIZE ? 'block' : 'none';
+    appendGalleryItems(catKey, 0, cat.images.length);
   }
 
   document.getElementById('galleryModal').classList.add('open');
@@ -1253,7 +1263,7 @@ function appendGalleryItems(catKey, from, to) {
     card.className = 'prod-card';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
-        '<img src="' + esc(src) + '" alt="' + esc(name) + '" loading="lazy" decoding="async" onload="markImageReady(this)">' +
+        '<img data-src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async">' +
       '</div>' +
       '<div class="prod-body">' +
         '<div class="prod-name">' + name + '</div>' +
@@ -1262,20 +1272,9 @@ function appendGalleryItems(catKey, from, to) {
         '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
       '</div>';
     const img = card.querySelector('img');
-    if (img.complete) markImageReady(img);
+    img.addEventListener('load', function() { markImageReady(this); });
     grid.appendChild(card);
-  }
-}
-
-function loadMoreGallery() {
-  const cat = catalog[activeGalleryCat];
-  if (!cat) return;
-  const from = galleryShownCount;
-  const to   = Math.min(from + GALLERY_PAGE_SIZE, cat.images.length);
-  appendGalleryItems(activeGalleryCat, from, to);
-  galleryShownCount = to;
-  if (galleryShownCount >= cat.images.length) {
-    document.getElementById('loadMoreWrap').style.display = 'none';
+    if (galleryObserver) galleryObserver.observe(img);
   }
 }
 
