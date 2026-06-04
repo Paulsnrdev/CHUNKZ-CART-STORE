@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chunkz Admin Panel</title>
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;
+      --gray-mid:#e0e0e0;--gray-dark:#666;
+      --accent:#e63946;--success:#2a9d8f;
+    }
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black);min-height:100vh}
+
+    /* ── Setup Notice ── */
+    #setupNotice{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--black)}
+    .setup-box{background:#fff;border-radius:16px;padding:40px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .setup-box h2{font-size:20px;font-weight:900;margin-bottom:6px;color:var(--accent)}
+    .setup-box .subtitle{font-size:13px;color:var(--gray-dark);margin-bottom:24px}
+    .setup-step{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+    .step-num{background:var(--black);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px}
+    .step-body{flex:1;font-size:13px;line-height:1.6}
+    .step-body strong{display:block;font-weight:700;margin-bottom:2px}
+    code{background:#f0f0f0;padding:2px 7px;border-radius:4px;font-size:12px;font-family:monospace;color:#c00}
+    .rules-box{background:#1a1a1a;color:#a8e6cf;font-family:monospace;font-size:12px;padding:14px;border-radius:8px;margin-top:8px;white-space:pre;overflow-x:auto}
+
+    /* ── Login ── */
+    #loginScreen{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--black)}
+    .login-box{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .login-logo{text-align:center;margin-bottom:28px}
+    .login-logo img{width:60px;height:60px;border-radius:50%;object-fit:cover}
+    .login-logo h1{font-size:18px;font-weight:900;letter-spacing:4px;margin-top:10px}
+    .login-logo p{font-size:11px;color:var(--gray-dark);margin-top:4px;letter-spacing:1px}
+    .login-field{margin-bottom:14px}
+    .login-field label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:6px}
+    .login-field input{width:100%;padding:12px 16px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;transition:border-color .2s}
+    .login-field input:focus{outline:none;border-color:var(--black)}
+    .login-btn{width:100%;background:var(--black);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s;margin-top:6px}
+    .login-btn:hover{background:#222}
+    .login-btn:disabled{background:#999;cursor:not-allowed}
+    .login-err{color:var(--accent);font-size:12px;margin-top:10px;text-align:center;display:none}
+
+    /* ── Header ── */
+    .adm-header{background:var(--black);color:#fff;padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .adm-header-left{display:flex;align-items:center;gap:14px}
+    .adm-header-left img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+    .adm-header-left h1{font-size:16px;font-weight:900;letter-spacing:3px}
+    .adm-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;letter-spacing:1px}
+    .hdr-right{display:flex;align-items:center;gap:12px}
+    .store-link{color:#aaa;font-size:12px;text-decoration:none;transition:color .2s}
+    .store-link:hover{color:#fff}
+    .logout-btn{background:rgba(255,255,255,.1);border:none;color:#fff;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
+    .logout-btn:hover{background:rgba(255,255,255,.2)}
+
+    /* ── Dashboard body ── */
+    #dashboard{display:none}
+    .adm-body{max-width:1280px;margin:0 auto;padding:28px 24px}
+
+    /* ── Filter bar ── */
+    .filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+    .filter-label{font-size:12px;font-weight:700;color:var(--gray-dark);letter-spacing:.5px;margin-right:4px}
+    .filter-btn{background:#fff;border:1.5px solid var(--gray-mid);color:var(--black);padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+    .filter-btn:hover{border-color:#999}
+    .filter-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+    .refresh-btn{margin-left:auto;background:none;border:1.5px solid var(--gray-mid);color:var(--gray-dark);padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+    .refresh-btn:hover{border-color:var(--black);color:var(--black)}
+
+    /* ── Stats grid ── */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+    @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+    .stat-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);border-left:4px solid transparent}
+    .stat-card.revenue{border-left-color:var(--accent)}
+    .stat-card.orders{border-left-color:#4361ee}
+    .stat-card.items{border-left-color:var(--success)}
+    .stat-card.top{border-left-color:#f8961e}
+    .stat-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
+    .stat-value{font-size:26px;font-weight:900;color:var(--black);line-height:1;word-break:break-all}
+    .stat-sub{font-size:11px;color:var(--gray-dark);margin-top:6px}
+
+    /* ── Charts row ── */
+    .charts-row{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:20px}
+    @media(max-width:800px){.charts-row{grid-template-columns:1fr}}
+    .chart-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .chart-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:16px}
+    .chart-wrap{position:relative;height:220px}
+
+    /* ── Collections table ── */
+    .collections-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:20px}
+    .section-title{font-size:14px;font-weight:800;letter-spacing:.5px;margin-bottom:14px}
+    .coll-table{width:100%;border-collapse:collapse;font-size:13px}
+    .coll-table th{text-align:left;padding:9px 12px;background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark)}
+    .coll-table th:first-child{border-radius:6px 0 0 6px}
+    .coll-table th:last-child{border-radius:0 6px 6px 0}
+    .coll-table td{padding:11px 12px;border-bottom:1px solid var(--gray-mid)}
+    .coll-table tr:last-child td{border-bottom:none}
+    .coll-bar-wrap{background:#f0f0f0;border-radius:4px;height:6px;min-width:80px}
+    .coll-bar{background:var(--accent);height:6px;border-radius:4px;transition:width .4s ease}
+    .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--gray-light);font-size:10px;font-weight:800;color:var(--gray-dark)}
+    .rank-badge.gold{background:#ffd700;color:#7a5800}
+    .rank-badge.silver{background:#c0c0c0;color:#555}
+    .rank-badge.bronze{background:#cd7f32;color:#fff}
+
+    /* ── Orders table ── */
+    .orders-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .orders-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .orders-count{font-size:12px;color:var(--gray-dark);font-weight:600}
+    .orders-table{width:100%;border-collapse:collapse;font-size:13px}
+    .orders-table th{text-align:left;padding:9px 12px;background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark)}
+    .orders-table th:first-child{border-radius:6px 0 0 6px}
+    .orders-table th:last-child{border-radius:0 6px 6px 0}
+    .orders-table td{padding:11px 12px;border-bottom:1px solid var(--gray-mid);vertical-align:top}
+    .orders-table tr:last-child td{border-bottom:none}
+    .orders-table tbody tr:hover td{background:#fafafa;cursor:pointer}
+    .item-pill{display:inline-block;background:var(--gray-light);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;color:var(--gray-dark);margin:1px 2px 1px 0}
+    .total-val{font-weight:800;color:var(--accent)}
+    .date-val{color:var(--gray-dark);font-size:11px;white-space:nowrap}
+    .cust-name{font-weight:700}
+    .cust-phone{font-size:11px;color:var(--gray-dark);margin-top:2px}
+    .expand-row td{padding:0 12px;background:#fafafa}
+    .expand-inner{padding:14px 0;border-top:1px dashed var(--gray-mid)}
+    .expand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .expand-field label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark);display:block;margin-bottom:3px}
+    .expand-field p{font-size:12px;color:var(--black)}
+    .item-detail-list{margin-top:8px;padding-left:0;list-style:none}
+    .item-detail-list li{font-size:12px;padding:3px 0;border-bottom:1px solid var(--gray-mid)}
+    .item-detail-list li:last-child{border-bottom:none}
+    .empty-state{text-align:center;padding:50px 20px;color:var(--gray-dark)}
+    .empty-icon{font-size:40px;margin-bottom:10px}
+    .empty-state p{font-size:13px}
+
+    /* ── Loading ── */
+    .loading{text-align:center;padding:50px}
+    .spin{display:inline-block;width:32px;height:32px;border:3px solid var(--gray-mid);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── Table wrapper scroll ── */
+    .table-wrap{overflow-x:auto}
+  </style>
+</head>
+<body>
+
+<!-- ═══ SETUP NOTICE (shown when Firebase not configured) ═══ -->
+<div id="setupNotice" style="display:flex">
+  <div class="setup-box">
+    <h2>Firebase Setup Required</h2>
+    <p class="subtitle">Your admin panel is built — you just need to connect it to Firebase. Follow these steps once.</p>
+
+    <div class="setup-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Create a Firebase project</strong>
+        Go to <strong>console.firebase.google.com</strong>, click "Add project", name it <code>chunkz-store</code>, and follow the prompts.
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Register your web app</strong>
+        In your Firebase project → click the <code>&lt;/&gt;</code> icon → name it <code>chunkz-web</code> → copy the <code>firebaseConfig</code> object shown.
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Paste your config into both files</strong>
+        Open <code>admin.html</code> and <code>index.html</code>. Find the <code>FIREBASE_CONFIG</code> object in each and replace the placeholder values with your actual keys.
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Create an admin user</strong>
+        In Firebase Console → Authentication → Sign-in method → enable <strong>Email/Password</strong>. Then go to Users → Add user → enter your email and a strong password. That's your admin login.
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Enable Firestore &amp; set security rules</strong>
+        Firebase Console → Firestore Database → Create database (Start in production mode). Then go to Rules tab and paste:
+        <div class="rules-box">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, list, update, delete: if request.auth != null;
+    }
+  }
+}</div>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <strong>Deploy &amp; you're live</strong>
+        Push your updated files to Vercel. Once deployed, orders will save to Firestore and this admin panel will show your dashboard.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="loginScreen" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="CHUNKZLOGO.jpg" alt="Chunkz" onerror="this.style.display='none'">
+      <h1>CHUNKZ</h1>
+      <p>ADMIN PANEL</p>
+    </div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@email.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard">
+  <!-- Header -->
+  <header class="adm-header">
+    <div class="adm-header-left">
+      <img src="CHUNKZLOGO.jpg" alt="Chunkz" onerror="this.style.display='none'">
+      <h1>CHUNKZ</h1>
+      <span class="adm-badge">ADMIN</span>
+    </div>
+    <div class="hdr-right">
+      <a href="index.html" class="store-link">← View Store</a>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="adm-body">
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Period:</span>
+      <button class="filter-btn active" onclick="setFilter('all',this)">All Time</button>
+      <button class="filter-btn" onclick="setFilter('month',this)">This Month</button>
+      <button class="filter-btn" onclick="setFilter('week',this)">This Week</button>
+      <button class="filter-btn" onclick="setFilter('today',this)">Today</button>
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loadingState" class="loading"><div class="spin"></div></div>
+
+    <!-- Content (hidden until loaded) -->
+    <div id="dataContent" style="display:none">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card revenue">
+          <div class="stat-label">Total Revenue (NGN)</div>
+          <div class="stat-value" id="statRevenue">₦0</div>
+          <div class="stat-sub" id="statRevenueSub"></div>
+        </div>
+        <div class="stat-card orders">
+          <div class="stat-label">Orders</div>
+          <div class="stat-value" id="statOrders">0</div>
+          <div class="stat-sub" id="statOrdersSub"></div>
+        </div>
+        <div class="stat-card items">
+          <div class="stat-label">Items Sold</div>
+          <div class="stat-value" id="statItems">0</div>
+          <div class="stat-sub" id="statItemsSub"></div>
+        </div>
+        <div class="stat-card top">
+          <div class="stat-label">Best Collection</div>
+          <div class="stat-value" id="statTop" style="font-size:18px">—</div>
+          <div class="stat-sub" id="statTopSub"></div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Orders Over Time (Last 30 Days)</div>
+          <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Collection</div>
+          <div class="chart-wrap"><canvas id="collChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Collections breakdown -->
+      <div class="collections-card">
+        <div class="section-title">Collections Breakdown</div>
+        <div class="table-wrap">
+          <table class="coll-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Collection</th>
+                <th>Orders</th>
+                <th>Items Sold</th>
+                <th>Revenue (NGN)</th>
+                <th>Share</th>
+              </tr>
+            </thead>
+            <tbody id="collBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders list -->
+      <div class="orders-card">
+        <div class="orders-head">
+          <div class="section-title">All Orders</div>
+          <div class="orders-count" id="ordersCount"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Currency</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /dataContent -->
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   FIREBASE CONFIG
+   Replace all values below with your Firebase project's
+   config keys after completing the setup steps.
+═══════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
+  authDomain:        "chunkz-store.firebaseapp.com",
+  projectId:         "chunkz-store",
+  storageBucket:     "chunkz-store.firebasestorage.app",
+  messagingSenderId: "418094301866",
+  appId:             "1:418094301866:web:a326b6057a1176ea80c6d3",
+  measurementId:     "G-6G1XJQT5G4"
+};
+
+/* ═══════════════════════════════════════════════════
+   CURRENCY → NGN CONVERSION RATES
+   (same as store's conversion factors)
+═══════════════════════════════════════════════════ */
+const TO_NGN = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+
+if (!FIREBASE_READY) {
+  document.getElementById('setupNotice').style.display = 'flex';
+} else {
+  document.getElementById('setupNotice').style.display = 'none';
+  firebase.initializeApp(FIREBASE_CONFIG);
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      document.getElementById('loginScreen').style.display  = 'none';
+      document.getElementById('dashboard').style.display    = 'block';
+      loadData();
+    } else {
+      document.getElementById('loginScreen').style.display  = 'flex';
+      document.getElementById('dashboard').style.display    = 'none';
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════════ */
+function doLogin() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value;
+  const btn   = document.getElementById('loginBtn');
+  const err   = document.getElementById('loginErr');
+  err.style.display = 'none';
+
+  if (!email || !pass) { showLoginErr('Enter your email and password.'); return; }
+
+  btn.disabled    = true;
+  btn.textContent = 'Signing in…';
+
+  firebase.auth().signInWithEmailAndPassword(email, pass)
+    .catch(function(e) {
+      showLoginErr('Invalid email or password. Try again.');
+      btn.disabled    = false;
+      btn.textContent = 'Sign In';
+    });
+}
+
+function doLogout() {
+  firebase.auth().signOut();
+}
+
+function showLoginErr(msg) {
+  const el = document.getElementById('loginErr');
+  el.textContent    = msg;
+  el.style.display  = 'block';
+}
+
+document.getElementById('adminPass') && document.getElementById('adminPass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+/* ═══════════════════════════════════════════════════
+   DATA LOADING
+═══════════════════════════════════════════════════ */
+let allOrders = [];
+let activeFilter = 'all';
+let timeChartInst = null;
+let collChartInst = null;
+
+async function loadData() {
+  if (!FIREBASE_READY || !firebase.auth().currentUser) return;
+
+  document.getElementById('loadingState').style.display  = 'block';
+  document.getElementById('dataContent').style.display   = 'none';
+
+  try {
+    const snap = await firebase.firestore()
+      .collection('orders')
+      .orderBy('timestamp', 'desc')
+      .get();
+
+    allOrders = snap.docs.map(function(doc) {
+      const d = doc.data();
+      d._id = doc.id;
+      return d;
+    });
+
+    renderAll();
+  } catch(e) {
+    console.error('Failed to load orders:', e);
+    document.getElementById('loadingState').innerHTML = '<p style="color:var(--accent);font-size:13px">Failed to load data. Check your Firestore rules.</p>';
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER
+═══════════════════════════════════════════════════ */
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderAll();
+}
+
+function getFilteredOrders() {
+  if (activeFilter === 'all') return allOrders;
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return allOrders.filter(function(o) {
+    const ts = o.timestamp ? new Date(o.timestamp) : null;
+    if (!ts) return false;
+
+    if (activeFilter === 'today') {
+      return ts >= today;
+    }
+    if (activeFilter === 'week') {
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - today.getDay());
+      return ts >= weekStart;
+    }
+    if (activeFilter === 'month') {
+      return ts.getFullYear() === now.getFullYear() && ts.getMonth() === now.getMonth();
+    }
+    return true;
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════════ */
+function renderAll() {
+  const orders = getFilteredOrders();
+  renderStats(orders);
+  renderTimeChart(orders);
+  renderCollChart(orders);
+  renderCollTable(orders);
+  renderOrdersTable(orders);
+
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dataContent').style.display  = 'block';
+}
+
+/* ═══════════════════════════════════════════════════
+   STATS
+═══════════════════════════════════════════════════ */
+function toNGN(amount, currency) {
+  return amount * (TO_NGN[currency] || 1);
+}
+
+function fmtNGN(n) {
+  return '₦' + Math.round(n).toLocaleString('en-NG');
+}
+
+function renderStats(orders) {
+  let totalNGN  = 0;
+  let itemCount = 0;
+  const collRevMap = {};
+  const collOrdMap = {};
+
+  orders.forEach(function(o) {
+    const ngn = toNGN(o.total || 0, o.currency || 'NGN');
+    totalNGN += ngn;
+
+    (o.items || []).forEach(function(it) {
+      itemCount += (it.qty || 1);
+      const coll = it.collection || 'Unknown';
+      collRevMap[coll] = (collRevMap[coll] || 0) + toNGN((it.price || 0) * (it.qty || 1), it.currency || o.currency || 'NGN');
+      collOrdMap[coll] = (collOrdMap[coll] || 0) + 1;
+    });
+  });
+
+  const topColl = Object.entries(collRevMap).sort(function(a,b){ return b[1]-a[1]; })[0];
+
+  document.getElementById('statRevenue').textContent    = fmtNGN(totalNGN);
+  document.getElementById('statRevenueSub').textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
+  document.getElementById('statOrders').textContent     = orders.length;
+  document.getElementById('statOrdersSub').textContent  = activeFilter === 'all' ? 'all time' : 'in selected period';
+  document.getElementById('statItems').textContent      = itemCount;
+  document.getElementById('statItemsSub').textContent   = 'units across ' + Object.keys(collOrdMap).length + ' collections';
+  document.getElementById('statTop').textContent        = topColl ? COLL_LABELS[topColl[0]] || topColl[0] : '—';
+  document.getElementById('statTopSub').textContent     = topColl ? fmtNGN(topColl[1]) + ' revenue' : 'No data yet';
+}
+
+/* ═══════════════════════════════════════════════════
+   COLLECTION LABELS
+═══════════════════════════════════════════════════ */
+const COLL_LABELS = {
+  shirts:'Shirts', hoodie:'Hoodie', sweatshirt:'Sweatshirt',
+  sweatpant:'Sweatpant', tracksuit:'Tracksuit', jersey:'Jersey',
+  tanktop:'Tank Top', croptop:'Crop Top', shorts:'Shorts',
+  truckerhat:'Trucker Hat', polo:'Polo', jortscargo:'Jorts/Cargo',
+  quarterzzip:'Quarter Zip', raglanlong:'Raglan Longsleeve',
+  raglanshirt:'Raglan Shirt', socks:'Socks', chunkzcombo:'Chunkz Combo'
+};
+
+/* ═══════════════════════════════════════════════════
+   TIME CHART
+═══════════════════════════════════════════════════ */
+function renderTimeChart(orders) {
+  const days = 30;
+  const labels = [];
+  const counts = [];
+  const revenue = [];
+
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    d.setHours(0, 0, 0, 0);
+    labels.push(d.toLocaleDateString('en-NG', { month: 'short', day: 'numeric' }));
+    counts.push(0);
+    revenue.push(0);
+  }
+
+  orders.forEach(function(o) {
+    const ts = o.timestamp ? new Date(o.timestamp) : null;
+    if (!ts) return;
+    const daysAgo = Math.floor((Date.now() - ts.getTime()) / 86400000);
+    const idx = days - 1 - daysAgo;
+    if (idx >= 0 && idx < days) {
+      counts[idx]++;
+      revenue[idx] += toNGN(o.total || 0, o.currency || 'NGN');
+    }
+  });
+
+  if (timeChartInst) timeChartInst.destroy();
+
+  timeChartInst = new Chart(document.getElementById('timeChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Orders',
+        data: counts,
+        borderColor: '#4361ee',
+        backgroundColor: 'rgba(67,97,238,.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: .3,
+        pointRadius: 3,
+        pointHoverRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 8, font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { stepSize: 1, font: { size: 10 } }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   COLLECTION CHART (doughnut)
+═══════════════════════════════════════════════════ */
+const CHART_COLORS = [
+  '#e63946','#4361ee','#2a9d8f','#f8961e','#7209b7',
+  '#3a86ff','#fb8500','#06d6a0','#ef476f','#118ab2',
+  '#ffd166','#073b4c','#b5179e','#560bad','#480ca8',
+  '#3f37c9','#4895ef'
+];
+
+function renderCollChart(orders) {
+  const map = {};
+  orders.forEach(function(o) {
+    (o.items || []).forEach(function(it) {
+      const coll = it.collection || 'Unknown';
+      map[coll] = (map[coll] || 0) + toNGN((it.price || 0) * (it.qty || 1), it.currency || o.currency || 'NGN');
+    });
+  });
+
+  const sorted = Object.entries(map).sort(function(a,b){ return b[1]-a[1]; }).slice(0, 8);
+  const labels  = sorted.map(function(e){ return COLL_LABELS[e[0]] || e[0]; });
+  const values  = sorted.map(function(e){ return Math.round(e[1]); });
+  const colors  = sorted.map(function(_,i){ return CHART_COLORS[i % CHART_COLORS.length]; });
+
+  if (collChartInst) collChartInst.destroy();
+
+  if (sorted.length === 0) {
+    document.getElementById('collChart').getContext('2d').clearRect(0, 0, 999, 999);
+    return;
+  }
+
+  collChartInst = new Chart(document.getElementById('collChart'), {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{ data: values, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { font: { size: 10 }, boxWidth: 12, padding: 8 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              return ' ' + ctx.label + ': ' + fmtNGN(ctx.raw);
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   COLLECTIONS TABLE
+═══════════════════════════════════════════════════ */
+function renderCollTable(orders) {
+  const map = {};
+
+  orders.forEach(function(o) {
+    (o.items || []).forEach(function(it) {
+      const coll = it.collection || 'Unknown';
+      if (!map[coll]) map[coll] = { orders: 0, items: 0, revenue: 0 };
+      map[coll].orders++;
+      map[coll].items   += (it.qty || 1);
+      map[coll].revenue += toNGN((it.price || 0) * (it.qty || 1), it.currency || o.currency || 'NGN');
+    });
+  });
+
+  const sorted    = Object.entries(map).sort(function(a,b){ return b[1].revenue - a[1].revenue; });
+  const maxRev    = sorted.length ? sorted[0][1].revenue : 1;
+  const tbody     = document.getElementById('collBody');
+
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray-dark);font-size:13px">No orders yet</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map(function(entry, i) {
+    const [key, d] = entry;
+    const pct = Math.round((d.revenue / maxRev) * 100);
+    const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    return '<tr>' +
+      '<td><span class="rank-badge ' + rankClass + '">' + (i + 1) + '</span></td>' +
+      '<td><strong>' + (COLL_LABELS[key] || key) + '</strong></td>' +
+      '<td>' + d.orders + '</td>' +
+      '<td>' + d.items + '</td>' +
+      '<td>' + fmtNGN(d.revenue) + '</td>' +
+      '<td><div class="coll-bar-wrap"><div class="coll-bar" style="width:' + pct + '%"></div></div></td>' +
+    '</tr>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   ORDERS TABLE
+═══════════════════════════════════════════════════ */
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('ordersBody');
+  document.getElementById('ordersCount').textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
+
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📦</div><p>No orders yet for this period.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = orders.map(function(o, idx) {
+    const ts     = o.timestamp ? new Date(o.timestamp) : null;
+    const dateStr = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    const sym    = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[o.currency] || '';
+    const items  = (o.items || []);
+    const pills  = items.slice(0, 3).map(function(it) {
+      return '<span class="item-pill">' + (COLL_LABELS[it.collection] || it.collection || '?') + ' ×' + (it.qty || 1) + '</span>';
+    }).join('') + (items.length > 3 ? '<span class="item-pill">+' + (items.length - 3) + ' more</span>' : '');
+
+    const rowId = 'exp-' + idx;
+    return '<tr class="order-row" onclick="toggleExpand(\'' + rowId + '\')">' +
+      '<td class="date-val">' + dateStr + '</td>' +
+      '<td><div class="cust-name">' + esc(o.customerName || '—') + '</div>' +
+      '<div class="cust-phone">' + esc(o.customerPhone || '') + '</div></td>' +
+      '<td>' + pills + '</td>' +
+      '<td class="total-val">' + sym + (o.total || 0).toLocaleString() + '</td>' +
+      '<td>' + (o.currency || '—') + '</td>' +
+    '</tr>' +
+    '<tr id="' + rowId + '" class="expand-row" style="display:none"><td colspan="5"><div class="expand-inner">' +
+      '<div class="expand-grid">' +
+        '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || '—') + '</p></div>' +
+        '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || '—') + '</p></div>' +
+        '<div class="expand-field"><label>Colour Preference</label><p>' + esc(o.colourPreference || '—') + '</p></div>' +
+        (o.descriptionNote ? '<div class="expand-field"><label>Note</label><p>' + esc(o.descriptionNote) + '</p></div>' : '') +
+      '</div>' +
+      '<ul class="item-detail-list">' +
+        items.map(function(it) {
+          const s = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[it.currency || o.currency] || '';
+          return '<li>' + esc(it.name || it.collection || '?') + ' — ' + (it.qty || 1) + ' × ' + s + (it.price || 0).toLocaleString() + ' = ' + s + ((it.price || 0) * (it.qty || 1)).toLocaleString() + '</li>';
+        }).join('') +
+      '</ul>' +
+    '</div></td></tr>';
+  }).join('');
+}
+
+function toggleExpand(id) {
+  const row = document.getElementById(id);
+  if (!row) return;
+  row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
