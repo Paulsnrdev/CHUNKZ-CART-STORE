@@ -1076,6 +1076,7 @@ let userCountry = 'NG';
 let checkoutAmount = 0;
 let checkoutCurrency = 'NGN';
 let customer = {};
+let pendingOrder = null;
 
 // Gallery / lightbox state
 let activeGalleryCat = null;
@@ -1515,7 +1516,7 @@ async function submitOrder(e) {
       customer         = { name, email, phone, address };
       checkoutAmount   = total;
       checkoutCurrency = currCode;
-      saveOrderToFirestore(name, email, phone, address, colour, desc, cart, total, currCode);
+      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total, currency: currCode };
       cart = [];
       saveCart();
       refreshCartUI();
@@ -1560,6 +1561,11 @@ function proceedToPayment() {
       name:         customer.name
     },
     callback: function() {
+      if (pendingOrder) {
+        var o = pendingOrder;
+        saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency);
+        pendingOrder = null;
+      }
       resultEl.className   = 'pay-result ok';
       resultEl.textContent = '✅ Payment successful! We\'ll process your order shortly.';
       resultEl.style.display = 'block';
