@@ -583,8 +583,58 @@
 <!-- FLUTTERWAVE: deferred so it doesn't block page rendering -->
 <script src="https://checkout.flutterwave.com/v3.js" defer></script>
 
+<!-- FIREBASE: for saving orders to admin dashboard -->
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
+/* ═══════════════════════════════════════════════════
+   FIREBASE CONFIG
+   Replace these placeholder values with your actual
+   Firebase project config keys (from admin.html setup).
+   Leave as-is until Firebase is set up — orders will
+   still go to Formspree normally.
+═══════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
+  authDomain:        "chunkz-store.firebaseapp.com",
+  projectId:         "chunkz-store",
+  storageBucket:     "chunkz-store.firebasestorage.app",
+  messagingSenderId: "418094301866",
+  appId:             "1:418094301866:web:a326b6057a1176ea80c6d3",
+  measurementId:     "G-6G1XJQT5G4"
+};
+
+const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+if (FIREBASE_READY) {
+  firebase.initializeApp(FIREBASE_CONFIG);
+}
+
+async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency) {
+  if (!FIREBASE_READY) return;
+  try {
+    const rates = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+    await firebase.firestore().collection('orders').add({
+      customerName:     name,
+      customerEmail:    email || '',
+      customerPhone:    phone,
+      deliveryAddress:  address,
+      colourPreference: colour || '',
+      descriptionNote:  desc   || '',
+      items: orderCart.map(function(i) {
+        return { name: i.name, collection: i.pid, qty: i.qty, price: i.price, currency: i.currency };
+      }),
+      total:      total,
+      currency:   currency,
+      totalNGN:   Math.round(total * (rates[currency] || 1)),
+      timestamp:  new Date().toISOString()
+    });
+  } catch(e) {
+    console.error('Firestore write failed (order still sent via email):', e);
+  }
+}
+
 /* ═══════════════════════════════════════════════════
    CATALOG DATA
    — To add new images: push image path strings into
@@ -1465,6 +1515,7 @@ async function submitOrder(e) {
       customer         = { name, email, phone, address };
       checkoutAmount   = total;
       checkoutCurrency = currCode;
+      saveOrderToFirestore(name, email, phone, address, colour, desc, cart, total, currCode);
       cart = [];
       saveCart();
       refreshCartUI();
