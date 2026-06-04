@@ -535,16 +535,15 @@
           <label>Delivery Address <span class="req">*</span></label>
           <textarea id="cAddress" required placeholder="123 Main Street, Ikeja, Lagos, Nigeria" style="min-height:70px"></textarea>
         </div>
-        <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER (SEND TO MERCHANT) →</button>
+        <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY →</button>
       </form>
+      <div class="pay-result" id="payRetryMsg" style="display:none"></div>
     </div>
     <div id="successState" style="display:none">
       <div class="success-box">
-        <div class="success-icon">✅</div>
-        <div class="success-title">Order Sent to Merchant!</div>
-        <p class="success-sub">Your order details have been received by our team.<br>Proceed to payment to complete your purchase.</p>
-        <button class="pay-btn" id="payBtn" onclick="proceedToPayment()">PROCEED TO PAYMENT</button>
-        <div class="pay-result" id="payResult"></div>
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Payment Confirmed!</div>
+        <p class="success-sub">Your order has been paid and sent to our team.<br>We'll get in touch with you shortly.</p>
       </div>
     </div>
   </div>
@@ -1446,6 +1445,7 @@ function openCheckout() {
   document.getElementById('formState').style.display    = 'block';
   document.getElementById('successState').style.display = 'none';
   document.getElementById('formErr').style.display      = 'none';
+  document.getElementById('payRetryMsg').style.display  = 'none';
 
   const sym = cartSymbol();
   document.getElementById('osSummaryItems').innerHTML = cart.map(function(i) {
@@ -1517,11 +1517,8 @@ async function submitOrder(e) {
       checkoutAmount   = total;
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total, currency: currCode };
-      cart = [];
-      saveCart();
-      refreshCartUI();
-      document.getElementById('formState').style.display    = 'none';
-      document.getElementById('successState').style.display = 'block';
+      document.getElementById('payRetryMsg').style.display = 'none';
+      proceedToPayment();
     } else {
       const data = await res.json().catch(function() { return {}; });
       showErr(data.error || 'Order failed. Please try again.');
@@ -1546,9 +1543,6 @@ function showErr(msg) {
    PLACEHOLDER public key — replace before going live.
 ═══════════════════════════════════════════════════ */
 function proceedToPayment() {
-  const resultEl = document.getElementById('payResult');
-  resultEl.style.display = 'none';
-
   FlutterwaveCheckout({
     public_key:      'FLWPUBK-9871f55d1138394925f7fe1b94eb0a85-X',
     tx_ref:          'ORDER-' + Date.now(),
@@ -1566,15 +1560,17 @@ function proceedToPayment() {
         saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency);
         pendingOrder = null;
       }
-      resultEl.className   = 'pay-result ok';
-      resultEl.textContent = '✅ Payment successful! We\'ll process your order shortly.';
-      resultEl.style.display = 'block';
-      document.getElementById('payBtn').style.display = 'none';
+      cart = [];
+      saveCart();
+      refreshCartUI();
+      document.getElementById('formState').style.display    = 'none';
+      document.getElementById('successState').style.display = 'block';
     },
     onclose: function() {
-      resultEl.className   = 'pay-result fail';
-      resultEl.textContent = '⚠️ Payment not completed. You can try again.';
-      resultEl.style.display = 'block';
+      var msg = document.getElementById('payRetryMsg');
+      msg.className   = 'pay-result fail';
+      msg.innerHTML   = '⚠️ Payment not completed — your cart is saved. Tap <strong>PLACE ORDER &amp; PAY</strong> when you\'re ready to try again.';
+      msg.style.display = 'block';
     },
     customizations: {
       title:       'CHUNKZ Store',
