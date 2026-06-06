@@ -945,9 +945,16 @@ async function loadFlutterwaveData() {
 
   // Load balance and transactions in parallel
   var [balRes, txRes] = await Promise.all([
-    fetch('/api/flutterwave?action=balance', { headers: headers }).then(function(r) { return r.json(); }).catch(function() { return null; }),
-    fetch('/api/flutterwave?action=transactions', { headers: headers }).then(function(r) { return r.json(); }).catch(function() { return null; })
+    fetch('/api/flutterwave?action=balance', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .catch(function(e) { return { _fetchError: e.message || 'Network error' }; }),
+    fetch('/api/flutterwave?action=transactions', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .catch(function(e) { return { _fetchError: e.message || 'Network error' }; })
   ]);
+
+  console.log('[FLW balance]', balRes);
+  console.log('[FLW transactions]', txRes);
 
   renderBalance(balRes);
   renderTransactions(txRes);
@@ -957,8 +964,9 @@ function renderBalance(data) {
   var grid = document.getElementById('balanceGrid');
 
   if (!data || data.status !== 'success' || !data.data || data.data.length === 0) {
-    grid.innerHTML = '<div class="flw-loading" style="color:var(--accent)">' +
-      (data && data.error ? data.error : 'Could not load balance. Check your FLUTTERWAVE_SECRET_KEY in Vercel.') + '</div>';
+    var msg = (data && (data.error || data.message || data._fetchError))
+      || 'Could not load balance. Check your FLUTTERWAVE_SECRET_KEY in Vercel.';
+    grid.innerHTML = '<div class="flw-loading" style="color:var(--accent)">' + msg + '</div>';
     return;
   }
 
@@ -977,8 +985,9 @@ function renderTransactions(data) {
   var countEl = document.getElementById('txCount');
 
   if (!data || data.status !== 'success') {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">' +
-      (data && data.error ? data.error : 'Could not load transactions. Check your FLUTTERWAVE_SECRET_KEY in Vercel.') + '</div></td></tr>';
+    var msg = (data && (data.error || data.message || data._fetchError))
+      || 'Could not load transactions. Check your FLUTTERWAVE_SECRET_KEY in Vercel.';
+    tbody.innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">' + msg + '</div></td></tr>';
     return;
   }
 
