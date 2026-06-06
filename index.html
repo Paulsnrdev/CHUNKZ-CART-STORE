@@ -1310,10 +1310,10 @@ function imgPrices(cat, entry) {
   if (entry.ngn) {
     var n = entry.ngn;
     return {
-      NG: { amount: n,                  currency: 'NGN', symbol: '₦'  },
-      US: { amount: Math.round(n/925),  currency: 'USD', symbol: '$'  },
-      GB: { amount: Math.round(n/1120), currency: 'GBP', symbol: '£'  },
-      CA: { amount: Math.round(n/690),  currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: n,                                currency: 'NGN', symbol: '₦'  },
+      US: { amount: entry.usd || Math.round(n/925),  currency: 'USD', symbol: '$'  },
+      GB: { amount: entry.gbp || Math.round(n/1120), currency: 'GBP', symbol: '£'  },
+      CA: { amount: entry.cad || Math.round(n/690),  currency: 'CAD', symbol: 'CA$'}
     };
   }
   return cat.prices;
