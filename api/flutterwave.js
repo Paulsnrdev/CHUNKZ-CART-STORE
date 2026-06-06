@@ -5,7 +5,7 @@
 
 const FLW_BASE       = 'https://api.flutterwave.com/v3';
 const FLW_SECRET     = process.env.FLUTTERWAVE_SECRET_KEY;
-const FIREBASE_KEY   = process.env.FIREBASE_API_KEY;
+const FIREBASE_KEY   = 'AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0';
 
 /* Verify Firebase ID token so only your logged-in admin can call this function */
 async function verifyFirebaseToken(idToken) {
