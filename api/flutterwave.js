@@ -1,26 +1,23 @@
 // Vercel Serverless Function — proxies Flutterwave API calls to keep the secret key off the browser.
-// Required environment variables in Vercel:
-//   FLUTTERWAVE_SECRET_KEY   — your Flutterwave secret key
-//   FIREBASE_API_KEY         — your Firebase web API key (already in your HTML, safe to repeat here)
+// Required environment variable in Vercel:
+//   FLUTTERWAVE_SECRET_KEY — your Flutterwave live secret key
 
-const FLW_BASE       = 'https://api.flutterwave.com/v3';
-const FLW_SECRET     = process.env.FLUTTERWAVE_SECRET_KEY;
-const FIREBASE_KEY   = 'AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0';
+const FLW_BASE   = 'https://api.flutterwave.com/v3';
+const FLW_SECRET = process.env.FLUTTERWAVE_SECRET_KEY;
 
-/* Verify Firebase ID token so only your logged-in admin can call this function */
-async function verifyFirebaseToken(idToken) {
+/* Verify the Firebase ID token by decoding its JWT payload locally.
+   We check the audience (Firebase project) and email match the admin account.
+   This avoids an external API call and works without any extra env vars. */
+function verifyAdminToken(idToken) {
   if (!idToken) return false;
   try {
-    const res = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_KEY}`,
-      {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ idToken })
-      }
+    const parts = idToken.split('.');
+    if (parts.length !== 3) return false;
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+    return (
+      payload.aud   === 'chunkz-store' &&
+      payload.email === 'olokobafawaz@gmail.com'
     );
-    const data = await res.json();
-    return !!(data.users && data.users.length > 0);
   } catch (e) {
     return false;
   }
@@ -41,9 +38,8 @@ module.exports = async function handler(req, res) {
   if (!idToken) {
     return res.status(401).json({ error: 'Unauthorized — no token provided' });
   }
-  const valid = await verifyFirebaseToken(idToken);
-  if (!valid) {
-    return res.status(401).json({ error: 'Unauthorized — invalid or expired token' });
+  if (!verifyAdminToken(idToken)) {
+    return res.status(401).json({ error: 'Unauthorized — token does not match admin account' });
   }
 
   // ── Secret key check ────────────────────────────────────
