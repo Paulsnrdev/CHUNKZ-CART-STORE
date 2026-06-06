@@ -58,7 +58,19 @@
     .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px}
     .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
     .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
-    .currency-pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:5px 14px;border-radius:20px;font-size:12px;color:#aaa;margin-top:18px;display:inline-block}
+    .hero-marquee{overflow:hidden;background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:28px;padding:9px 0;width:100%;display:block}
+    .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 20s linear infinite;animation:marqueeScroll 20s linear infinite;will-change:transform}
+    .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
+    .hero-marquee-track span{white-space:nowrap;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;padding:0 48px;flex-shrink:0}
+    .hero-marquee-track span::before{content:'★';margin-right:14px;color:var(--accent)}
+    @-webkit-keyframes marqueeScroll{0%{-webkit-transform:translateX(0)}100%{-webkit-transform:translateX(-50%)}}
+    @keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @media(max-width:600px){.hero-marquee-track span{font-size:11px;letter-spacing:1px;padding:0 32px}}
+    /* ── Chat Button ── */
+    .chat-fab{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:12px 20px 12px 16px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:14px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s}
+    .chat-fab:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+    .chat-fab i{font-size:20px}
+    @media(max-width:500px){.chat-fab{padding:11px 15px 11px 13px;font-size:13px}.chat-fab i{font-size:18px}}
     .tw-cursor{display:inline-block;width:2px;height:1em;background:#aaa;margin-left:2px;vertical-align:text-bottom;animation:twblink .7s step-end infinite}
     @keyframes twblink{0%,100%{opacity:1}50%{opacity:0}}
 
@@ -373,7 +385,16 @@
   <h1>CHUNKZ</h1>
   <p>Urban Streetwear. <span id="typewriter"></span><span class="tw-cursor"></span></p>
   <a href="#products" class="hero-cta">Shop the Collection</a>
-  <div class="currency-pill" id="currPill">Detecting your location…</div>
+  <div class="hero-marquee">
+    <div class="hero-marquee-track">
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+      <span>All items are available in all colours. Kindly place your order(s)</span>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════ MAIN LAYOUT ══════════════ -->
@@ -882,23 +903,23 @@ const catalog = {
     ctaLabel:   'View Collection',
     prices: {
       NG: { amount: 25000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 26,    currency: 'USD', symbol: '$'  },
+      US: { amount: 25,    currency: 'USD', symbol: '$'  },
       GB: { amount: 19,    currency: 'GBP', symbol: '£'  },
       CA: { amount: 35,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'CHUNKZ JERSEY/Black Jersey.webp',          ngn: 25000 },
-      { src: "CHUNKZ JERSEY/Jersey Back.webp",         ngn: 25000 },
-      { src: 'CHUNKZ JERSEY/White Jersey.webp',          ngn: 25000 },
+      { src: 'CHUNKZ JERSEY/Black Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: "CHUNKZ JERSEY/Jersey Back.webp",         ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ JERSEY/White Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       // { src: 'CHUNKZ JERSEY/Jersey B.webp',              ngn: 25000 },
      
-      { src: 'CHUNKZ JERSEY/Blue Jersey.webp',           ngn: 25000 },
-      { src: 'CHUNKZ JERSEY/Pink Jersey.webp',           ngn: 25000 },
-      { src: 'CHUNKZ JERSEY/Dark Pink Jersey.webp',      ngn: 25000 },
-      { src: 'CHUNKZ JERSEY/Green Jersey.webp',          ngn: 25000 },
-      { src: 'CHUNKZ CAMO JERSEY/Jersey Camo.webp',      ngn: 25000 },
+      { src: 'CHUNKZ JERSEY/Blue Jersey.webp',           ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ JERSEY/Pink Jersey.webp',           ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ JERSEY/Dark Pink Jersey.webp',      ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ JERSEY/Green Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ CAMO JERSEY/Jersey Camo.webp',      ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       // { src: 'CHUNKZ CAMO JERSEY/Jersey Camo B.webp',    ngn: 25000 },
-      { src: 'CHUNKZ CAMO JERSEY/Jersey Camo Back.webp', ngn: 25000 }
+      { src: 'CHUNKZ CAMO JERSEY/Jersey Camo Back.webp', ngn: 25000, usd: 25, gbp: 19, cad: 35 }
     ]
   },
 
@@ -909,69 +930,65 @@ const catalog = {
     ctaLabel:   'View Collection',
     prices: {
       NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 16,    currency: 'USD', symbol: '$'  },
+      US: { amount: 15,    currency: 'USD', symbol: '$'  },
       GB: { amount: 11.5,     currency: 'GBP', symbol: '£'  },
       CA: { amount: 22,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'Copy of SUMMER SET/White Singlet tank-top.webp', ngn: 15000 },
-      { src: 'Copy of SUMMER SET/Black Singlet tank-top.webp', ngn: 15000 },
-      { src: 'Copy of SUMMER SET/White vest tank.webp',        ngn: 16500 },
-      { src: 'Copy of SUMMER SET/Black vest tank.webp',        ngn: 17000 },
-      { src: 'JUNE 2026 SET/Singlet Tanktop.webp',             ngn: 15500 },
+      { src: 'Copy of SUMMER SET/White Singlet tank-top.webp', ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'Copy of SUMMER SET/Black Singlet tank-top.webp', ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'Copy of SUMMER SET/White vest tank.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'Copy of SUMMER SET/Black vest tank.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Singlet Tanktop.webp',             ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       // { src: 'JUNE 2026 SET/Singlet Tanktop 1.webp',           ngn: 15500 },
       // { src: 'JUNE 2026 SET/All singlet Tanktop.webp',         ngn: 11000 },
       // { src: 'JUNE 2026 SET/All Female Tanktop.webp',          ngn: 11000 },
       // { src: 'JUNE 2026 SET/Female Tanktop.webp',              ngn: 10000 },
-      { src: 'JUNE 2026 SET/Tank top black-green.webp',        ngn: 11500 },
-      { src: 'JUNE 2026 SET/Tank top black-red.webp',          ngn: 11500 },
-      { src: 'JUNE 2026 SET/Tank top white-green.webp',        ngn: 11500 },
-      { src: 'JUNE 2026 SET/Tank top white-red.webp',          ngn: 11500 },
-      { src: 'JUNE 2026 SET/White-Pink Tank.webp',             ngn: 12000 },
-      { src: 'JUNE 2026 SET/Chunkz Singlet (black).webp',      ngn:  9500 },
-      { src: 'JUNE 2026 SET/Chunkz Singlet (green).webp',      ngn:  9500 },
-      { src: 'JUNE 2026 SET/Female singlet black.webp',        ngn: 10000 },
-      { src: 'JUNE 2026 SET/Female singlet blue.webp',         ngn: 10000 },
-      { src: 'JUNE 2026 SET/Female singlet pink.webp',         ngn: 10000 },
-      { src: 'JUNE 2026 SET/Female singlet red.webp',          ngn: 10000 },
-      { src: 'JUNE 2026 SET/Female singlet red minus.webp',    ngn:  9500 },
-      { src: 'JUNE 2026 SET/Female singlet white.webp',        ngn: 10000 },
-      { src: 'JUNE 2026 SET/Archer Crop Tank.webp',            ngn: 12000 },
+      { src: 'JUNE 2026 SET/Tank top black-green.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Tank top black-red.webp',          ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Tank top white-green.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Tank top white-red.webp',          ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/White-Pink Tank.webp',             ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Chunkz Singlet (black).webp',      ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Chunkz Singlet (green).webp',      ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Female singlet black.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Female singlet blue.webp',         ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Female singlet white.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Archer Crop Tank.webp',            ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       // { src: 'JUNE 2026 SET/Tank and Short combo.webp',        ngn: 18000 }
     ]
   },
 
   croptop: {
     title:      'Crop Top',
-    subtitle:   'Fresh Summer Crop Tops',
+    subtitle:   'Female Summer Crop Tops',
     coverImage: 'JUNE 2026 SET/Ringer Slit-Globe Crop.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 12000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 12,    currency: 'USD', symbol: '$'  },
+      NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 13.5,    currency: 'USD', symbol: '$'  },
       GB: { amount: 10,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 16,    currency: 'CAD', symbol: 'CA$'}
+      CA: { amount: 18,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Ringer Slit-Globe Crop.webp',    ngn: 13500 },
-      { src: 'Copy of SUMMER SET/White Croptop world.webp',  ngn: 12000 },
-      { src: 'Copy of SUMMER SET/White croptop (fw).webp',   ngn: 13500 },
-      { src: 'Copy of SUMMER SET/Black croptop (fw).webp',   ngn: 13500 },
-      { src: 'Copy of SUMMER SET/Black croptop (SHJ).webp',  ngn: 14500 },
-      { src: 'Copy of SUMMER SET/Raglan crop top.webp',      ngn: 14500 },
-      { src: 'Copy of SUMMER SET/croptop bfly blue.webp',    ngn: 13000 },
-      { src: 'Copy of SUMMER SET/croptop bfly pink.webp',    ngn: 13000 },
-      { src: 'JUNE 2026 SET/Camo Globe Black Crop.webp',     ngn: 14000 },
-      { src: 'JUNE 2026 SET/Camo Globe White Crop.webp',     ngn: 14000 },
-      { src: 'JUNE 2026 SET/Black-Cherub Raglan Crop.webp',  ngn: 15000 },
-      { src: 'JUNE 2026 SET/Pink-Cherub Raglan Crop.webp',   ngn: 15000 },
-      { src: 'JUNE 2026 SET/Red-Cherub Raglan Crop.webp',    ngn: 15000 },
-      { src: 'JUNE 2026 SET/Black Sanctuary Crop.webp',      ngn: 15000 },
-      { src: 'JUNE 2026 SET/White Sanctuary Crop.webp',      ngn: 15000 },
-      { src: 'JUNE 2026 SET/Hinged Black Crop.webp',         ngn: 15000 },
-
+      { src: 'JUNE 2026 SET/Ringer Slit-Globe Crop.webp',    ngn: 15000, usd: 13.5, gbp: 10, cad: 18 },
+      { src: 'Copy of SUMMER SET/White croptop (fw).webp',   ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'Copy of SUMMER SET/White Croptop world.webp',  ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'Copy of SUMMER SET/Black croptop (fw).webp',   ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'Copy of SUMMER SET/Black croptop (SHJ).webp',  ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'Copy of SUMMER SET/Raglan crop top.webp',      ngn: 12000, usd: 12.5, gbp: 10, cad: 14 },
+      { src: 'Copy of SUMMER SET/croptop bfly blue.webp',    ngn: 10000,  usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'Copy of SUMMER SET/croptop bfly pink.webp',    ngn: 10000,  usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'JUNE 2026 SET/Camo Globe Black Crop.webp',     ngn: 10000,  usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'JUNE 2026 SET/Camo Globe White Crop.webp',     ngn: 10000,  usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'JUNE 2026 SET/Black-Cherub Raglan Crop.webp',  ngn: 12000, usd: 12.5, gbp: 10, cad: 14 },
+      { src: 'JUNE 2026 SET/Pink-Cherub Raglan Crop.webp',   ngn: 12000, usd: 12.5, gbp: 10, cad: 14 },
+      { src: 'JUNE 2026 SET/Red-Cherub Raglan Crop.webp',    ngn: 12000, usd: 12.5, gbp: 10, cad: 14 },
+      { src: 'JUNE 2026 SET/Black Sanctuary Crop.webp',      ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'JUNE 2026 SET/White Sanctuary Crop.webp',      ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
+      { src: 'JUNE 2026 SET/Hinged White Crop.webp',         ngn: 10000, usd: 11, gbp: 8.85, cad: 12 }
     ]
-  },
+      },
 
   shorts: {
     title:      'Shorts',
@@ -980,18 +997,18 @@ const catalog = {
     ctaLabel:   'View Collection',
     prices: {
       NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 15,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 12,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 20,    currency: 'CAD', symbol: 'CA$'}
+      US: { amount: 16.5,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 12.5,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 22,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/New Chunkz Black Short.webp',    ngn: 14500 },
-      { src: 'JUNE 2026 SET/New Chunkz brown short.webp',    ngn: 14500 },
-      { src: 'JUNE 2026 SET/New Chunkz grey short.webp',     ngn: 14500 },
-      { src: 'JUNE 2026 SET/New Chunkz pink short.webp',     ngn: 14500 },
-      { src: 'Copy of SUMMER SET/Black short.webp',          ngn: 14000 },
-      { src: 'Chunkz First Set/Anime Short.webp',            ngn: 15000 },
-      { src: 'Chunkz First Set/Black short 1.webp',            ngn: 15000 }
+      { src: 'JUNE 2026 SET/New Chunkz Black Short.webp',    ngn: 15000, usd: 16.5, gbp: 12.5, cad: 22 },
+      { src: 'JUNE 2026 SET/New Chunkz brown short.webp',    ngn: 15000, usd: 16.5, gbp: 12.5, cad: 22 },
+      { src: 'JUNE 2026 SET/New Chunkz grey short.webp',     ngn: 15000, usd: 16.5, gbp: 12.5, cad: 22 },
+      { src: 'JUNE 2026 SET/New Chunkz pink short.webp',     ngn: 15000, usd: 16.5, gbp: 12.5, cad: 22 },
+      { src: 'Copy of SUMMER SET/Black short.webp',          ngn: 15000, usd: 16.5, gbp: 12.5, cad: 22 },
+      { src: 'Chunkz First Set/Anime Short.webp',            ngn: 15000, usd: 18, gbp: 14, cad: 24 },
+      // { src: 'Chunkz First Set/Black short 1.webp',            ngn: 15000, usd: 12, gbp: 9.6, cad: 16 }
     ]
   },
 
@@ -1001,14 +1018,14 @@ const catalog = {
     coverImage: 'Chunkz First Set/Cap Section.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 12000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 12,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 10,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 16,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 5000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 5,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 4,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 6,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'Chunkz First Set/Cap Section.webp',      ngn: 12000 },
-      { src: 'Chunkz First Set/BLACKCap Section.webp', ngn: 11000 }
+      { src: 'Chunkz First Set/Cap Section.webp',      ngn: 5000, usd: 5, gbp: 4, cad: 6 },
+      { src: 'Chunkz First Set/BLACKCap Section.webp', ngn: 5000, usd: 5, gbp: 4, cad: 6 }
     ]
   },
 
@@ -1018,23 +1035,23 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Black Chunkz Crest Polo.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 18000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 18,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 14,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 24,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 27500, currency: 'NGN', symbol: '₦' },
+      US: { amount: 24.5,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 18.5,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Black Chunkz Crest Polo.webp',      ngn: 20000 },
-      { src: 'JUNE 2026 SET/White Chunkz Crest Polo.webp',      ngn: 20000 },
-      { src: 'JUNE 2026 SET/Black Short-sleeved Polo.webp',     ngn: 18000 },
-      { src: 'JUNE 2026 SET/White Short-sleeved Polo.webp',     ngn: 18000 },
+      { src: 'JUNE 2026 SET/Black Chunkz Crest Polo.webp',      ngn: 27500, usd: 24.5, gbp: 18.5, cad: 33 },
+      { src: 'JUNE 2026 SET/White Chunkz Crest Polo.webp',      ngn: 27500, usd: 24.5, gbp: 18.5, cad: 33 },
+      { src: 'JUNE 2026 SET/Black Short-sleeved Polo.webp',     ngn: 25000, usd: 23.5, gbp: 18, cad: 31 },
+      { src: 'JUNE 2026 SET/White Short-sleeved Polo.webp',     ngn: 25000, usd: 23.5, gbp: 18, cad: 31 },
       
-      { src: 'JUNE 2026 SET/Black Chunkz Crest Polo 1.webp',    ngn: 20000 },
-      { src: 'JUNE 2026 SET/Grey Chunkz Crest Polo.webp',       ngn: 20000 },
-      { src: 'JUNE 2026 SET/Red Chunkz Crest Polo.webp',        ngn: 20000 },
+      { src: 'JUNE 2026 SET/Black Chunkz Crest Polo 1.webp',    ngn: 27500, usd: 24.5, gbp: 18.5, cad: 33 },
+      { src: 'JUNE 2026 SET/Grey Chunkz Crest Polo.webp',       ngn: 27500, usd: 24.5, gbp: 18.5, cad: 33 },
+      { src: 'JUNE 2026 SET/Red Chunkz Crest Polo.webp',        ngn: 27500, usd: 24.5, gbp: 18.5, cad: 33 },
       
-       { src: 'Copy of SUMMER SET/Polo (zipless).webp',          ngn: 18000 },
-      { src: 'Copy of SUMMER SET/Polo (zipper 1).webp',         ngn: 21000 },
+       { src: 'Copy of SUMMER SET/Polo (zipless).webp',          ngn: 23500, usd: 23, gbp: 17.5, cad: 30 },
+      { src: 'Copy of SUMMER SET/Polo (zipper 1).webp',         ngn: 23500, usd: 23, gbp: 17.5, cad: 30 },
     ]
   },
 
@@ -1044,16 +1061,16 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Jort.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 18000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 18,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 14,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 24,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 20000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 22,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 16.5,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 30,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Chunkz Jort.webp', ngn: 18000 },
-      { src: 'Chunkz First Set/Chunkz Jorts.webp', ngn: 18000 },
-      { src: 'Chunkz First Set/Cargo Pant.webp', ngn: 18000 },
-      { src: 'Chunkz First Set/Cargo Pant 1.webp', ngn: 18000 },
+      { src: 'JUNE 2026 SET/Chunkz Jort.webp', ngn: 20000, usd: 22, gbp: 16.5, cad: 30 },
+      { src: 'Chunkz First Set/Chunkz Jorts.webp', ngn: 20000, usd: 22, gbp: 16.5, cad: 30 },
+      { src: 'Chunkz First Set/Cargo Pant.webp', ngn: 20000, usd: 22, gbp: 16.5, cad: 30 },
+      { src: 'Chunkz First Set/Cargo Pant 1.webp', ngn: 20000, usd: 22, gbp: 16.5, cad: 30 },
     ]
   },
 
@@ -1063,14 +1080,14 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Quater Zip.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 25000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 27000, currency: 'NGN', symbol: '₦' },
       US: { amount: 25,    currency: 'USD', symbol: '$'  },
       GB: { amount: 20,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
+      CA: { amount: 36.5,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Chunkz Quater Zip.webp',       ngn: 25000 },
-      { src: 'JUNE 2026 SET/White Collar Quater Zip.webp',  ngn: 27000 },
+      { src: 'JUNE 2026 SET/Chunkz Quater Zip.webp',       ngn: 25000, usd: 24, gbp: 19.5, cad: 35 },
+      { src: 'JUNE 2026 SET/White Collar Quater Zip.webp',  ngn: 27000, usd: 25, gbp: 20, cad: 36.5 },
       // { src: 'JUNE 2026 SET/White Collar Quater Zip 1.webp', ngn: 27000 }
     ]
   },
@@ -1081,18 +1098,18 @@ const catalog = {
     coverImage: 'Chunkz First Set/Raglan Longsleeve.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 18000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 18,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 14,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 24,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 27000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 25,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 20,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 36.5,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
      
-      { src: 'Chunkz First Set/Raglan Longsleeve.webp',                    ngn: 19000 },
-      { src: 'Chunkz First Set/Raglan Longsleeve 1.webp',                 ngn: 19500 },
-      { src: 'JUNE 2026 SET/Black Double-Sleeve Layer.webp',                ngn: 20000 },
-      { src: 'JUNE 2026 SET/New Plain Raglan Longsleeve.webp',             ngn: 19000 },
-      { src: 'JUNE 2026 SET/New Camou Raglan longsleeve.webp',             ngn: 22000 },
+      { src: 'Chunkz First Set/Raglan Longsleeve.webp',                    ngn: 25000, usd: 24, gbp: 19.5, cad: 35 },
+      { src: 'Chunkz First Set/Raglan Longsleeve 1.webp',                 ngn: 25000, usd: 24, gbp: 19.5, cad: 35 },
+      { src: 'JUNE 2026 SET/Black Double-Sleeve Layer.webp',                ngn: 27000, usd: 25, gbp: 20, cad: 36.5 },
+      { src: 'JUNE 2026 SET/New Plain Raglan Longsleeve.webp',             ngn: 25000, usd: 24, gbp: 19.5, cad: 35 },
+      { src: 'JUNE 2026 SET/New Camou Raglan longsleeve.webp',             ngn: 25000, usd: 24, gbp: 19.5, cad: 35 },
   ]
   },
 
@@ -1102,16 +1119,16 @@ const catalog = {
     coverImage: 'Chunkz First Set/Raglan Shirt.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 15,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 12,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 20,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 23000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 23,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 16.5,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 31.75,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'Chunkz First Set/Raglan Shirt.webp',    ngn: 15000 },
-      { src: 'Chunkz First Set/Raglan Shirt 1.webp',  ngn: 15500 },
-      { src: 'Chunkz First Set/Raglan Shirt 2.webp',  ngn: 16000 },
-      { src: 'Chunkz First Set/Raglan shirt 3.webp',  ngn: 16500 }
+      { src: 'Chunkz First Set/Raglan Shirt.webp',    ngn: 23000, usd: 23, gbp: 16.5, cad: 31.75 },
+      { src: 'Chunkz First Set/Raglan Shirt 1.webp',  ngn: 23000, usd: 23, gbp: 16.5, cad: 31.75 },
+      { src: 'Chunkz First Set/Raglan Shirt 2.webp',  ngn: 23000, usd: 23, gbp: 16.5, cad: 31.75 },
+      { src: 'Chunkz First Set/Raglan shirt 3.webp',  ngn: 23000, usd: 23, gbp: 16.5, cad: 31.75 }
     ]
   },
 
@@ -1127,8 +1144,8 @@ const catalog = {
       CA: { amount: 7,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Socks mockup 1.webp', ngn: 5000 },
-      { src: 'JUNE 2026 SET/Socks mockup 2.webp', ngn: 5500 }
+      { src: 'JUNE 2026 SET/Socks mockup 1.webp', ngn: 5000, usd: 5, gbp: 4, cad: 7 },
+      { src: 'JUNE 2026 SET/Socks mockup 2.webp', ngn: 5500, usd: 5, gbp: 4, cad: 7 }
     ]
   },
 
@@ -1138,26 +1155,26 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Hoodie and Pant Combo.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 40000, currency: 'NGN', symbol: '₦' },
-      US: { amount: 40,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 32,    currency: 'GBP', symbol: '£'  },
-      CA: { amount: 53,    currency: 'CAD', symbol: 'CA$'}
+      NG: { amount: 55000, currency: 'NGN', symbol: '₦' },
+      US: { amount: 48.5,    currency: 'USD', symbol: '$'  },
+      GB: { amount: 37,    currency: 'GBP', symbol: '£'  },
+      CA: { amount: 65,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
-      { src: 'JUNE 2026 SET/Camo Combo.webp',                ngn: 40000 },
-      { src: 'JUNE 2026 SET/Cherub Worldwide Combo.webp',    ngn: 42000 },
-      { src: 'JUNE 2026 SET/Hoodie and Pant Combo.webp',     ngn: 48000 },
-      { src: 'JUNE 2026 SET/Black Tank and Short combo .webp', ngn: 28000 },
-      { src: 'JUNE 2026 SET/White Tank and Short combo .webp', ngn: 28000 },
-      { src: 'Chunkz First Set/Hoodie And Pant Combo 2.webp', ngn: 45000 },
-      { src: 'Chunkz First Set/Raglan & Jort Combo.webp',    ngn: 35000 },
-      { src: 'Chunkz First Set/Raglan Combo.webp',           ngn: 32000 },
-      { src: 'Chunkz First Set/Vandal Longlseeve & Short.webp',  ngn: 32000 },
-      { src: 'JUNE 2026 SET/Rebel Fly Short Set.webp', ngn: 28000 },
-      { src: 'JUNE 2026 SET/Full Brown Combo.webp',     ngn: 48000 },
-      { src: 'JUNE 2026 SET/Full Black Combo.webp', ngn: 28000 },
-      { src: 'JUNE 2026 SET/Full Green Combo.webp', ngn: 28000 },
-      { src: 'Chunkz First Set/SLD & PANT COMBO.webp',       ngn: 38000 }
+      { src: 'JUNE 2026 SET/Camo Combo.webp',                ngn: 50000, usd: 45, gbp: 35, cad: 60 },
+      { src: 'JUNE 2026 SET/Cherub Worldwide Combo.webp',    ngn: 40000, usd: 40, gbp: 29.5, cad: 50 },
+      { src: 'JUNE 2026 SET/Hoodie and Pant Combo.webp',     ngn: 47500, usd: 40, gbp: 30, cad: 55 },
+      { src: 'JUNE 2026 SET/Black Tank and Short combo .webp', ngn: 30000, usd: 28, gbp: 21, cad: 38 },
+      { src: 'JUNE 2026 SET/White Tank and Short combo .webp', ngn: 30000, usd: 28, gbp: 21, cad: 38 },
+      { src: 'Chunkz First Set/Hoodie And Pant Combo 2.webp', ngn: 45000, usd: 38.5, gbp: 28.5, cad: 52 },
+      { src: 'Chunkz First Set/Raglan & Jort Combo.webp',    ngn: 42500, usd: 35, gbp: 26, cad: 47.5 },
+      { src: 'Chunkz First Set/Raglan Combo.webp',           ngn: 40000, usd: 31, gbp: 24.5, cad: 45 },
+      { src: 'Chunkz First Set/Vandal Longlseeve & Short.webp',  ngn: 40000, usd: 31, gbp: 24.5, cad: 45 },
+      { src: 'JUNE 2026 SET/Rebel Fly Short Set.webp',           ngn: 25000, usd: 23.5, gbp: 18, cad: 30 },
+      { src: 'JUNE 2026 SET/Full Brown Combo.webp',             ngn: 47500, usd: 40, gbp: 30, cad: 55 },
+      { src: 'JUNE 2026 SET/Full Black Combo.webp',           ngn: 55000, usd: 48, gbp: 37, cad: 65 },
+      { src: 'JUNE 2026 SET/Full Green Combo.webp',           ngn: 47500, usd: 40, gbp: 30, cad: 55 },
+      { src: 'Chunkz First Set/SLD & PANT COMBO.webp',       ngn: 43500, usd: 35, gbp: 26, cad: 47 }
     ]
   }
 
@@ -1265,7 +1282,6 @@ async function detectCountry() {
       if (code && /^[A-Z]{2}$/i.test(code)) {
         const detected = code.toUpperCase();
         userCountry = SUPPORTED_COUNTRIES.includes(detected) ? detected : 'US';
-        document.getElementById('currPill').textContent = 'Showing prices for: ' + (name || detected);
         renderCategories();
         refreshCartUI();
         return;
@@ -1273,7 +1289,6 @@ async function detectCountry() {
     } catch (_) {}
   }
   userCountry = 'NG';
-  document.getElementById('currPill').textContent = 'Prices in NGN (₦)';
   renderCategories();
 }
 
@@ -2012,5 +2027,13 @@ detectDeliveryCountry(); // warm up delivery country cache before checkout opens
   img.src = 'CHUNKZLOGO.jpg';
 })();
 </script>
+
+<!-- ── Chat with Chunkz (WhatsApp) ── -->
+<a class="chat-fab"
+   href="https://wa.me/2347069094959?text=Hello%20Chunkz!%20I%27d%20like%20to%20ask%20about%20an%20item."
+   target="_blank" rel="noopener" aria-label="Chat with Chunkz on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+  Chat with Chunkz
+</a>
 </body>
 </html>
