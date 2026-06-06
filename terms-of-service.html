@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Chunkz</title>
+  <meta name="description" content="Read Chunkz's Terms of Service. By shopping with us you agree to these terms governing orders, payments, returns, and more.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:960px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:440px;margin:0 auto}
+
+    .content-wrap{max-width:960px;margin:0 auto;padding:56px 20px}
+    .last-updated{font-size:12px;color:#888;margin-bottom:32px;padding:10px 16px;background:#fff;border-radius:8px;display:inline-block;border-left:3px solid var(--accent)}
+    .section-block{background:#fff;border-radius:16px;padding:36px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .section-block h2{font-size:19px;font-weight:900;margin-bottom:6px;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+    .section-block h2 i{font-size:16px;color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--gray-mid);margin:20px 0}
+    .section-block p{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:14px}
+    .section-block p:last-child{margin-bottom:0}
+    .section-block ul{padding-left:20px;margin-bottom:14px}
+    .section-block ul li{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:6px}
+    .section-block a{color:var(--black);font-weight:700;text-decoration:underline}
+    .alert-info{border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;margin-top:16px;background:#eff6ff;color:#1e40af;border-left:4px solid #3b82f6}
+    .alert-warn{border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;margin-top:16px;background:#fff7ed;color:#92400e;border-left:4px solid #f59e0b}
+
+    .help-cta{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .help-cta h2{font-size:20px;font-weight:900;margin-bottom:10px}
+    .help-cta p{color:#4a6080;font-size:13px;margin-bottom:24px}
+    .help-cta a{background:var(--black);color:#fff;padding:12px 30px;border-radius:30px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;transition:background .2s;margin:4px}
+    .help-cta a:hover{background:#333}
+
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .content-wrap{padding:36px 16px}
+      .section-block{padding:24px}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="/" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#products">Shop</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Terms of Service</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>TERMS OF SERVICE</h1>
+  <p>Please read these terms carefully before placing an order with us.</p>
+</section>
+
+<div class="content-wrap">
+
+  <div class="last-updated">Last updated: June 2026</div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-file-contract"></i> 1. Acceptance of Terms</h2>
+    <hr class="section-divider">
+    <p>By accessing or using the Chunkz website (<strong>chunkzthebrand.com</strong>) or placing an order with us, you confirm that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree with any part of these terms, please do not use our website or place an order.</p>
+    <p>Chunkz reserves the right to update or modify these terms at any time without prior notice. Continued use of our website after any changes constitutes your acceptance of the new terms.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-tshirt"></i> 2. Products & Orders</h2>
+    <hr class="section-divider">
+    <p>All product listings, descriptions, and images on our website are for informational purposes only. We make every effort to display colours and details accurately, but we cannot guarantee that your device's screen accurately reflects the actual product.</p>
+    <ul>
+      <li>Orders are subject to availability. If an item becomes unavailable after you place your order, we will contact you promptly.</li>
+      <li>We reserve the right to refuse or cancel any order at our discretion, including cases of suspected fraud, pricing errors, or stock discrepancies.</li>
+      <li>Once payment is confirmed, your order is considered placed. You will receive an Order ID to track your purchase.</li>
+      <li>Chunkz is not responsible for errors made by the customer in the order (e.g. wrong size, wrong address). Please review your order carefully before completing payment.</li>
+    </ul>
+    <div class="alert-info"><i class="fas fa-info-circle"></i> &nbsp;If you notice an error in your order immediately after placing it, contact us via WhatsApp or email as soon as possible. We will do our best to assist, but changes cannot be guaranteed once processing has begun.</div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-credit-card"></i> 3. Pricing & Payment</h2>
+    <hr class="section-divider">
+    <p>All prices are displayed in your detected or selected currency (NGN, USD, GBP, or CAD). Prices are subject to change without notice. The price charged is the price displayed at the time of checkout.</p>
+    <p>Payments are processed securely through <strong>Flutterwave</strong>. We accept card payments, bank transfers, and other methods supported by Flutterwave. Chunkz does not store your card or banking details — all payment data is handled directly by Flutterwave.</p>
+    <ul>
+      <li>Orders are only confirmed after successful payment. Unpaid orders are not processed.</li>
+      <li>Delivery fees are calculated at checkout based on your location and are non-refundable once the order is dispatched.</li>
+      <li>Currency conversion rates are indicative and may vary slightly from your bank's rate.</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-undo-alt"></i> 4. Returns, Exchanges & Refunds</h2>
+    <hr class="section-divider">
+    <p>We want you to love your Chunkz purchase. If there is an issue with your order, please contact us within <strong>7 days</strong> of delivery.</p>
+    <ul>
+      <li><strong>Defective or wrong items:</strong> We will arrange a replacement or full refund at no extra cost to you.</li>
+      <li><strong>Size exchanges:</strong> We accept size exchanges on unworn, unwashed items with original tags attached. The customer is responsible for return shipping costs.</li>
+      <li><strong>Change of mind:</strong> We do not accept returns or refunds for change of mind, incorrect size selected, or items that have been worn or washed.</li>
+      <li><strong>Refunds:</strong> Approved refunds are processed within 5–10 business days back to your original payment method.</li>
+    </ul>
+    <div class="alert-warn"><i class="fas fa-exclamation-triangle"></i> &nbsp;Items marked as <strong>Sale</strong> or purchased during promotional periods are final sale and not eligible for return or exchange unless defective.</div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-truck"></i> 5. Shipping & Delivery</h2>
+    <hr class="section-divider">
+    <p>Delivery timelines and fees are detailed on our <a href="/shipping-delivery">Shipping &amp; Delivery</a> page. By placing an order, you agree to the shipping terms outlined there.</p>
+    <ul>
+      <li>Chunkz is not responsible for delays caused by couriers, customs, or circumstances beyond our control (e.g. public holidays, bad weather, strikes).</li>
+      <li>For international orders, the customer is responsible for any import duties, taxes, or customs fees charged by their country.</li>
+      <li>Risk of loss and title for products pass to you upon delivery to the courier.</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-copyright"></i> 6. Intellectual Property</h2>
+    <hr class="section-divider">
+    <p>All content on this website — including the Chunkz logo, product images, text, graphics, and designs — is the property of Chunkz and is protected by copyright and trademark law. You may not reproduce, distribute, or use any content from this site without our express written permission.</p>
+    <p>You are welcome to share links to our website and products on social media, but you may not present our content as your own.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-ban"></i> 7. Prohibited Use</h2>
+    <hr class="section-divider">
+    <p>When using our website, you agree not to:</p>
+    <ul>
+      <li>Use the site for any unlawful purpose or in violation of any regulations.</li>
+      <li>Attempt to gain unauthorised access to any part of the website or its systems.</li>
+      <li>Submit false, fraudulent, or misleading information during checkout.</li>
+      <li>Use automated tools to scrape, copy, or harvest data from our website.</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-shield-alt"></i> 8. Limitation of Liability</h2>
+    <hr class="section-divider">
+    <p>To the fullest extent permitted by law, Chunkz shall not be liable for any indirect, incidental, special, or consequential damages arising out of your use of our website or products, including but not limited to loss of profits, data, or goodwill.</p>
+    <p>Our total liability to you for any claim arising from your use of our services shall not exceed the amount you paid for the specific order in question.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-balance-scale"></i> 9. Governing Law</h2>
+    <hr class="section-divider">
+    <p>These Terms of Service are governed by and construed in accordance with the laws of the Federal Republic of Nigeria. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts of Nigeria.</p>
+  </div>
+
+  <div class="help-cta">
+    <h2>Questions about these terms?</h2>
+    <p>If anything is unclear, we're happy to explain. Reach out to our team and we'll respond promptly.</p>
+    <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
+    <a href="/faqs" style="background:#f4f4f4;color:#0a0a0a"><i class="fas fa-question-circle"></i> FAQs</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="/#products">All Products</a></li>
+        <li><a href="/#products">New Arrivals</a></li>
+        <li><a href="/#products">Best Sellers</a></li>
+        <li><a href="/#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/faqs">FAQs</a></li>
+        <li><a href="/shipping-delivery">Shipping &amp; Delivery</a></li>
+        <li><a href="/size-guide">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/cookie-policy">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

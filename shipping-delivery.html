@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping &amp; Delivery — Chunkz</title>
+  <meta name="description" content="Learn about Chunkz shipping options, delivery times, and how to track your order locally and internationally.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    /* Header */
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    /* Breadcrumb */
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:960px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    /* Page Hero */
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:440px;margin:0 auto}
+
+    /* Stat Cards */
+    .stat-row{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;padding:56px 20px 0}
+    .stat-card{background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .stat-card i{font-size:26px;margin-bottom:12px;display:block;color:var(--black)}
+    .stat-card strong{display:block;font-size:17px;font-weight:900;margin-bottom:4px}
+    .stat-card span{font-size:12px;color:#4a6080}
+
+    /* Main Content */
+    .content-wrap{max-width:960px;margin:0 auto;padding:56px 20px}
+    .section-block{background:#fff;border-radius:16px;padding:36px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .section-block h2{font-size:19px;font-weight:900;margin-bottom:6px;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+    .section-block h2 i{font-size:16px;color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--gray-mid);margin:20px 0}
+    .section-block p{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:14px}
+    .section-block p:last-child{margin-bottom:0}
+    .section-block a{color:var(--black);font-weight:700;text-decoration:underline}
+
+    /* Table */
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+    .info-table th{background:var(--black);color:#fff;padding:11px 16px;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+    .info-table th:first-child{border-radius:8px 0 0 0}
+    .info-table th:last-child{border-radius:0 8px 0 0}
+    .info-table td{padding:11px 16px;border-bottom:1px solid var(--gray-mid);color:#333;vertical-align:top}
+    .info-table tr:last-child td{border-bottom:none}
+    .info-table tr:nth-child(even) td{background:var(--gray-light)}
+    .badge-paid{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#fee2e2;color:#b91c1c}
+
+    /* Steps */
+    .steps{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+    .step{display:flex;gap:16px;align-items:flex-start}
+    .step-num{width:32px;height:32px;border-radius:50%;background:var(--black);color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .step-text strong{display:block;font-size:13px;font-weight:700;margin-bottom:3px}
+    .step-text span{font-size:12px;color:#4a6080;line-height:1.7}
+
+    /* Alert box */
+    .alert-info{border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;margin-top:16px;background:#eff6ff;color:#1e40af;border-left:4px solid #3b82f6}
+
+    /* FAQ teaser */
+    .help-cta{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .help-cta h2{font-size:20px;font-weight:900;margin-bottom:10px}
+    .help-cta p{color:#4a6080;font-size:13px;margin-bottom:24px}
+    .help-cta a{background:var(--black);color:#fff;padding:12px 30px;border-radius:30px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;transition:background .2s;margin:4px}
+    .help-cta a:hover{background:#333}
+
+    /* Footer */
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .content-wrap{padding:36px 16px}
+      .section-block{padding:24px}
+      .stat-row{padding:40px 16px 0}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+      .info-table{font-size:12px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="/" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#products">Shop</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Shipping &amp; Delivery</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>SHIPPING &amp; DELIVERY</h1>
+  <p>We deliver locally across Nigeria and internationally to countries worldwide.</p>
+</section>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <i class="fas fa-truck"></i>
+    <strong>3–7 Days</strong>
+    <span>Domestic delivery</span>
+  </div>
+  <div class="stat-card">
+    <i class="fas fa-globe"></i>
+    <strong>10–21 Days</strong>
+    <span>International delivery</span>
+  </div>
+  <div class="stat-card">
+    <i class="fas fa-box"></i>
+    <strong>2–4 Business Days</strong>
+    <span>Order processing</span>
+  </div>
+  <div class="stat-card">
+    <i class="fas fa-shield-alt"></i>
+    <strong>Tracked</strong>
+    <span>Every shipment</span>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="section-block">
+    <h2><i class="fas fa-shipping-fast"></i> Domestic Shipping (Nigeria)</h2>
+    <hr class="section-divider">
+    <p>We process all orders within 2–4 business days after payment is confirmed. Once dispatched, you'll receive a tracking update via WhatsApp or email.</p>
+
+    <table class="info-table">
+      <thead>
+        <tr>
+          <th>Zone</th>
+          <th>Method</th>
+          <th>Estimated Delivery</th>
+          <th>Delivery Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+
+         <tr>
+          <td>Within Ibadan</td>
+          <td>Standard Delivery</td>
+          <td>1–3 business days</td>
+          <td><span class="badge-paid">₦1,500 – ₦2,000/Pickup</span></td>
+        </tr>
+
+        <tr>
+          <td>Lagos State</td>
+          <td>Courier Service</td>
+          <td>1–3 business days</td>
+          <td><span class="badge-paid">₦4,000 </span></td>
+        </tr>
+        <tr>
+          <td>South West ( Abeokuta, Osun, Ekiti, Ondo, )</td>
+          <td>Courier Service</td>
+          <td>2–4 business days</td>
+          <td><span class="badge-paid">₦3,000 – ₦4,500</span></td>
+        </tr>
+        <tr>
+          <td>Other Nigerian States</td>
+          <td>Courier Service</td>
+          <td>3–7 business days</td>
+          <td><span class="badge-paid">Varies from ₦5,000 and above</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-info" style="margin-top:16px">
+      <strong>Delivery fee note:</strong> For within-Ibadan and local area deliveries, the final delivery fee is negotiated directly between you and the rider/driver at the point of delivery. The figures above are estimates, your rider will confirm the exact amount.
+    </div>
+
+    <div class="alert-info" style="margin-top:12px">
+      <strong>Free delivery</strong> is available on orders over ₦50,000 delivered within <strong>Ibadan</strong>. Free delivery to <strong>Bowen University</strong> on orders over ₦50,000 is subject to availability and conditions.<br> Contact us to confirm before ordering. Standard delivery rates apply to all other locations.
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-globe-africa"></i> International Shipping</h2>
+    <hr class="section-divider">
+    <p>We ship worldwide to every country. International orders are handled through a trusted courier partner and include full tracking. The United Kingdom, United States, and Canada are our most common destinations; delivery times for other countries are similar or may vary slightly.</p>
+    <p>For international orders, please <a href="/contact">contact us</a> before placing your order so we can confirm shipping rates and the fastest available option for your location.</p>
+
+    <table class="info-table">
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Method</th>
+          <th>Estimated Delivery</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>United Kingdom</td>
+          <td>International Courier</td>
+          <td>10–14 business days</td>
+        </tr>
+        <tr>
+          <td>United States</td>
+          <td>International Courier</td>
+          <td>14–21 business days</td>
+        </tr>
+        <tr>
+          <td>Canada</td>
+          <td>International Courier</td>
+          <td>14–21 business days</td>
+        </tr>
+        <tr>
+          <td>Rest of World</td>
+          <td>International Courier</td>
+          <td>Varies by location</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-info" style="margin-top:20px">
+      We deliver to all countries worldwide. Shipping fees and delivery times vary by destination and package weight. Please <a href="/contact" style="color:inherit;font-weight:700">contact us</a> for a quote before placing your international order.
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-map-marker-alt"></i> Order Tracking</h2>
+    <hr class="section-divider">
+    <p>Every order is fully tracked from the moment it leaves us to the moment it reaches your door.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Order Confirmed</strong>
+          <span>After payment, you'll receive an order confirmation. We begin processing your order within 1–2 business days.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Order Dispatched</strong>
+          <span>Once your order is packed and handed to the courier, we'll send you a tracking number via WhatsApp or email.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Track Your Parcel</strong>
+          <span>Use your tracking number on the courier's website to monitor your delivery in real time. Kindly track for order <a href="/track-order">here</a></span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <strong>Delivered</strong>
+          <span>Your order arrives at the address provided at checkout. Ensure someone is available to receive the parcel.</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:20px">Haven't received a tracking update within 3 business days of your payment confirmation? <a href="/contact">Reach out to our team</a> and we'll look into it straight away.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-question-circle"></i> Delivery FAQs</h2>
+    <hr class="section-divider">
+    <p><strong>Can I change my delivery address after ordering?</strong><br>Contact us as soon as possible via <a href="/contact">our contact page</a>. If your order hasn't been dispatched yet, we can update the address.</p>
+    <p><strong>What if no one is home when delivery is attempted?</strong><br>The courier will typically leave a note or attempt redelivery the next business day. For domestic orders, you can also arrange collection from a nearby courier hub.</p>
+    <p><strong>Do you deliver to universities and campuses?</strong><br>Yes! We regularly deliver to campuses including Bowen University, ACU, Covenant University, Babcock University, PAU, Reedemers University, Veritas, Nile, OAU, FUTA, FUNNAB, OOU, UI e.t.c. Provide your full hostel/hall address and a contact number at checkout.</p>
+    <p><strong>My order hasn't arrived — what do I do?</strong><br>If your estimated delivery window has passed, <a href="/contact">contact us</a> with your order reference and we will investigate and resolve it promptly.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-bolt"></i> Urgent / Rush Orders</h2>
+    <hr class="section-divider">
+    <p>Need your order faster than standard processing allows? We offer a <strong>Rush Order</strong> option for customers who need priority handling and quicker turnaround.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Contact Us First</strong>
+          <span>Reach out via WhatsApp or email before placing your order to confirm availability and your required deadline.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Rush Fee Applies</strong>
+          <span>Urgent orders attract an additional rush fee on top of the standard product and delivery price. The fee depends on your timeline and order size.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Place Your Order</strong>
+          <span>Once we've confirmed we can meet your deadline and agreed on pricing, proceed with your order as normal and note "URGENT" in the Description field.</span>
+        </div>
+      </div>
+    </div>
+    <div class="alert-info" style="margin-top:20px"><i class="fas fa-exclamation-circle"></i> &nbsp;Rush orders are subject to availability. We process all orders in the order they are received, contacting us first ensures we can actually accommodate your timeline before you pay.</div>
+  </div>
+
+  <div class="help-cta">
+    <h2>Need Help With Your Order?</h2>
+    <p>Our team is on hand to answer any delivery questions or concerns.</p>
+    <a href="/contact">Contact Us</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="/#products">All Products</a></li>
+        <li><a href="/#products">New Arrivals</a></li>
+        <li><a href="/#products">Best Sellers</a></li>
+        <li><a href="/#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/faqs">FAQs</a></li>
+        <li><a href="/shipping-delivery">Shipping &amp; Delivery</a></li>
+        <li><a href="/size-guide">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/cookie-policy">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
