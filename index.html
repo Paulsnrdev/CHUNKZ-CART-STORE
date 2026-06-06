@@ -495,18 +495,18 @@
     <div class="ft-col">
       <div class="ft-col-title">Customer Service</div>
       <ul>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="faqs.html">FAQs</a></li>
-        <li><a href="shipping-delivery.html">Shipping &amp; Delivery</a></li>
-        <li><a href="size-guide.html">Size Guide</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/faqs">FAQs</a></li>
+        <li><a href="/shipping-delivery">Shipping &amp; Delivery</a></li>
+        <li><a href="/size-guide">Size Guide</a></li>
       </ul>
     </div>
     <div class="ft-col">
       <div class="ft-col-title">Legal</div>
       <ul>
-        <li><a href="terms-of-service.html">Terms of Service</a></li>
-        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/cookie-policy">Cookie Policy</a></li>
       </ul>
     </div>
   </div>
@@ -626,7 +626,7 @@
           <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px">Your Order ID</div>
           <div id="successOrderRef" style="font-size:20px;font-weight:900;letter-spacing:2px;color:#0a0a0a;font-family:monospace"></div>
           <div style="font-size:12px;color:#888;margin-top:5px">Screenshot or write this down to track your order</div>
-          <a id="successTrackLink" href="track-order.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:9px 22px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:1px">TRACK MY ORDER →</a>
+          <a id="successTrackLink" href="/track-order" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:9px 22px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:1px">TRACK MY ORDER →</a>
         </div>
       </div>
     </div>
@@ -1884,7 +1884,7 @@ function proceedToPayment() {
       if (confirmedRef) {
         document.getElementById('successOrderRef').textContent = confirmedRef;
         document.getElementById('successRefBlock').style.display = 'block';
-        document.getElementById('successTrackLink').href = 'track-order.html?ref=' + confirmedRef;
+        document.getElementById('successTrackLink').href = '/track-order?ref=' + confirmedRef;
       }
       document.getElementById('formState').style.display    = 'none';
       document.getElementById('successState').style.display = 'block';

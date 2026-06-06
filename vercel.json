@@ -1,4 +1,16 @@
 {
+  "redirects": [
+    { "source": "/admin.html",             "destination": "/admin",             "permanent": true },
+    { "source": "/contact.html",           "destination": "/contact",           "permanent": true },
+    { "source": "/faqs.html",              "destination": "/faqs",              "permanent": true },
+    { "source": "/size-guide.html",        "destination": "/size-guide",        "permanent": true },
+    { "source": "/shipping-delivery.html", "destination": "/shipping-delivery", "permanent": true },
+    { "source": "/shipping-returns.html",  "destination": "/shipping-returns",  "permanent": true },
+    { "source": "/track-order.html",       "destination": "/track-order",       "permanent": true },
+    { "source": "/terms-of-service.html",  "destination": "/terms-of-service",  "permanent": true },
+    { "source": "/privacy-policy.html",    "destination": "/privacy-policy",    "permanent": true },
+    { "source": "/cookie-policy.html",     "destination": "/cookie-policy",     "permanent": true }
+  ],
   "rewrites": [
     { "source": "/admin",             "destination": "/admin.html" },
     { "source": "/contact",           "destination": "/contact.html" },
