@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Size Guide — Chunkz</title>
+  <meta name="description" content="Find your perfect fit with the Chunkz size guide. Sizing charts for tees, hoodies, shorts, tracksuits and more.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    /* Header */
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    /* Breadcrumb */
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:1000px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    /* Page Hero */
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:480px;margin:0 auto}
+
+    /* Unit Toggle */
+    .unit-toggle{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px}
+    .unit-btn{background:#fff;border:1.5px solid var(--gray-mid);padding:9px 24px;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,color .2s;font-family:inherit;color:#888}
+    .unit-btn:first-child{border-radius:30px 0 0 30px;border-right:none}
+    .unit-btn:last-child{border-radius:0 30px 30px 0}
+    .unit-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+
+    /* Tabs */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
+    .tab-btn{background:#fff;border:1.5px solid var(--gray-mid);padding:9px 20px;border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s,color .2s;font-family:inherit;color:#666;letter-spacing:.5px}
+    .tab-btn:hover{border-color:#999;color:var(--black)}
+    .tab-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+
+    /* Content */
+    .content-wrap{max-width:1000px;margin:0 auto;padding:56px 20px}
+    .size-section{display:none}
+    .size-section.active{display:block}
+
+    .section-block{background:#fff;border-radius:16px;padding:36px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .section-block h2{font-size:18px;font-weight:900;margin-bottom:6px;letter-spacing:.5px}
+    .section-subtitle{font-size:13px;color:#4a6080;margin-bottom:22px}
+    .section-divider{border:none;border-top:1px solid var(--gray-mid);margin:20px 0}
+
+    /* Size Table */
+    .size-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .size-table{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
+    .size-table th{background:var(--black);color:#fff;padding:12px 16px;text-align:center;font-size:11px;letter-spacing:.8px;text-transform:uppercase;font-weight:700}
+    .size-table th:first-child{text-align:left;border-radius:8px 0 0 0}
+    .size-table th:last-child{border-radius:0 8px 0 0}
+    .size-table td{padding:12px 16px;border-bottom:1px solid var(--gray-mid);text-align:center;color:#333}
+    .size-table td:first-child{text-align:left;font-weight:800;font-size:14px}
+    .size-table tr:last-child td{border-bottom:none}
+    .size-table tr:nth-child(even) td{background:var(--gray-light)}
+    .size-table tr:hover td{background:#f0f4ff}
+
+    /* How to measure */
+    .measure-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:16px}
+    .measure-card{background:var(--gray-light);border-radius:12px;padding:18px;display:flex;gap:12px;align-items:flex-start}
+    .measure-card i{font-size:20px;color:var(--black);margin-top:2px;flex-shrink:0}
+    .measure-card strong{display:block;font-size:13px;font-weight:700;margin-bottom:4px}
+    .measure-card span{font-size:12px;color:#4a6080;line-height:1.6}
+
+    /* Tips */
+    .tip-box{background:#eff6ff;border-left:4px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:#1e40af;line-height:1.7;margin-top:16px}
+    .tip-box strong{display:block;margin-bottom:4px}
+
+    /* CTA */
+    .cta-block{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-top:24px}
+    .cta-block h2{font-size:20px;font-weight:900;margin-bottom:10px}
+    .cta-block p{color:#4a6080;font-size:13px;margin-bottom:22px;line-height:1.7}
+    .cta-block a{background:var(--black);color:#fff;padding:12px 30px;border-radius:30px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;transition:background .2s;margin:4px}
+    .cta-block a:hover{background:#333}
+    .cta-block a.secondary{background:#fff;color:var(--black);border:2px solid var(--black)}
+    .cta-block a.secondary:hover{background:var(--gray-light)}
+
+    /* Footer */
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .content-wrap{padding:40px 16px}
+      .section-block{padding:22px}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="/" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#products">Shop</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Size Guide</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>SIZE GUIDE</h1>
+  <p>Find your perfect fit. Chest, waist &amp; hip are full circumference. Length, shoulder &amp; sleeve are straight-line measurements.</p>
+</section>
+
+<div class="content-wrap">
+
+  <div style="text-align:center;margin-bottom:32px">
+    <div class="unit-toggle">
+      <button class="unit-btn active" onclick="setUnit('cm', this)">CM</button>
+      <button class="unit-btn" onclick="setUnit('in', this)">INCHES</button>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('tops', this)">Tops &amp; Tees</button>
+      <button class="tab-btn" onclick="showTab('hoodies', this)">Hoodies &amp; Sweatshirts</button>
+      <button class="tab-btn" onclick="showTab('quarterzip', this)">Quarter Zip</button>
+      <button class="tab-btn" onclick="showTab('bottoms', this)">Bottoms</button>
+      <button class="tab-btn" onclick="showTab('tracksuits', this)">Tracksuits</button>
+      <button class="tab-btn" onclick="showTab('croptops', this)">Tanks &amp; Crop Tops</button>
+    </div>
+  </div>
+
+  <!-- TOPS -->
+  <div class="size-section active" id="tab-tops">
+
+    <div class="section-block">
+      <h2>Graphic Tees &amp; Polo Shirts</h2>
+      <p class="section-subtitle">Short-sleeve tees and polo shirts. Our tees have a relaxed, slightly oversized streetwear fit.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="tops-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+              <th>Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="96,67,46,22" data-in="37.8,26.4,18.1,8.7"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="102,70,49,23" data-in="40.2,27.6,19.3,9.1"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="108,73,52,24" data-in="42.5,28.7,20.5,9.4"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="114,76,55,25" data-in="44.9,29.9,21.7,9.8"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="120,79,58,26" data-in="47.2,31.1,22.8,10.2"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="126,82,61,27" data-in="49.6,32.3,24.0,10.6"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Our tees are designed with a relaxed streetwear fit. If you prefer a more fitted look, size down. If you want extra drape, size up.</div>
+    </div>
+
+    <div class="section-block">
+      <h2>Raglan &amp; Long Sleeve Tees</h2>
+      <p class="section-subtitle">Full-length sleeve tees including raglan two-tone styles and plain longsleeves. Sleeve is measured from shoulder seam to cuff.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="raglan-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+              <th>Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="96,68,46,64"  data-in="37.8,26.8,18.1,25.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="102,71,49,66" data-in="40.2,28.0,19.3,26.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="108,74,52,68" data-in="42.5,29.1,20.5,26.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="114,77,55,70" data-in="44.9,30.3,21.7,27.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="120,80,58,72" data-in="47.2,31.5,22.8,28.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="126,83,61,74" data-in="49.6,32.7,24.0,29.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Raglan and long sleeve tees follow the same chest sizing as our regular tees. Sleeve length is the full arm from shoulder to wrist.</div>
+    </div>
+
+  </div>
+
+  <!-- HOODIES -->
+  <div class="size-section" id="tab-hoodies">
+
+    <div class="section-block">
+      <h2>Hoodies &amp; Sweatshirts</h2>
+      <p class="section-subtitle">Includes pullover hoodies, zip-up hoodies, and crew-neck sweatshirts. Designed with a comfortable, slightly boxy fit.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="hoodies-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+              <th>Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="102,65,48,64" data-in="40.2,25.6,18.9,25.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="108,68,51,66" data-in="42.5,26.8,20.1,26.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="114,71,54,68" data-in="44.9,28.0,21.3,26.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="120,74,57,70" data-in="47.2,29.1,22.4,27.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="126,77,60,72" data-in="49.6,30.3,23.6,28.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="132,80,63,74" data-in="52.0,31.5,24.8,29.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Hoodies and sweatshirts are cut for a cosy, relaxed fit. We recommend your true size. For a more oversized look, go one size up.</div>
+    </div>
+
+  </div>
+
+  <!-- QUARTER ZIP -->
+  <div class="size-section" id="tab-quarterzip">
+    <div class="section-block">
+      <h2>Quarter Zip</h2>
+      <p class="section-subtitle">Long-sleeve quarter-zip pullovers. Slightly slimmer than our hoodies — designed as a clean mid-layer or standalone top.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="quarterzip-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+              <th>Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="100,67,48,64" data-in="39.4,26.4,18.9,25.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="106,70,51,66" data-in="41.7,27.6,20.1,26.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="112,73,54,68" data-in="44.1,28.7,21.3,26.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="118,76,57,70" data-in="46.5,29.9,22.4,27.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="124,79,60,72" data-in="48.8,31.1,23.6,28.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="130,82,63,74" data-in="51.2,32.3,24.8,29.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Quarter zips run slightly trimmer than hoodies. If you like a looser drape, go one size up. Sleeve is measured from shoulder seam to cuff.</div>
+    </div>
+  </div>
+
+  <!-- BOTTOMS -->
+  <div class="size-section" id="tab-bottoms">
+
+    <!-- Sweatpants & Cargo -->
+    <div class="section-block">
+      <h2>Sweatpants &amp; Cargo Pants</h2>
+      <p class="section-subtitle">Full-length bottoms including sweatpants and cargo pants. All measurements taken flat.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="bottoms-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Waist</th>
+              <th>Hip</th>
+              <th>Inseam</th>
+              <th>Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="66,88,27,97" data-in="26.0,34.6,10.6,38.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="70,92,27,99" data-in="27.6,36.2,10.6,39.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="74,98,28,101" data-in="29.1,38.6,11.0,39.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="80,104,29,103" data-in="31.5,40.9,11.4,40.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="86,110,30,105" data-in="33.9,43.3,11.8,41.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="92,116,30,107" data-in="36.2,45.7,11.8,42.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> All bottoms have an elasticated drawstring waist — if you're between sizes, your smaller size will give a more fitted look while the larger size will be more relaxed.</div>
+    </div>
+
+    <!-- Shorts & Jorts -->
+    <div class="section-block">
+      <h2>Shorts &amp; Jorts</h2>
+      <p class="section-subtitle">Includes sweat shorts, denim jorts, and casual shorts. All measurements taken flat.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="shorts-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Waist</th>
+              <th>Hip</th>
+              <th>Inseam</th>
+              <th>Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="66,88,17,42" data-in="26.0,34.6,6.7,16.5"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="70,92,18,44" data-in="27.6,36.2,7.1,17.3"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="74,98,19,46" data-in="29.1,38.6,7.5,18.1"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="80,104,20,48" data-in="31.5,40.9,7.9,18.9"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="86,110,21,50" data-in="33.9,43.3,8.3,19.7"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="92,116,22,52" data-in="36.2,45.7,8.7,20.5"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Shorts and jorts are cut with a mid-thigh to above-knee length. For a longer, more relaxed short, size up.</div>
+    </div>
+
+  </div>
+
+  <!-- TRACKSUITS -->
+  <div class="size-section" id="tab-tracksuits">
+
+    <div class="section-block">
+      <h2>Tracksuit Top</h2>
+      <p class="section-subtitle">Chest, shoulder &amp; sleeve measurements for the tracksuit jacket/zip-up top.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="tracksuits-top-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Top Length</th>
+              <th>Shoulder</th>
+              <th>Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="102,65,48,64" data-in="40.2,25.6,18.9,25.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="108,68,51,66" data-in="42.5,26.8,20.1,26.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="114,71,54,68" data-in="44.9,28.0,21.3,26.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="120,74,57,70" data-in="47.2,29.1,22.4,27.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="126,77,60,72" data-in="49.6,30.3,23.6,28.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="132,80,63,74" data-in="52.0,31.5,24.8,29.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h2>Tracksuit Bottom</h2>
+      <p class="section-subtitle">Waist, hip, inseam &amp; length measurements for the tracksuit jogger/pant.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="tracksuits-bottom-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Waist</th>
+              <th>Hip</th>
+              <th>Inseam</th>
+              <th>Pant Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="66,88,27,97"   data-in="26.0,34.6,10.6,38.2"><td>XS</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="70,92,27,99"   data-in="27.6,36.2,10.6,39.0"><td>S</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="74,98,28,101"  data-in="29.1,38.6,11.0,39.8"><td>M</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="80,104,29,103" data-in="31.5,40.9,11.4,40.6"><td>L</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="86,110,30,105" data-in="33.9,43.3,11.8,41.3"><td>XL</td><td></td><td></td><td></td><td></td></tr>
+            <tr data-cm="92,116,30,107" data-in="36.2,45.7,11.8,42.1"><td>XXL</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Tracksuit sets are sold together. We recommend ordering matching sizes for both top and bottom for the best look and fit.</div>
+    </div>
+
+  </div>
+
+  <!-- CROP TOPS & TANKS -->
+  <div class="size-section" id="tab-croptops">
+
+    <!-- Male -->
+    <div class="section-block">
+      <h2>Male — Tank Tops &amp; Singlets</h2>
+      <p class="section-subtitle">Includes male tank tops, singlets, and muscle-fit vests. Measured by chest circumference for a comfortable athletic fit.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="male-tanks-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="88,68,43" data-in="34.6,26.8,16.9"><td>XS</td><td></td><td></td><td></td></tr>
+            <tr data-cm="94,71,45" data-in="37.0,28.0,17.7"><td>S</td><td></td><td></td><td></td></tr>
+            <tr data-cm="100,74,47" data-in="39.4,29.1,18.5"><td>M</td><td></td><td></td><td></td></tr>
+            <tr data-cm="106,77,49" data-in="41.7,30.3,19.3"><td>L</td><td></td><td></td><td></td></tr>
+            <tr data-cm="112,80,51" data-in="44.1,31.5,20.1"><td>XL</td><td></td><td></td><td></td></tr>
+            <tr data-cm="118,83,53" data-in="46.5,32.7,20.9"><td>XXL</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> Our male tanks are cut for an athletic fit. If you prefer a more relaxed, draped look go one size up.</div>
+    </div>
+
+    <!-- Female -->
+    <div class="section-block">
+      <h2>Female — Crop Tops &amp; Tank Tops</h2>
+      <p class="section-subtitle">Includes crop tops, female singlets, and female-cut tank tops. Designed for a fitted to slightly relaxed fit.</p>
+      <div class="size-table-wrap">
+        <table class="size-table" id="croptops-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Bust</th>
+              <th>Length</th>
+              <th>Shoulder</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cm="80,33,35" data-in="31.5,13.0,13.8"><td>XS</td><td></td><td></td><td></td></tr>
+            <tr data-cm="86,35,37" data-in="33.9,13.8,14.6"><td>S</td><td></td><td></td><td></td></tr>
+            <tr data-cm="92,37,39" data-in="36.2,14.6,15.4"><td>M</td><td></td><td></td><td></td></tr>
+            <tr data-cm="98,39,41" data-in="38.6,15.4,16.1"><td>L</td><td></td><td></td><td></td></tr>
+            <tr data-cm="104,41,43" data-in="40.9,16.1,16.9"><td>XL</td><td></td><td></td><td></td></tr>
+            <tr data-cm="110,43,45" data-in="43.3,16.9,17.7"><td>XXL</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box"><strong>Fit tip:</strong> For a cropped look, order your true size. If you prefer more coverage or a relaxed fit, size up.</div>
+    </div>
+
+  </div>
+
+  <!-- How to Measure -->
+  <div class="section-block">
+    <h2>How to Measure Yourself</h2>
+    <p class="section-subtitle">Use a soft measuring tape for accurate measurements. Measure over lightweight clothing or directly on your body.</p>
+    <div class="measure-grid">
+      <div class="measure-card">
+        <i class="fas fa-expand-arrows-alt"></i>
+        <div>
+          <strong>Chest / Bust</strong>
+          <span>Measure around the fullest part of your chest, keeping the tape parallel to the ground.</span>
+        </div>
+      </div>
+      <div class="measure-card">
+        <i class="fas fa-ruler-vertical"></i>
+        <div>
+          <strong>Length</strong>
+          <span>Measure from the top of the shoulder seam down to the hem of the garment.</span>
+        </div>
+      </div>
+      <div class="measure-card">
+        <i class="fas fa-arrows-alt-h"></i>
+        <div>
+          <strong>Shoulder</strong>
+          <span>Measure from shoulder point to shoulder point across the back, just below the collar.</span>
+        </div>
+      </div>
+      <div class="measure-card">
+        <i class="fas fa-circle-notch"></i>
+        <div>
+          <strong>Waist</strong>
+          <span>Measure around your natural waist, the narrowest part of your torso.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <h2>Still Not Sure?</h2>
+    <p>Our team is happy to help you find the perfect fit. Send us your measurements and the product you're interested in and we'll advise you on the best size.</p>
+    <a href="/contact">Contact Us</a>
+    <a href="/#products" class="secondary">Browse Products</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="/#products">All Products</a></li>
+        <li><a href="/#products">New Arrivals</a></li>
+        <li><a href="/#products">Best Sellers</a></li>
+        <li><a href="/#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/faqs">FAQs</a></li>
+        <li><a href="/shipping-delivery">Shipping &amp; Delivery</a></li>
+        <li><a href="/size-guide">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/cookie-policy">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+var currentUnit = 'cm';
+
+function setUnit(unit, btn) {
+  currentUnit = unit;
+  document.querySelectorAll('.unit-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  updateAllTables();
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.size-section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function updateAllTables() {
+  document.querySelectorAll('.size-table tbody tr').forEach(function(row) {
+    var values = currentUnit === 'cm'
+      ? (row.dataset.cm || '').split(',')
+      : (row.dataset.in || '').split(',');
+    var cells = row.querySelectorAll('td');
+    for (var i = 1; i < cells.length; i++) {
+      var val = values[i - 1];
+      cells[i].textContent = val ? val + (currentUnit === 'cm' ? ' cm' : '"') : '—';
+    }
+  });
+}
+
+updateAllTables();
+</script>
+</body>
+</html>

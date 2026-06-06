@@ -142,6 +142,55 @@
 
     /* ── Table wrapper scroll ── */
     .table-wrap{overflow-x:auto}
+
+    /* ── View tabs ── */
+    .view-tabs{display:flex;gap:4px;margin-bottom:22px;background:#fff;padding:5px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);width:fit-content}
+    .view-tab{background:none;border:none;padding:8px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--gray-dark);letter-spacing:.3px}
+    .view-tab.active{background:var(--black);color:#fff}
+    .view-tab:hover:not(.active){background:var(--gray-light)}
+
+    /* ── Balance cards ── */
+    .balance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:20px}
+    .bal-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);border-left:4px solid var(--success)}
+    .bal-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
+    .bal-amount{font-size:28px;font-weight:900;color:var(--black);line-height:1}
+    .bal-sub{font-size:11px;color:var(--gray-dark);margin-top:6px}
+
+    /* ── Flutterwave transaction table ── */
+    .flw-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .flw-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .flw-table{width:100%;border-collapse:collapse;font-size:13px}
+    .flw-table th{text-align:left;padding:9px 12px;background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark)}
+    .flw-table th:first-child{border-radius:6px 0 0 6px}
+    .flw-table th:last-child{border-radius:0 6px 6px 0}
+    .flw-table td{padding:11px 12px;border-bottom:1px solid var(--gray-mid);vertical-align:top}
+    .flw-table tr:last-child td{border-bottom:none}
+    .flw-successful{background:#dcfce7;color:#166534}
+    .flw-failed{background:#fee2e2;color:#991b1b}
+    .flw-pending{background:#fef3c7;color:#92400e}
+    .tx-ref{font-size:10px;font-family:monospace;color:var(--gray-dark);margin-top:2px}
+    .flw-loading{text-align:center;padding:40px;color:var(--gray-dark);font-size:13px}
+
+    /* ── Status badges ── */
+    .st-badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+    .st-confirmed{background:#e0f2fe;color:#0369a1}
+    .st-processing{background:#fef3c7;color:#92400e}
+    .st-dispatched{background:#dcfce7;color:#166534}
+    .st-delivered{background:#d1fae5;color:#065f46}
+    .st-unknown{background:var(--gray-light);color:var(--gray-dark)}
+
+    /* ── Status update block ── */
+    .su-block{margin-top:14px;padding-top:14px;border-top:1px dashed var(--gray-mid)}
+    .su-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
+    .su-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .su-sel{padding:7px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;outline:none;cursor:pointer;flex-shrink:0;font-family:inherit}
+    .su-sel:focus{border-color:var(--black)}
+    .su-track{flex:1;min-width:160px;padding:7px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;outline:none;font-family:inherit}
+    .su-track:focus{border-color:var(--black)}
+    .su-save{background:var(--black);color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
+    .su-save:hover{background:#222}
+    .su-msg{font-size:11px;margin-top:6px}
+    .ref-mono{font-size:10px;font-family:monospace;color:#999;margin-top:2px;letter-spacing:.5px}
   </style>
 </head>
 <body>
@@ -194,7 +243,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /orders/{orderId} {
       allow create: if true;
-      allow read, list, update, delete: if request.auth != null;
+      allow get: if true;
+      allow list, update, delete: if request.auth != null;
     }
   }
 }</div>
@@ -242,15 +292,21 @@ service cloud.firestore {
       <span class="adm-badge">ADMIN</span>
     </div>
     <div class="hdr-right">
-      <a href="index.html" class="store-link">← View Store</a>
+      <a href="/" class="store-link">← View Store</a>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
     </div>
   </header>
 
   <div class="adm-body">
 
+    <!-- View switcher -->
+    <div class="view-tabs">
+      <button class="view-tab active" id="tabOrders" onclick="switchView('orders',this)">Orders &amp; Analytics</button>
+      <button class="view-tab" id="tabTx" onclick="switchView('transactions',this)">Flutterwave Payments</button>
+    </div>
+
     <!-- Filter bar -->
-    <div class="filter-bar">
+    <div class="filter-bar" id="ordersFilterBar">
       <span class="filter-label">Period:</span>
       <button class="filter-btn active" onclick="setFilter('all',this)">All Time</button>
       <button class="filter-btn" onclick="setFilter('month',this)">This Month</button>
@@ -336,6 +392,7 @@ service cloud.firestore {
                 <th>Items</th>
                 <th>Total</th>
                 <th>Currency</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody id="ordersBody"></tbody>
@@ -344,6 +401,45 @@ service cloud.firestore {
       </div>
 
     </div><!-- /dataContent -->
+
+    <!-- ═══ TRANSACTIONS VIEW ═══ -->
+    <div id="txContent" style="display:none">
+
+      <!-- Balance cards -->
+      <div class="balance-grid" id="balanceGrid">
+        <div class="flw-loading">Loading balance…</div>
+      </div>
+
+      <!-- Transactions table -->
+      <div class="flw-card">
+        <div class="flw-head">
+          <div class="section-title">Flutterwave Transactions</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span class="orders-count" id="txCount"></span>
+            <button class="refresh-btn" onclick="loadFlutterwaveData()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="flw-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Method</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="txBody">
+              <tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /txContent -->
+
   </div>
 </div>
 
@@ -743,16 +839,30 @@ function renderOrdersTable(orders) {
       return '<span class="item-pill">' + (COLL_LABELS[it.collection] || it.collection || '?') + ' ×' + (it.qty || 1) + '</span>';
     }).join('') + (items.length > 3 ? '<span class="item-pill">+' + (items.length - 3) + ' more</span>' : '');
 
+    const statusStr = o.orderStatus || '';
+    const stCls     = statusStr ? ('st-' + statusStr) : 'st-unknown';
+    const stLabel   = { confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[statusStr] || '—';
+    const showTrack = (statusStr === 'dispatched' || statusStr === 'delivered') ? 'block' : 'none';
+    const docId     = esc(o._id || '');
+
+    const selOpts = ['confirmed','processing','dispatched','delivered'].map(function(s) {
+      return '<option value="' + s + '"' + (statusStr === s ? ' selected' : '') + '>' +
+        { confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[s] + '</option>';
+    }).join('');
+
     const rowId = 'exp-' + idx;
     return '<tr class="order-row" onclick="toggleExpand(\'' + rowId + '\')">' +
       '<td class="date-val">' + dateStr + '</td>' +
       '<td><div class="cust-name">' + esc(o.customerName || '—') + '</div>' +
-      '<div class="cust-phone">' + esc(o.customerPhone || '') + '</div></td>' +
+      '<div class="cust-phone">' + esc(o.customerPhone || '') + '</div>' +
+      (o.orderRef ? '<div class="ref-mono">' + esc(o.orderRef) + '</div>' : '') +
+      '</td>' +
       '<td>' + pills + '</td>' +
       '<td class="total-val">' + sym + (o.total || 0).toLocaleString() + '</td>' +
       '<td>' + (o.currency || '—') + '</td>' +
+      '<td><span class="st-badge ' + stCls + '">' + stLabel + '</span></td>' +
     '</tr>' +
-    '<tr id="' + rowId + '" class="expand-row" style="display:none"><td colspan="5"><div class="expand-inner">' +
+    '<tr id="' + rowId + '" class="expand-row" style="display:none"><td colspan="6"><div class="expand-inner">' +
       '<div class="expand-grid">' +
         '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || '—') + '</p></div>' +
         '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || '—') + '</p></div>' +
@@ -765,6 +875,17 @@ function renderOrdersTable(orders) {
           return '<li>' + esc(it.name || it.collection || '?') + ' — ' + (it.qty || 1) + ' × ' + s + (it.price || 0).toLocaleString() + ' = ' + s + ((it.price || 0) * (it.qty || 1)).toLocaleString() + '</li>';
         }).join('') +
       '</ul>' +
+      (docId ? (
+        '<div class="su-block">' +
+          '<div class="su-title">Update Order Status</div>' +
+          '<div class="su-form">' +
+            '<select class="su-sel" id="sel-' + idx + '" onchange="toggleTrackInput(' + idx + ')">' + selOpts + '</select>' +
+            '<input type="text" class="su-track" id="track-' + idx + '" placeholder="Courier tracking number" value="' + esc(o.trackingNumber || '') + '" style="display:' + showTrack + '">' +
+            '<button class="su-save" onclick="updateOrderStatus(\'' + docId + '\',' + idx + ');event.stopPropagation()">Save</button>' +
+          '</div>' +
+          '<div class="su-msg" id="msg-' + idx + '"></div>' +
+        '</div>'
+      ) : '') +
     '</div></td></tr>';
   }).join('');
 }
@@ -777,6 +898,170 @@ function toggleExpand(id) {
 
 function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ═══════════════════════════════════════════════════
+   VIEW SWITCHER
+═══════════════════════════════════════════════════ */
+var txLoaded = false;
+
+function switchView(view, btn) {
+  document.querySelectorAll('.view-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  var isOrders = view === 'orders';
+  document.getElementById('ordersFilterBar').style.display = isOrders ? 'flex' : 'none';
+  document.getElementById('loadingState').style.display    = isOrders && !document.getElementById('dataContent').style.display.includes('block') ? 'block' : 'none';
+  document.getElementById('dataContent').style.display     = isOrders ? (allOrders.length >= 0 ? 'block' : 'none') : 'none';
+  document.getElementById('txContent').style.display       = isOrders ? 'none' : 'block';
+
+  if (!isOrders && !txLoaded) {
+    txLoaded = true;
+    loadFlutterwaveData();
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   FLUTTERWAVE DATA
+═══════════════════════════════════════════════════ */
+async function getIdToken() {
+  var user = firebase.auth().currentUser;
+  if (!user) return null;
+  return user.getIdToken(true);
+}
+
+async function loadFlutterwaveData() {
+  document.getElementById('balanceGrid').innerHTML = '<div class="flw-loading">Loading balance…</div>';
+  document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>';
+  document.getElementById('txCount').textContent = '';
+
+  var token = await getIdToken();
+  if (!token) {
+    document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">Not authenticated. Please log in again.</div></td></tr>';
+    return;
+  }
+
+  var headers = { Authorization: 'Bearer ' + token };
+
+  // Load balance and transactions in parallel
+  var [balRes, txRes] = await Promise.all([
+    fetch('/api/flutterwave?action=balance', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .catch(function(e) { return { _fetchError: e.message || 'Network error' }; }),
+    fetch('/api/flutterwave?action=transactions', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .catch(function(e) { return { _fetchError: e.message || 'Network error' }; })
+  ]);
+
+  console.log('[FLW balance]', balRes);
+  console.log('[FLW transactions]', txRes);
+
+  renderBalance(balRes);
+  renderTransactions(txRes);
+}
+
+function renderBalance(data) {
+  var grid = document.getElementById('balanceGrid');
+
+  if (!data || data.status !== 'success' || !data.data || data.data.length === 0) {
+    var msg = (data && (data.error || data.message || data._fetchError))
+      || 'Could not load balance. Check your FLUTTERWAVE_SECRET_KEY in Vercel.';
+    grid.innerHTML = '<div class="flw-loading" style="color:var(--accent)">' + msg + '</div>';
+    return;
+  }
+
+  grid.innerHTML = data.data.map(function(b) {
+    var sym = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[b.currency] || b.currency;
+    return '<div class="bal-card">' +
+      '<div class="bal-label">Available Balance</div>' +
+      '<div class="bal-amount">' + sym + Number(b.available_balance || 0).toLocaleString() + '</div>' +
+      '<div class="bal-sub">Ledger: ' + sym + Number(b.ledger_balance || 0).toLocaleString() + ' ' + b.currency + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderTransactions(data) {
+  var tbody = document.getElementById('txBody');
+  var countEl = document.getElementById('txCount');
+
+  if (!data || data.status !== 'success') {
+    var msg = (data && (data.error || data.message || data._fetchError))
+      || 'Could not load transactions. Check your FLUTTERWAVE_SECRET_KEY in Vercel.';
+    tbody.innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">' + msg + '</div></td></tr>';
+    return;
+  }
+
+  var txs = data.data || [];
+  countEl.textContent = txs.length + ' transaction' + (txs.length !== 1 ? 's' : '');
+
+  if (txs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💳</div><p>No transactions yet.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = txs.map(function(tx) {
+    var ts  = tx.created_at ? new Date(tx.created_at) : null;
+    var dateStr = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    var sym = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[tx.currency] || '';
+    var status = (tx.status || '').toLowerCase();
+    var stCls  = 'st-badge flw-' + (status || 'pending');
+    var method = (tx.payment_type || '—').replace(/_/g,' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+    var cust   = (tx.customer || {});
+
+    return '<tr>' +
+      '<td class="date-val">' + dateStr + '</td>' +
+      '<td><div class="cust-name">' + esc(cust.name || '—') + '</div>' +
+      '<div class="cust-phone">' + esc(cust.phone_number || cust.email || '') + '</div>' +
+      '<div class="tx-ref">' + esc(tx.tx_ref || '') + '</div></td>' +
+      '<td class="total-val">' + sym + Number(tx.amount || 0).toLocaleString() + '</td>' +
+      '<td>' + (tx.currency || '—') + '</td>' +
+      '<td>' + method + '</td>' +
+      '<td><span class="' + stCls + '">' + (status || '—') + '</span></td>' +
+    '</tr>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   STATUS UPDATE
+═══════════════════════════════════════════════════ */
+function toggleTrackInput(idx) {
+  var sel = document.getElementById('sel-' + idx);
+  var trackEl = document.getElementById('track-' + idx);
+  if (!trackEl) return;
+  trackEl.style.display = (sel.value === 'dispatched' || sel.value === 'delivered') ? 'block' : 'none';
+}
+
+async function updateOrderStatus(docId, idx) {
+  var selEl   = document.getElementById('sel-' + idx);
+  var trackEl = document.getElementById('track-' + idx);
+  var msgEl   = document.getElementById('msg-' + idx);
+  if (!selEl || !msgEl) return;
+
+  var status   = selEl.value;
+  var tracking = trackEl ? trackEl.value.trim() : '';
+
+  msgEl.textContent  = 'Saving…';
+  msgEl.style.color  = '#666';
+  msgEl.style.display = 'block';
+
+  try {
+    var update = { orderStatus: status };
+    if (tracking) update.trackingNumber = tracking;
+    await firebase.firestore().collection('orders').doc(docId).update(update);
+
+    msgEl.textContent = 'Status updated to "' + status + '".';
+    msgEl.style.color = '#2a9d8f';
+
+    allOrders.forEach(function(o) {
+      if (o._id === docId) {
+        o.orderStatus = status;
+        if (tracking) o.trackingNumber = tracking;
+      }
+    });
+  } catch(e) {
+    msgEl.textContent = 'Failed to save. Check your connection.';
+    msgEl.style.color = '#e63946';
+  }
 }
 </script>
 </body>

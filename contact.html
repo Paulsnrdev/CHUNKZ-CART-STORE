@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Chunkz</title>
+  <meta name="description" content="Get in touch with the Chunkz team. We're here to help with orders, products, and any questions you have.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    /* Header */
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+    .nav-links a.active{color:#fff}
+
+    /* Breadcrumb */
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:1100px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    /* Page Hero */
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:440px;margin:0 auto}
+
+    /* Contact Section */
+    .contact-section{padding:72px 20px}
+    .contact-inner{max-width:1100px;margin:0 auto}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:24px;align-items:start}
+    .contact-card{background:#fff;border-radius:16px;padding:32px;outline:1.5px solid #0d1117;box-shadow:0 0 10px rgba(30,58,138,.45),0 0 22px rgba(59,130,246,.2),0 4px 20px rgba(0,0,0,.07)}
+    .contact-left-title{font-size:18px;font-weight:800;margin-bottom:10px}
+    .contact-left-desc{color:#4a6080;font-size:14px;line-height:1.7;margin-bottom:28px}
+    .contact-detail{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+    .contact-detail-icon{width:38px;height:38px;border-radius:10px;background:var(--gray-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .contact-detail-icon i{font-size:14px;color:var(--black)}
+    .contact-detail-text strong{display:block;font-size:13px;font-weight:700;margin-bottom:2px}
+    .contact-detail-text span{font-size:12px;color:#4a6080}
+    .contact-divider{border:none;border-top:1px solid var(--gray-mid);margin:24px 0}
+    .contact-follow-title{font-size:13px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+    .social-icons{display:flex;gap:12px}
+    .social-icons a{width:36px;height:36px;border-radius:50%;background:var(--gray-light);display:flex;align-items:center;justify-content:center;color:var(--black);font-size:15px;transition:background .2s,color .2s;text-decoration:none}
+    .social-icons a:hover{background:var(--black);color:#fff}
+    .contact-right-title{font-size:18px;font-weight:800;margin-bottom:22px}
+    .contact-form .cf-group{margin-bottom:16px}
+    .contact-form .cf-group label{display:block;font-size:12px;font-weight:600;color:#4a6080;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+    .contact-form .cf-group input,.contact-form .cf-group textarea{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;font-family:inherit;color:var(--black);transition:border-color .2s,box-shadow .2s;background:#fafafa}
+    .contact-form .cf-group input:focus,.contact-form .cf-group textarea:focus{border-color:var(--black);background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+    .contact-form .cf-group textarea{resize:vertical;min-height:110px}
+    .contact-submit{background:var(--black);color:#fff;border:none;padding:13px 32px;border-radius:30px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;margin-top:4px}
+    .contact-submit:hover{background:#333;transform:translateY(-1px)}
+    .success-msg{display:none;background:#d1fae5;color:#065f46;padding:14px 18px;border-radius:10px;font-size:14px;font-weight:600;margin-top:14px}
+
+    /* Hours card */
+    .hours-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:1100px;margin:0 auto 72px}
+    .hours-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.07);text-align:center}
+    .hours-card i{font-size:28px;color:var(--black);margin-bottom:14px;display:block}
+    .hours-card h3{font-size:15px;font-weight:800;margin-bottom:8px;letter-spacing:.5px}
+    .hours-card p{font-size:13px;color:#4a6080;line-height:1.7}
+
+    /* Footer */
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .contact-grid{grid-template-columns:1fr;gap:16px}
+      .contact-section{padding:50px 16px}
+      .contact-card{padding:24px}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="/" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#products">Shop</a></li>
+      <li><a href="/contact" class="active">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Contact Us</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>CONTACT US</h1>
+  <p>Have a question or need help with your order? We'd love to hear from you.</p>
+</section>
+
+<section style="padding:56px 20px 0">
+  <div class="hours-grid">
+    <div class="hours-card">
+      <i class="fas fa-clock"></i>
+      <h3>Response Time</h3>
+      <p>We typically respond to all enquiries within 24 hours, Monday to Saturday.</p>
+    </div>
+    <div class="hours-card">
+      <i class="fas fa-headset"></i>
+      <h3>Customer Support</h3>
+      <p>Mon – Sat: 9 AM – 7 PM WAT<br>Sunday: Closed</p>
+    </div>
+    <div class="hours-card">
+      <i class="fas fa-shipping-fast"></i>
+      <h3>Order Enquiries</h3>
+      <p>For order tracking or delivery issues, include your order reference in your message.</p>
+    </div>
+    <div class="hours-card">
+      <i class="fas fa-handshake"></i>
+      <h3>Collaborations</h3>
+      <p>We customize for other brands and are open to collabs and suggestions. Reach out and let's create something together.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-grid">
+
+      <div class="contact-card">
+        <h3 class="contact-left-title">Get in Touch</h3>
+        <p class="contact-left-desc">Have questions about our products or need assistance with your order? Reach out to our customer service team.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="contact-detail-text">
+            <strong>Our Location</strong>
+            <span>Bowen University – University of Ibadan</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-detail-text">
+            <strong>Email Us</strong>
+            <span>chunkzthebrand@gmail.com</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="contact-detail-text">
+            <strong>Call Us</strong>
+            <span>+234 706 909 4959</span>
+          </div>
+        </div>
+        <hr class="contact-divider">
+        <div class="contact-follow-title">Follow Us</div>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/chunkz_thebrand?igsh=eTVkNDdqazlkOWd2" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h3 class="contact-right-title">Send Us a Message</h3>
+        <form class="contact-form" onsubmit="sendMessage(event)">
+          <div class="cf-group">
+            <label>Name</label>
+            <input type="text" id="ctName" placeholder="Your full name" required>
+          </div>
+          <div class="cf-group">
+            <label>Email</label>
+            <input type="email" id="ctEmail" placeholder="your@email.com" required>
+          </div>
+          <div class="cf-group">
+            <label>Subject</label>
+            <input type="text" id="ctSubject" placeholder="How can we help?">
+          </div>
+          <div class="cf-group">
+            <label>Message</label>
+            <textarea id="ctMessage" placeholder="Write your message here…" required></textarea>
+          </div>
+          <button type="submit" class="contact-submit">Send Message</button>
+        </form>
+        <div class="success-msg" id="successMsg">Thanks for your message! We'll get back to you within 24 hours.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="/#products">All Products</a></li>
+        <li><a href="/#products">New Arrivals</a></li>
+        <li><a href="/#products">Best Sellers</a></li>
+        <li><a href="/#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/faqs">FAQs</a></li>
+        <li><a href="/shipping-delivery">Shipping &amp; Delivery</a></li>
+        <li><a href="/size-guide">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/cookie-policy">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+async function sendMessage(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.contact-submit');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    await fetch('https://formspree.io/f/mkgzepaq', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:    document.getElementById('ctName').value.trim(),
+        email:   document.getElementById('ctEmail').value.trim(),
+        subject: document.getElementById('ctSubject').value.trim(),
+        message: document.getElementById('ctMessage').value.trim()
+      })
+    });
+  } catch(_) {}
+  e.target.reset();
+  btn.disabled = false;
+  btn.textContent = 'Send Message';
+  document.getElementById('successMsg').style.display = 'block';
+}
+</script>
+</body>
+</html>
