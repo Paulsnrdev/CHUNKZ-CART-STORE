@@ -16,7 +16,7 @@ function verifyAdminToken(idToken) {
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
     return (
       payload.aud   === 'chunkz-store' &&
-      payload.email === 'olokobafawaz@gmail.com'
+      payload.email === 'brodahsegunofib@gmail.com'
     );
   } catch (e) {
     return false;
