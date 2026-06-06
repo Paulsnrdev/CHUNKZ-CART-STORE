@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/flutterwave.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "redirects": [
     { "source": "/admin.html",             "destination": "/admin",             "permanent": true },
     { "source": "/contact.html",           "destination": "/contact",           "permanent": true },
