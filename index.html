@@ -189,6 +189,10 @@
     .order-summary{background:var(--gray-light);border-radius:8px;padding:13px;margin-bottom:18px;font-size:13px}
     .os-title{font-weight:700;margin-bottom:8px;font-size:14px}
     .os-item{display:flex;justify-content:space-between;padding:3px 0;color:#555}
+    .os-delivery{display:flex;justify-content:space-between;padding:3px 0;color:#555;font-size:13px}
+    .os-delivery-note{font-size:12px;color:#7c5a00;margin-top:6px;line-height:1.5;padding:8px 10px;background:#fef3c7;border-radius:6px;border-left:3px solid #f59e0b}
+    .zone-select{width:100%;padding:10px 13px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;outline:none;transition:border-color .2s;font-family:inherit;background:#fff;cursor:pointer}
+    .zone-select:focus{border-color:var(--black)}
     .os-total{display:flex;justify-content:space-between;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-mid);font-size:15px}
     .place-btn{width:100%;background:var(--black);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s;margin-top:6px}
     .place-btn:hover{background:#333}
@@ -207,6 +211,33 @@
     /* ── Toast ── */
     .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
     .toast.show{transform:translateX(-50%) translateY(0)}
+
+    /* ── Size Picker ── */
+    .sz-overlay{display:none;position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.5)}
+    .sz-overlay.on{display:block}
+    .sz-sheet{position:fixed;left:0;right:0;bottom:0;z-index:360;background:#fff;border-radius:20px 20px 0 0;padding:8px 20px 32px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -6px 40px rgba(0,0,0,.18)}
+    .sz-sheet.on{transform:translateY(0)}
+    @media(min-width:600px){
+      .sz-sheet{left:50%;right:auto;width:360px;bottom:auto;top:50%;border-radius:20px;padding:24px 24px 28px;transform:translate(-50%,-46%) scale(.95);opacity:0;pointer-events:none;transition:transform .25s ease,opacity .25s ease}
+      .sz-sheet.on{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+    }
+    .sz-drag{width:36px;height:4px;background:#ddd;border-radius:4px;margin:6px auto 16px}
+    @media(min-width:600px){.sz-drag{display:none}}
+    .sz-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+    .sz-title{font-size:15px;font-weight:800;letter-spacing:.3px;line-height:1.4;max-width:84%}
+    .sz-close{background:none;border:none;font-size:20px;color:#aaa;cursor:pointer;line-height:1;padding:0;transition:color .15s}
+    .sz-close:hover{color:#000}
+    .sz-sub{font-size:12px;color:#888;margin-bottom:18px}
+    .sz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+    .sz-btn{background:var(--gray-light);border:2px solid transparent;color:var(--black);font-size:13px;font-weight:800;padding:14px 8px;border-radius:10px;cursor:pointer;transition:all .15s;letter-spacing:.5px;font-family:inherit}
+    .sz-btn:hover{border-color:#aaa;background:#fff}
+    .sz-btn.sz-on{background:var(--black);border-color:var(--black);color:#fff}
+    .sz-tbd{width:100%;background:transparent;border:2px dashed #ccc;color:#999;font-size:12px;font-weight:700;padding:12px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:14px;font-family:inherit;letter-spacing:.3px}
+    .sz-tbd:hover,.sz-tbd.sz-on{border-color:var(--black);color:var(--black);background:var(--gray-light)}
+    .sz-confirm{width:100%;background:var(--black);color:#fff;border:none;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;font-family:inherit;letter-spacing:1px}
+    .sz-confirm:hover{background:#333}
+    .sz-confirm:disabled{background:#ccc;cursor:not-allowed;letter-spacing:.5px}
+    .c-item-size{font-size:11px;color:#888;margin-bottom:2px}
 
     /* ── Contact Section ── */
     .contact-section{background:var(--gray-light);padding:72px 20px}
@@ -464,18 +495,18 @@
     <div class="ft-col">
       <div class="ft-col-title">Customer Service</div>
       <ul>
-        <li><a href="#contact">Contact Us</a></li>
-        <li><a href="#contact">FAQs</a></li>
-        <li><a href="#contact">Shipping &amp; Returns</a></li>
-        <li><a href="#contact">Size Guide</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="shipping-delivery.html">Shipping &amp; Delivery</a></li>
+        <li><a href="size-guide.html">Size Guide</a></li>
       </ul>
     </div>
     <div class="ft-col">
       <div class="ft-col-title">Legal</div>
       <ul>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="terms-of-service.html">Terms of Service</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="cookie-policy.html">Cookie Policy</a></li>
       </ul>
     </div>
   </div>
@@ -503,6 +534,27 @@
 </div>
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
+<!-- ══════════════ SIZE PICKER ══════════════ -->
+<div class="sz-overlay" id="szOverlay" onclick="closeSizePicker()"></div>
+<div class="sz-sheet" id="szSheet">
+  <div class="sz-drag"></div>
+  <div class="sz-head">
+    <div class="sz-title" id="szTitle">Select Size</div>
+    <button class="sz-close" onclick="closeSizePicker()">✕</button>
+  </div>
+  <div class="sz-sub">Pick your size — or choose "To be filled" if you're not sure yet</div>
+  <div class="sz-grid">
+    <button class="sz-btn" onclick="pickSize(this,'XS')">XS</button>
+    <button class="sz-btn" onclick="pickSize(this,'S')">S</button>
+    <button class="sz-btn" onclick="pickSize(this,'M')">M</button>
+    <button class="sz-btn" onclick="pickSize(this,'L')">L</button>
+    <button class="sz-btn" onclick="pickSize(this,'XL')">XL</button>
+    <button class="sz-btn" onclick="pickSize(this,'XXL')">XXL</button>
+  </div>
+  <button class="sz-tbd" id="szTbd" onclick="pickSize(this,'To be filled')">I don't know my size yet — To be filled</button>
+  <button class="sz-confirm" id="szConfirm" disabled onclick="confirmSizeAdd()">ADD TO CART</button>
+</div>
+
 <!-- ══════════════ CHECKOUT MODAL ══════════════ -->
 <div class="modal" id="checkoutModal">
   <div class="modal-bg" onclick="closeCheckout()"></div>
@@ -513,6 +565,11 @@
       <div class="order-summary">
         <div class="os-title">Order Summary</div>
         <div id="osSummaryItems"></div>
+        <div class="os-delivery" id="osDeliveryRow" style="display:none">
+          <span>Delivery (<span id="osDeliveryZoneLabel"></span>)</span>
+          <span id="osDeliveryFee"></span>
+        </div>
+        <div id="osDeliveryNote" style="display:none"></div>
         <div class="os-total">
           <span>Total</span>
           <span id="osSummaryTotal"></span>
@@ -541,7 +598,19 @@
           <textarea id="cDesc" placeholder="Any special requests or notes for your order…"></textarea>
         </div>
         <div class="fg">
-          <label>Delivery Address <span class="req">*</span></label>
+          <label>Delivery Zone <span class="req">*</span></label>
+          <select id="cZone" required class="zone-select" onchange="updateDeliveryFee()">
+            <option value="">— Select your delivery zone —</option>
+            <option value="pickup">Self Pickup — Free</option>
+            <option value="ibadan">Within Ibadan — ₦2,000</option>
+            <option value="lagos">Lagos State — ₦4,000</option>
+            <option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) — ₦4,500</option>
+            <option value="other">Other Nigerian States</option>
+            <option value="international">International (Outside Nigeria)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label id="addrLabel">Delivery Address <span class="req">*</span></label>
           <textarea id="cAddress" required placeholder="123 Main Street, Ikeja, Lagos, Nigeria" style="min-height:70px"></textarea>
         </div>
         <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY →</button>
@@ -553,6 +622,12 @@
         <div class="success-icon">🎉</div>
         <div class="success-title">Payment Confirmed!</div>
         <p class="success-sub">Your order has been paid and sent to our team.<br>We'll get in touch with you shortly.</p>
+        <div id="successRefBlock" style="display:none;background:#f4f4f4;border-radius:10px;padding:18px;margin-bottom:18px;text-align:center">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px">Your Order ID</div>
+          <div id="successOrderRef" style="font-size:20px;font-weight:900;letter-spacing:2px;color:#0a0a0a;font-family:monospace"></div>
+          <div style="font-size:12px;color:#888;margin-top:5px">Screenshot or write this down to track your order</div>
+          <a id="successTrackLink" href="track-order.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:9px 22px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:1px">TRACK MY ORDER →</a>
+        </div>
       </div>
     </div>
   </div>
@@ -619,19 +694,24 @@ if (FIREBASE_READY) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 
-async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency) {
+async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef) {
   if (!FIREBASE_READY) return;
   try {
     const rates = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
-    await firebase.firestore().collection('orders').add({
+    await firebase.firestore().collection('orders').doc(orderRef).set({
+      orderRef:         orderRef,
+      orderStatus:      'confirmed',
+      trackingNumber:   '',
       customerName:     name,
       customerEmail:    email || '',
       customerPhone:    phone,
       deliveryAddress:  address,
+      deliveryZone:     deliveryZone  || '',
+      deliveryFeeNGN:   deliveryFeeNGN || 0,
       colourPreference: colour || '',
       descriptionNote:  desc   || '',
       items: orderCart.map(function(i) {
-        return { name: i.name, collection: i.pid, qty: i.qty, price: i.price, currency: i.currency };
+        return { name: i.name, collection: i.pid, size: i.size || '', qty: i.qty, price: i.price, currency: i.currency };
       }),
       total:      total,
       currency:   currency,
@@ -641,6 +721,14 @@ async function saveOrderToFirestore(name, email, phone, address, colour, desc, o
   } catch(e) {
     console.error('Firestore write failed (order still sent via email):', e);
   }
+}
+
+function generateOrderRef() {
+  var now = new Date();
+  var ymd = now.getFullYear().toString() +
+    String(now.getMonth() + 1).padStart(2, '0') +
+    String(now.getDate()).padStart(2, '0');
+  return 'CKZ-' + ymd + '-' + String(Math.floor(1000 + Math.random() * 9000));
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1085,6 +1173,52 @@ let checkoutAmount = 0;
 let checkoutCurrency = 'NGN';
 let customer = {};
 let pendingOrder = null;
+let ipCountry    = null; // cached IP-based country for delivery zone filtering
+
+async function detectDeliveryCountry() {
+  if (ipCountry) return ipCountry;
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(function() { controller.abort(); }, 3000);
+    const res  = await fetch('https://ipapi.co/country/', { signal: controller.signal });
+    clearTimeout(tid);
+    const code = (await res.text()).trim();
+    ipCountry = (code && code.length === 2) ? code : 'ALL';
+  } catch(e) {
+    ipCountry = 'ALL'; // detection failed — show all options
+  }
+  return ipCountry;
+}
+
+function filterDeliveryZones(countryCode) {
+  var isNigeria = countryCode === 'NG';
+  var showAll   = countryCode === 'ALL'; // fallback
+  var sel = document.getElementById('cZone');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Select your delivery zone —</option>';
+  if (isNigeria || showAll) {
+    sel.innerHTML +=
+      '<option value="pickup">Self Pickup — Free</option>' +
+      '<option value="ibadan">Within Ibadan — ₦2,000</option>' +
+      '<option value="lagos">Lagos State — ₦4,000</option>' +
+      '<option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) — ₦4,500</option>' +
+      '<option value="other">Other Nigerian States</option>';
+  }
+  if (!isNigeria || showAll) {
+    sel.innerHTML += '<option value="international">International (Outside Nigeria)</option>';
+  }
+}
+
+const DELIVERY_ZONES = {
+  pickup:        { label: 'Self Pickup',              fee: 0,    note: null },
+  ibadan:        { label: 'Within Ibadan',            fee: 2000, note: null },
+  lagos:         { label: 'Lagos State',              fee: 4000, note: null },
+  southwest:     { label: 'South West',               fee: 4500, note: null },
+  other:         { label: 'Other Nigerian States',    fee: null,
+    note: 'Delivery fee will be negotiated at the park with the dispatch rider. We will contact you after your order is placed.' },
+  international: { label: 'International',            fee: null,
+    note: 'International shipping rates vary by destination. We will contact you with the exact cost after your order is placed.' }
+};
 
 // Gallery / lightbox state
 let activeGalleryCat = null;
@@ -1342,7 +1476,53 @@ document.addEventListener('keydown', function(e) {
 /* ═══════════════════════════════════════════════════
    CART OPERATIONS
 ═══════════════════════════════════════════════════ */
+/* ─ Size picker state ─ */
+var _szPending  = null;
+var _szSelected = null;
+
 function addToCart(catKey, imgIndex) {
+  var cat = catalog[catKey];
+  if (!cat) return;
+  _szPending  = { catKey: catKey, imgIndex: imgIndex };
+  _szSelected = null;
+
+  var title = cat.title;
+  if (imgIndex !== undefined && imgIndex !== null && cat.images && cat.images[imgIndex] !== undefined) {
+    title = cat.title + ' — ' + cleanImageName(imgSrc(cat.images[imgIndex]));
+  }
+  document.getElementById('szTitle').textContent = title;
+  document.querySelectorAll('.sz-btn,.sz-tbd').forEach(function(b){ b.classList.remove('sz-on'); });
+  document.getElementById('szConfirm').disabled = true;
+  document.getElementById('szOverlay').classList.add('on');
+  document.getElementById('szSheet').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSizePicker() {
+  document.getElementById('szOverlay').classList.remove('on');
+  document.getElementById('szSheet').classList.remove('on');
+  document.body.style.overflow = '';
+  _szPending  = null;
+  _szSelected = null;
+}
+
+function pickSize(btn, size) {
+  document.querySelectorAll('.sz-btn,.sz-tbd').forEach(function(b){ b.classList.remove('sz-on'); });
+  btn.classList.add('sz-on');
+  _szSelected = size;
+  document.getElementById('szConfirm').disabled = false;
+}
+
+function confirmSizeAdd() {
+  if (!_szPending || !_szSelected) return;
+  var catKey   = _szPending.catKey;
+  var imgIndex = _szPending.imgIndex;
+  var size     = _szSelected;
+  closeSizePicker();
+  _doAddToCart(catKey, imgIndex, size);
+}
+
+function _doAddToCart(catKey, imgIndex, size) {
   const cat = catalog[catKey];
   if (!cat) return;
 
@@ -1351,11 +1531,11 @@ function addToCart(catKey, imgIndex) {
     const entry      = cat.images[imgIndex];
     const src        = imgSrc(entry);
     const designName = cleanImageName(src);
-    itemKey  = catKey + '_' + imgIndex;
+    itemKey  = catKey + '_' + imgIndex + '_' + size;
     itemName = cat.title + ' — ' + designName;
     pr       = getPrice({ prices: imgPrices(cat, entry) });
   } else {
-    itemKey  = catKey;
+    itemKey  = catKey + '_' + size;
     itemName = cat.title;
     pr       = getPrice(cat);
   }
@@ -1368,6 +1548,7 @@ function addToCart(catKey, imgIndex) {
       key:      itemKey,
       pid:      catKey,
       name:     itemName,
+      size:     size,
       price:    pr.amount,
       symbol:   pr.symbol,
       currency: pr.currency,
@@ -1376,7 +1557,7 @@ function addToCart(catKey, imgIndex) {
   }
   saveCart();
   refreshCartUI();
-  showToast(itemName + ' added to cart!');
+  showToast(itemName + ' (' + size + ') added!');
 }
 
 function removeFromCart(key) {
@@ -1426,6 +1607,7 @@ function buildCartHTML() {
     return '<div class="c-item">' +
       '<div>' +
         '<div class="c-item-name">' + i.name + '</div>' +
+        (i.size ? '<div class="c-item-size">Size: ' + i.size + '</div>' : '') +
         '<div class="c-item-sub">' + sym + i.price.toLocaleString() + ' × ' + i.qty + '</div>' +
       '</div>' +
       '<div class="c-item-right">' +
@@ -1500,12 +1682,75 @@ function openCheckout() {
 
   const sym = cartSymbol();
   document.getElementById('osSummaryItems').innerHTML = cart.map(function(i) {
-    return '<div class="os-item"><span>' + i.name + ' ×' + i.qty + '</span>' +
+    var sizeLabel = i.size ? ' <span style="font-size:11px;color:#888;font-weight:400">[' + i.size + ']</span>' : '';
+    return '<div class="os-item"><span>' + i.name + sizeLabel + ' ×' + i.qty + '</span>' +
       '<span>' + sym + (i.price * i.qty).toLocaleString() + '</span></div>';
   }).join('');
   document.getElementById('osSummaryTotal').textContent = sym + cartTotal().toLocaleString();
+  // Reset delivery zone, then populate options based on detected country
+  document.getElementById('osDeliveryRow').style.display  = 'none';
+  document.getElementById('osDeliveryNote').style.display = 'none';
+  document.getElementById('cAddress').required    = true;
+  document.getElementById('cAddress').placeholder = '123 Main Street, Ikeja, Lagos, Nigeria';
+  detectDeliveryCountry().then(filterDeliveryZones);
+
   document.getElementById('checkoutModal').classList.add('on');
   document.body.style.overflow = 'hidden';
+}
+
+function getDeliveryFeeInCartCurrency() {
+  var zone = (document.getElementById('cZone') || {}).value;
+  if (!zone || !DELIVERY_ZONES[zone] || DELIVERY_ZONES[zone].fee === null) return 0;
+  var feeNGN = DELIVERY_ZONES[zone].fee;
+  if (feeNGN === 0) return 0;
+  var curr  = cartCurrencyCode();
+  var rates = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+  if (curr === 'NGN') return feeNGN;
+  return Math.round(feeNGN / (rates[curr] || 1));
+}
+
+function updateDeliveryFee() {
+  var zone         = document.getElementById('cZone').value;
+  var deliveryRow  = document.getElementById('osDeliveryRow');
+  var deliveryNote = document.getElementById('osDeliveryNote');
+  var addrLabel    = document.getElementById('addrLabel');
+  var addrInput    = document.getElementById('cAddress');
+  var sym          = cartSymbol();
+  var subtotal     = cartTotal();
+
+  if (zone === 'pickup') {
+    addrInput.required    = false;
+    addrInput.placeholder = 'Optional — add any pickup notes or preferred meetup details';
+    addrLabel.innerHTML   = 'Pickup Notes';
+  } else {
+    addrInput.required    = true;
+    addrInput.placeholder = '123 Main Street, Ikeja, Lagos, Nigeria';
+    addrLabel.innerHTML   = 'Delivery Address <span class="req">*</span>';
+  }
+
+  if (!zone) {
+    deliveryRow.style.display  = 'none';
+    deliveryNote.style.display = 'none';
+    document.getElementById('osSummaryTotal').textContent = sym + subtotal.toLocaleString();
+    return;
+  }
+
+  var zoneData = DELIVERY_ZONES[zone];
+  deliveryRow.style.display = 'flex';
+  document.getElementById('osDeliveryZoneLabel').textContent = zoneData.label;
+
+  if (zoneData.fee !== null) {
+    var fee = getDeliveryFeeInCartCurrency();
+    document.getElementById('osDeliveryFee').textContent    = fee === 0 ? 'Free' : sym + fee.toLocaleString();
+    document.getElementById('osSummaryTotal').textContent   = sym + (subtotal + fee).toLocaleString();
+    deliveryNote.style.display = 'none';
+    deliveryNote.innerHTML     = '';
+  } else {
+    document.getElementById('osDeliveryFee').textContent  = 'TBD';
+    document.getElementById('osSummaryTotal').textContent = sym + subtotal.toLocaleString() + ' + delivery';
+    deliveryNote.innerHTML     = '<div class="os-delivery-note">&#9432; ' + zoneData.note + '</div>';
+    deliveryNote.style.display = 'block';
+  }
 }
 
 function closeCheckout() {
@@ -1524,30 +1769,50 @@ async function submitOrder(e) {
   const colour  = document.getElementById('cColour').value.trim();
   const desc    = document.getElementById('cDesc').value.trim();
   const address = document.getElementById('cAddress').value.trim();
+  const zone    = document.getElementById('cZone').value;
 
-  if (!name || !phone || !address) {
-    showErr('Please fill in all required fields (Name, Phone, Delivery Address).');
+  if (!name || !phone) {
+    showErr('Please fill in all required fields (Name, Phone).');
+    return;
+  }
+  if (!zone) {
+    showErr('Please select a delivery zone.');
+    return;
+  }
+  if (zone !== 'pickup' && !address) {
+    showErr('Please enter your delivery address.');
     return;
   }
 
-  const sym      = cartSymbol();
-  const total    = cartTotal();
-  const currCode = cartCurrencyCode();
+  const sym        = cartSymbol();
+  const subtotal   = cartTotal();
+  const currCode   = cartCurrencyCode();
+  const zoneData   = DELIVERY_ZONES[zone];
+  const deliveryFee = getDeliveryFeeInCartCurrency();
+  const grandTotal  = subtotal + deliveryFee;
+  const deliveryFeeLabel = zoneData.fee === null ? 'TBD (negotiated)'
+    : (zoneData.fee === 0 ? 'Free' : '₦' + zoneData.fee.toLocaleString());
 
+  const orderRef   = generateOrderRef();
   const itemLines = cart.map(function(i) {
-    return i.name + ' (x' + i.qty + ') @ ' + sym + i.price.toLocaleString() +
+    var sizeTag = i.size ? ' [' + i.size + ']' : '';
+    return i.name + sizeTag + ' (x' + i.qty + ') @ ' + sym + i.price.toLocaleString() +
       ' = ' + sym + (i.price * i.qty).toLocaleString();
   }).join('\n');
 
   const payload = {
+    order_ref:         orderRef,
     customer_name:     name,
     customer_email:    email   || 'Not provided',
     customer_phone:    phone,
     colour_preference: colour  || 'Not specified',
     description_note:  desc    || 'None',
-    delivery_address:  address,
+    delivery_zone:     zoneData.label,
+    delivery_fee:      deliveryFeeLabel,
+    delivery_address:  address || 'Self Pickup',
     order_items:       itemLines,
-    order_total:       sym + total.toLocaleString() + ' ' + currCode,
+    order_subtotal:    sym + subtotal.toLocaleString() + ' ' + currCode,
+    order_total:       sym + grandTotal.toLocaleString() + ' ' + currCode,
     currency:          currCode,
     order_date:        new Date().toLocaleString('en-NG')
   };
@@ -1565,9 +1830,9 @@ async function submitOrder(e) {
 
     if (res.ok) {
       customer         = { name, email, phone, address };
-      checkoutAmount   = total;
+      checkoutAmount   = grandTotal;
       checkoutCurrency = currCode;
-      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total, currency: currCode };
+      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: grandTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef };
       document.getElementById('payRetryMsg').style.display = 'none';
       proceedToPayment();
     } else {
@@ -1606,14 +1871,21 @@ function proceedToPayment() {
       name:         customer.name
     },
     callback: function() {
+      var confirmedRef = null;
       if (pendingOrder) {
         var o = pendingOrder;
-        saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency);
+        confirmedRef = o.orderRef;
+        saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef);
         pendingOrder = null;
       }
       cart = [];
       saveCart();
       refreshCartUI();
+      if (confirmedRef) {
+        document.getElementById('successOrderRef').textContent = confirmedRef;
+        document.getElementById('successRefBlock').style.display = 'block';
+        document.getElementById('successTrackLink').href = 'track-order.html?ref=' + confirmedRef;
+      }
       document.getElementById('formState').style.display    = 'none';
       document.getElementById('successState').style.display = 'block';
     },
@@ -1708,6 +1980,7 @@ loadCart();
 renderCategories();  // render immediately with NG default so page isn't blank
 refreshCartUI();
 detectCountry();     // re-renders with correct local currency once IP resolves
+detectDeliveryCountry(); // warm up delivery country cache before checkout opens
 
 // Set favicon as a circular logo on a white circle background
 (function() {

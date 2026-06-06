@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order — Chunkz</title>
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black);min-height:100vh}
+
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1200px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .back-link{color:#aaa;font-size:13px;text-decoration:none;transition:color .2s}
+    .back-link:hover{color:#fff}
+
+    .page-wrap{max-width:580px;margin:0 auto;padding:40px 20px 80px}
+
+    .page-title{font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:6px}
+    .page-sub{color:var(--gray-dark);font-size:14px;margin-bottom:32px;line-height:1.6}
+
+    .search-card{background:#fff;border-radius:14px;padding:26px;box-shadow:0 3px 16px rgba(0,0,0,.09);margin-bottom:28px}
+    .search-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px;display:block}
+    .search-row{display:flex;gap:10px}
+    .search-input{flex:1;padding:11px 15px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;font-family:monospace;outline:none;transition:border-color .2s;text-transform:uppercase;letter-spacing:1px}
+    .search-input:focus{border-color:var(--black)}
+    .search-input::placeholder{font-family:'Segoe UI',sans-serif;text-transform:none;letter-spacing:0;font-size:13px;color:#bbb}
+    .search-btn{background:var(--black);color:#fff;border:none;padding:11px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap;letter-spacing:.5px}
+    .search-btn:hover{background:#222}
+    .search-btn:disabled{background:#aaa;cursor:not-allowed}
+    .search-err{font-size:13px;color:var(--accent);margin-top:10px;display:none;line-height:1.5}
+
+    .result-card{background:#fff;border-radius:14px;padding:26px;box-shadow:0 3px 16px rgba(0,0,0,.09);display:none}
+    .result-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:16px;border-bottom:1.5px solid var(--gray-mid);gap:12px;flex-wrap:wrap}
+    .result-ref{font-size:14px;font-weight:900;letter-spacing:2px;font-family:monospace;color:var(--black)}
+    .result-date{font-size:11px;color:var(--gray-dark);margin-top:3px}
+    .result-customer{font-size:13px;font-weight:700;color:var(--black);text-align:right}
+    .result-zone{font-size:11px;color:var(--gray-dark);margin-top:2px;text-align:right}
+
+    /* Timeline */
+    .timeline{margin-bottom:24px}
+    .tl-step{display:flex;align-items:flex-start;gap:14px;position:relative}
+    .tl-step:not(:last-child){padding-bottom:26px}
+    .tl-step:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--gray-mid)}
+    .tl-step:not(:last-child).tl-done::before,.tl-step:not(:last-child).tl-active::before{background:var(--success)}
+    .tl-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--gray-mid);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;transition:all .3s}
+    .tl-done .tl-dot{background:var(--success);border-color:var(--success);color:#fff}
+    .tl-active .tl-dot{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 0 0 4px rgba(10,10,10,.08)}
+    .tl-icon{font-size:14px;font-weight:900;line-height:1}
+    .tl-num{font-size:12px;font-weight:700;color:var(--gray-dark)}
+    .tl-done .tl-num,.tl-active .tl-num{color:#fff}
+    .tl-body{flex:1;padding-top:5px}
+    .tl-title{font-size:14px;font-weight:800;color:#aaa}
+    .tl-done .tl-title,.tl-active .tl-title{color:var(--black)}
+    .tl-desc{font-size:12px;color:var(--gray-dark);margin-top:4px;line-height:1.6;display:none}
+    .tl-done .tl-desc,.tl-active .tl-desc{display:block}
+    .tracking-chip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:#0a0a0a;color:#fff;padding:6px 13px;border-radius:16px;font-size:12px;font-family:monospace;font-weight:700;letter-spacing:1px}
+
+    /* Items section */
+    .items-section{border-top:1.5px solid var(--gray-mid);padding-top:18px}
+    .items-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:12px}
+    .item-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid #f0f0f0}
+    .item-row:last-child{border-bottom:none}
+    .total-row{display:flex;justify-content:space-between;font-size:14px;font-weight:800;padding-top:12px;margin-top:6px;border-top:2px solid var(--gray-mid)}
+
+    @media(max-width:480px){
+      .search-row{flex-direction:column}
+      .search-btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="index.html" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz" onerror="this.style.display='none'"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <a href="index.html" class="back-link">← Back to Store</a>
+  </div>
+</header>
+
+<div class="page-wrap">
+  <div class="page-title">Track Your Order</div>
+  <p class="page-sub">Enter the Order ID that was shown on screen after your payment. It starts with <strong>CKZ-</strong> and was also included in your order email.</p>
+
+  <div class="search-card">
+    <label class="search-label" for="refInput">Order ID</label>
+    <div class="search-row">
+      <input type="text" id="refInput" class="search-input" placeholder="e.g. CKZ-20260606-4729" maxlength="22" autocomplete="off" spellcheck="false">
+      <button class="search-btn" id="searchBtn" onclick="trackOrder()">Track</button>
+    </div>
+    <div class="search-err" id="searchErr"></div>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div>
+        <div class="result-ref" id="resRef"></div>
+        <div class="result-date" id="resDate"></div>
+      </div>
+      <div>
+        <div class="result-customer" id="resCustomer"></div>
+        <div class="result-zone" id="resZone"></div>
+      </div>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+
+    <div class="items-section">
+      <div class="items-title">Order Items</div>
+      <div id="orderItems"></div>
+      <div class="total-row">
+        <span>Total Paid</span>
+        <span id="orderTotal"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
+  authDomain:        "chunkz-store.firebaseapp.com",
+  projectId:         "chunkz-store",
+  storageBucket:     "chunkz-store.firebasestorage.app",
+  messagingSenderId: "418094301866",
+  appId:             "1:418094301866:web:a326b6057a1176ea80c6d3"
+};
+
+firebase.initializeApp(FIREBASE_CONFIG);
+var db = firebase.firestore();
+
+document.getElementById('refInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') trackOrder();
+});
+
+// Auto-fill and search if ?ref= is in the URL
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if (ref) {
+    document.getElementById('refInput').value = ref.toUpperCase();
+    trackOrder();
+  }
+})();
+
+async function trackOrder() {
+  var ref    = document.getElementById('refInput').value.trim().toUpperCase();
+  var errEl  = document.getElementById('searchErr');
+  var btn    = document.getElementById('searchBtn');
+
+  errEl.style.display = 'none';
+
+  if (!ref) {
+    showErr('Please enter your Order ID.');
+    return;
+  }
+  if (!ref.match(/^CKZ-\d{8}-\d{4}$/)) {
+    showErr('That doesn\'t look like a valid Order ID. It should look like CKZ-20260606-4729.');
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = 'Searching…';
+  document.getElementById('resultCard').style.display = 'none';
+
+  try {
+    var snap = await db.collection('orders').doc(ref).get();
+
+    if (!snap.exists) {
+      showErr('No order found with that ID. Please check the ID and try again. Only orders placed after the tracking feature launched will be trackable.');
+      return;
+    }
+
+    renderResult(ref, snap.data());
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch(e) {
+    showErr('Could not load your order. Please check your internet connection and try again.');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Track';
+  }
+}
+
+function showErr(msg) {
+  var errEl = document.getElementById('searchErr');
+  errEl.textContent   = msg;
+  errEl.style.display = 'block';
+}
+
+var STATUS_ORDER  = ['confirmed', 'processing', 'dispatched', 'delivered'];
+var STATUS_LABELS = {
+  confirmed:  'Order Confirmed',
+  processing: 'Processing',
+  dispatched: 'Dispatched',
+  delivered:  'Delivered'
+};
+var STATUS_DESCS = {
+  confirmed:  'Payment received and your order has been confirmed. Our team will begin processing it shortly.',
+  processing: 'We\'re packing your order and preparing it for dispatch.',
+  dispatched: 'Your order has been handed to the courier and is on its way to you.',
+  delivered:  'Your order has been delivered. Thank you for shopping with Chunkz!'
+};
+
+function renderResult(ref, o) {
+  var sym = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[o.currency] || '';
+
+  document.getElementById('resRef').textContent = ref;
+
+  var ts = o.timestamp ? new Date(o.timestamp) : null;
+  document.getElementById('resDate').textContent = ts
+    ? 'Placed ' + ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' })
+    : '';
+
+  document.getElementById('resCustomer').textContent = o.customerName || '';
+  document.getElementById('resZone').textContent     = o.deliveryZone ? 'Zone: ' + o.deliveryZone : '';
+
+  // Build timeline
+  var status    = o.orderStatus || 'confirmed';
+  var statusIdx = STATUS_ORDER.indexOf(status);
+  if (statusIdx < 0) statusIdx = 0;
+
+  var tlHtml = STATUS_ORDER.map(function(s, i) {
+    var isDone   = i < statusIdx;
+    var isActive = i === statusIdx;
+    var cls      = 'tl-step' + (isDone ? ' tl-done' : isActive ? ' tl-active' : '');
+    var dotInner = isDone
+      ? '<span class="tl-icon">✓</span>'
+      : '<span class="tl-num">' + (i + 1) + '</span>';
+
+    var trackingHtml = '';
+    if (s === 'dispatched' && (isDone || isActive) && o.trackingNumber) {
+      trackingHtml = '<div class="tracking-chip">Tracking: ' + escHtml(o.trackingNumber) + '</div>';
+    }
+
+    return '<div class="' + cls + '">' +
+      '<div class="tl-dot">' + dotInner + '</div>' +
+      '<div class="tl-body">' +
+        '<div class="tl-title">' + STATUS_LABELS[s] + '</div>' +
+        '<div class="tl-desc">' + STATUS_DESCS[s] + trackingHtml + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('timeline').innerHTML = tlHtml;
+
+  // Build items list
+  var items    = o.items || [];
+  var itemsHtml = items.map(function(it) {
+    var s = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[it.currency || o.currency] || '';
+    return '<div class="item-row">' +
+      '<span>' + escHtml(it.name || it.collection || '?') + ' &times; ' + (it.qty || 1) + '</span>' +
+      '<span>' + s + ((it.price || 0) * (it.qty || 1)).toLocaleString() + '</span>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('orderItems').innerHTML = itemsHtml ||
+    '<div style="font-size:13px;color:#999;padding:8px 0">No item details available.</div>';
+  document.getElementById('orderTotal').textContent =
+    sym + (o.total || 0).toLocaleString() + ' ' + (o.currency || '');
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

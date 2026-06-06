@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy — Chunkz</title>
+  <meta name="description" content="Learn how Chunkz uses cookies and similar technologies on our website, and how to manage your preferences.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:960px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:440px;margin:0 auto}
+
+    .content-wrap{max-width:960px;margin:0 auto;padding:56px 20px}
+    .last-updated{font-size:12px;color:#888;margin-bottom:32px;padding:10px 16px;background:#fff;border-radius:8px;display:inline-block;border-left:3px solid var(--accent)}
+    .section-block{background:#fff;border-radius:16px;padding:36px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .section-block h2{font-size:19px;font-weight:900;margin-bottom:6px;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+    .section-block h2 i{font-size:16px;color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--gray-mid);margin:20px 0}
+    .section-block p{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:14px}
+    .section-block p:last-child{margin-bottom:0}
+    .section-block ul{padding-left:20px;margin-bottom:14px}
+    .section-block ul li{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:6px}
+    .section-block a{color:var(--black);font-weight:700;text-decoration:underline}
+    .alert-info{border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;margin-top:16px;background:#eff6ff;color:#1e40af;border-left:4px solid #3b82f6}
+
+    .cookie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}
+    .cookie-card{border:1.5px solid var(--gray-mid);border-radius:12px;padding:20px}
+    .cookie-card-title{font-size:14px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .cookie-card-title i{font-size:15px}
+    .cookie-card p{font-size:12px;color:#4a6080;line-height:1.7;margin-bottom:0}
+    .badge-essential{color:#166534;background:#dcfce7;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.5px}
+    .badge-functional{color:#1e40af;background:#dbeafe;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.5px}
+    .badge-analytics{color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.5px}
+
+    .browser-steps{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+    .browser-row{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--gray-light);border-radius:10px}
+    .browser-row i{font-size:18px;width:24px;text-align:center;flex-shrink:0}
+    .browser-row div{font-size:13px;color:#333;line-height:1.5}
+    .browser-row a{color:var(--black);font-weight:700;text-decoration:underline}
+
+    .help-cta{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .help-cta h2{font-size:20px;font-weight:900;margin-bottom:10px}
+    .help-cta p{color:#4a6080;font-size:13px;margin-bottom:24px}
+    .help-cta a{background:var(--black);color:#fff;padding:12px 30px;border-radius:30px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;transition:background .2s;margin:4px}
+    .help-cta a:hover{background:#333}
+
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .content-wrap{padding:36px 16px}
+      .section-block{padding:24px}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="index.html" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#products">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Cookie Policy</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>COOKIE POLICY</h1>
+  <p>A plain-language explanation of the cookies we use and why.</p>
+</section>
+
+<div class="content-wrap">
+
+  <div class="last-updated">Last updated: June 2026</div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-cookie-bite"></i> 1. What Are Cookies?</h2>
+    <hr class="section-divider">
+    <p>Cookies are small text files that are stored on your device (computer, phone, or tablet) when you visit a website. They help websites remember your preferences, keep you logged in, and understand how you use the site.</p>
+    <p>Cookies do not contain viruses and cannot access other files on your device. They are widely used across the web to make websites work more efficiently and to provide information to website owners.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-list-alt"></i> 2. Types of Cookies We Use</h2>
+    <hr class="section-divider">
+    <p>We keep our cookie usage minimal. Here's what we use and why:</p>
+    <div class="cookie-grid">
+      <div class="cookie-card">
+        <div class="cookie-card-title">
+          <i class="fas fa-lock" style="color:#16a34a"></i>
+          Essential Cookies
+          <span class="badge-essential">Always On</span>
+        </div>
+        <p>These are required for the website to function. They include your shopping cart contents, selected currency, and checkout session. Without these, you cannot place an order.</p>
+      </div>
+      <div class="cookie-card">
+        <div class="cookie-card-title">
+          <i class="fas fa-user-cog" style="color:#2563eb"></i>
+          Functional Cookies
+          <span class="badge-functional">Optional</span>
+        </div>
+        <p>These remember your preferences between visits — such as your last selected currency or delivery region — so you don't have to re-enter them each time.</p>
+      </div>
+      <div class="cookie-card">
+        <div class="cookie-card-title">
+          <i class="fas fa-chart-bar" style="color:#d97706"></i>
+          Analytics Cookies
+          <span class="badge-analytics">Optional</span>
+        </div>
+        <p>These help us understand how visitors use our site in aggregate (e.g. which pages are popular). Data is anonymised and never linked to your personal information.</p>
+      </div>
+    </div>
+    <div class="alert-info" style="margin-top:20px"><i class="fas fa-info-circle"></i> &nbsp;We do <strong>not</strong> use advertising or tracking cookies. We do not share browsing data with ad networks or social media platforms.</div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-fire"></i> 3. Firebase & Third-Party Services</h2>
+    <hr class="section-divider">
+    <p>Our website uses <strong>Google Firebase</strong> for database and authentication services. Firebase may set its own cookies or use local storage to maintain session state. These are governed by Google's Privacy Policy.</p>
+    <p>Our payment processor, <strong>Flutterwave</strong>, operates in a separate browser context during checkout and may set its own cookies for fraud prevention and session management. These are governed by Flutterwave's Privacy Policy.</p>
+    <p>Neither Firebase nor Flutterwave cookies are used to track you across other websites.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-sliders-h"></i> 4. Local Storage</h2>
+    <hr class="section-divider">
+    <p>In addition to cookies, our website uses your browser's <strong>local storage</strong> to save your shopping cart between visits. This data stays on your device and is not transmitted to us until you complete a purchase. You can clear it at any time by clearing your browser's site data.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-tools"></i> 5. Managing Cookies</h2>
+    <hr class="section-divider">
+    <p>You can control or delete cookies through your browser settings at any time. Here's how to manage cookies in the most popular browsers:</p>
+    <div class="browser-steps">
+      <div class="browser-row">
+        <i class="fab fa-chrome" style="color:#4285f4"></i>
+        <div><strong>Google Chrome</strong> — Settings &rarr; Privacy and Security &rarr; Cookies and other site data</div>
+      </div>
+      <div class="browser-row">
+        <i class="fab fa-firefox-browser" style="color:#ff7139"></i>
+        <div><strong>Mozilla Firefox</strong> — Settings &rarr; Privacy &amp; Security &rarr; Cookies and Site Data</div>
+      </div>
+      <div class="browser-row">
+        <i class="fab fa-safari" style="color:#006cff"></i>
+        <div><strong>Safari</strong> — Preferences &rarr; Privacy &rarr; Manage Website Data</div>
+      </div>
+      <div class="browser-row">
+        <i class="fab fa-edge" style="color:#0078d4"></i>
+        <div><strong>Microsoft Edge</strong> — Settings &rarr; Cookies and site permissions &rarr; Cookies and site data</div>
+      </div>
+    </div>
+    <p style="margin-top:16px">Please note that disabling essential cookies may prevent you from adding items to your cart or completing a purchase on our website.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-sync-alt"></i> 6. Changes to This Policy</h2>
+    <hr class="section-divider">
+    <p>We may update this Cookie Policy from time to time as our website changes or to reflect new legal requirements. We will update the "Last updated" date at the top of this page whenever changes are made. Continued use of our website after any updates means you accept the revised policy.</p>
+    <p>For details about how we handle your personal data more broadly, please see our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+  </div>
+
+  <div class="help-cta">
+    <h2>Questions about cookies?</h2>
+    <p>If you have any questions about how we use cookies, we're happy to help.</p>
+    <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+    <a href="privacy-policy.html" style="background:#f4f4f4;color:#0a0a0a"><i class="fas fa-user-shield"></i> Privacy Policy</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="index.html#products">All Products</a></li>
+        <li><a href="index.html#products">New Arrivals</a></li>
+        <li><a href="index.html#products">Best Sellers</a></li>
+        <li><a href="index.html#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="shipping-delivery.html">Shipping &amp; Delivery</a></li>
+        <li><a href="size-guide.html">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="terms-of-service.html">Terms of Service</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

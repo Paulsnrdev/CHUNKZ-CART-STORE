@@ -1,6 +1,15 @@
 {
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin",             "destination": "/admin.html" },
+    { "source": "/contact",           "destination": "/contact.html" },
+    { "source": "/faqs",              "destination": "/faqs.html" },
+    { "source": "/size-guide",        "destination": "/size-guide.html" },
+    { "source": "/shipping-delivery", "destination": "/shipping-delivery.html" },
+    { "source": "/shipping-returns",  "destination": "/shipping-returns.html" },
+    { "source": "/track-order",       "destination": "/track-order.html" },
+    { "source": "/terms-of-service",  "destination": "/terms-of-service.html" },
+    { "source": "/privacy-policy",    "destination": "/privacy-policy.html" },
+    { "source": "/cookie-policy",     "destination": "/cookie-policy.html" }
   ],
   "headers": [
     {

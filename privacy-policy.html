@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Chunkz</title>
+  <meta name="description" content="Learn how Chunkz collects, uses, and protects your personal information when you shop with us.">
+  <link rel="icon" href="CHUNKZLOGO.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0a0a0a;--white:#fff;--gray-light:#f4f4f4;--gray-mid:#e0e0e0;--gray-dark:#666;--accent:#e63946;--success:#2a9d8f}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
+
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--gray-mid);padding:12px 20px}
+    .breadcrumb-inner{max-width:960px;margin:0 auto;font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .breadcrumb-inner a{color:#888;text-decoration:none;transition:color .2s}
+    .breadcrumb-inner a:hover{color:var(--black)}
+    .breadcrumb-inner span{color:var(--black);font-weight:600}
+
+    .page-hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 60%,#16213e 100%);color:#fff;padding:60px 20px;text-align:center}
+    .page-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:4px;margin-bottom:12px}
+    .page-hero p{font-size:15px;color:#aaa;max-width:440px;margin:0 auto}
+
+    .content-wrap{max-width:960px;margin:0 auto;padding:56px 20px}
+    .last-updated{font-size:12px;color:#888;margin-bottom:32px;padding:10px 16px;background:#fff;border-radius:8px;display:inline-block;border-left:3px solid var(--accent)}
+    .section-block{background:#fff;border-radius:16px;padding:36px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .section-block h2{font-size:19px;font-weight:900;margin-bottom:6px;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+    .section-block h2 i{font-size:16px;color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--gray-mid);margin:20px 0}
+    .section-block p{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:14px}
+    .section-block p:last-child{margin-bottom:0}
+    .section-block ul{padding-left:20px;margin-bottom:14px}
+    .section-block ul li{font-size:13px;color:#4a6080;line-height:1.8;margin-bottom:6px}
+    .section-block a{color:var(--black);font-weight:700;text-decoration:underline}
+    .alert-info{border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;margin-top:16px;background:#eff6ff;color:#1e40af;border-left:4px solid #3b82f6}
+
+    .data-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+    .data-table th{background:var(--black);color:#fff;padding:11px 16px;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+    .data-table th:first-child{border-radius:8px 0 0 0}
+    .data-table th:last-child{border-radius:0 8px 0 0}
+    .data-table td{padding:11px 16px;border-bottom:1px solid var(--gray-mid);color:#333;vertical-align:top;line-height:1.6}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:nth-child(even) td{background:var(--gray-light)}
+
+    .help-cta{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .help-cta h2{font-size:20px;font-weight:900;margin-bottom:10px}
+    .help-cta p{color:#4a6080;font-size:13px;margin-bottom:24px}
+    .help-cta a{background:var(--black);color:#fff;padding:12px 30px;border-radius:30px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;transition:background .2s;margin:4px}
+    .help-cta a:hover{background:#333}
+
+    footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
+    .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
+    .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .ft-brand-name{font-size:20px;font-weight:900;letter-spacing:4px;color:#fff}
+    .ft-brand-desc{color:#8892a4;font-size:13px;line-height:1.7;max-width:220px}
+    .ft-col-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .ft-col ul li a{color:#8892a4;text-decoration:none;font-size:13px;transition:color .2s}
+    .ft-col ul li a:hover{color:#fff}
+    .ft-bottom{max-width:1400px;margin:0 auto;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .ft-bottom p{color:#4a5568;font-size:13px}
+
+    @media(max-width:768px){
+      .content-wrap{padding:36px 16px}
+      .section-block{padding:24px}
+      .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
+      .data-table{font-size:12px}
+    }
+    @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="index.html" class="logo">
+      <span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span>
+      <span class="logo-name">CHUNKZ</span>
+    </a>
+    <nav><ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#products">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Home</a>
+    <i class="fas fa-chevron-right" style="font-size:9px"></i>
+    <span>Privacy Policy</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <h1>PRIVACY POLICY</h1>
+  <p>We respect your privacy. Here's exactly what data we collect and how we use it.</p>
+</section>
+
+<div class="content-wrap">
+
+  <div class="last-updated">Last updated: June 2026</div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-user-shield"></i> 1. Who We Are</h2>
+    <hr class="section-divider">
+    <p>This Privacy Policy applies to <strong>Chunkz</strong> (operating at <strong>chunkzthebrand.com</strong>), an urban streetwear brand based in Nigeria. When you shop with us, we collect certain personal information to fulfil your order and improve your experience. This policy explains what we collect, why, and how we keep it safe.</p>
+    <p>By using our website or placing an order, you agree to the collection and use of your information as described in this policy.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-database"></i> 2. Information We Collect</h2>
+    <hr class="section-divider">
+    <p>We only collect information that is necessary to process and fulfil your order.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Why We Collect It</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Full name</strong></td>
+          <td>To address your order and package it correctly</td>
+        </tr>
+        <tr>
+          <td><strong>Email address</strong></td>
+          <td>To send order confirmation and delivery updates</td>
+        </tr>
+        <tr>
+          <td><strong>Phone number</strong></td>
+          <td>For delivery coordination and WhatsApp updates</td>
+        </tr>
+        <tr>
+          <td><strong>Delivery address</strong></td>
+          <td>To dispatch your order to the correct location</td>
+        </tr>
+        <tr>
+          <td><strong>Order details</strong> (items, size, total)</td>
+          <td>To process your purchase and maintain order records</td>
+        </tr>
+        <tr>
+          <td><strong>IP address / country</strong></td>
+          <td>To auto-detect your currency and delivery region</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert-info"><i class="fas fa-lock"></i> &nbsp;We do <strong>not</strong> collect or store any payment card details. All payment processing is handled by <strong>Flutterwave</strong>, which has its own privacy policy and PCI-DSS compliance.</div>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-cogs"></i> 3. How We Use Your Information</h2>
+    <hr class="section-divider">
+    <p>Your information is used solely for the following purposes:</p>
+    <ul>
+      <li>Processing and fulfilling your order (packing, shipping, tracking)</li>
+      <li>Communicating with you about your order status via email or WhatsApp</li>
+      <li>Resolving any disputes, refunds, or customer service issues related to your order</li>
+      <li>Detecting and preventing fraudulent transactions</li>
+      <li>Improving our website experience (using anonymised, aggregated data)</li>
+    </ul>
+    <p>We do <strong>not</strong> use your personal data for unsolicited marketing. If we ever send promotional messages, we will only do so with your consent and will always provide a clear way to opt out.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-server"></i> 4. Data Storage & Security</h2>
+    <hr class="section-divider">
+    <p>Your order data is stored securely using <strong>Google Firebase (Firestore)</strong>, a cloud database with industry-standard encryption at rest and in transit. Access to order data is restricted to authorised Chunkz administrators only.</p>
+    <p>We retain your order information for a minimum of <strong>2 years</strong> to comply with our accounting and legal obligations. After this period, data is deleted or anonymised.</p>
+    <p>While we take reasonable steps to protect your data, no system is completely immune to security breaches. In the event of a data breach that affects your personal information, we will notify you as required by applicable law.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-share-alt"></i> 5. Sharing Your Information</h2>
+    <hr class="section-divider">
+    <p>We do not sell, trade, or rent your personal information to third parties. We only share data with the following parties as necessary to fulfil your order:</p>
+    <ul>
+      <li><strong>Flutterwave</strong> — Payment processing. Your payment details are sent directly to Flutterwave and never stored by us.</li>
+      <li><strong>Courier / logistics partners</strong> — Your name, phone number, and delivery address are shared with our delivery partners solely for the purpose of delivering your order.</li>
+      <li><strong>Google Firebase</strong> — Our database and hosting provider. Data is stored on Google's secure infrastructure.</li>
+    </ul>
+    <p>We may also disclose your information if required to do so by law or in response to a valid legal request from a government authority.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-globe"></i> 6. International Orders</h2>
+    <hr class="section-divider">
+    <p>If you place an international order, your delivery address and contact details will be shared with our international logistics partners. By placing an international order, you consent to your data being transferred outside of Nigeria as necessary to fulfil delivery.</p>
+    <p>We ensure that any third parties handling your data are required to maintain appropriate security measures.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-hand-paper"></i> 7. Your Rights</h2>
+    <hr class="section-divider">
+    <p>You have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> — Request a copy of the personal data we hold about you.</li>
+      <li><strong>Correction</strong> — Ask us to correct any inaccurate or incomplete data.</li>
+      <li><strong>Deletion</strong> — Request that we delete your personal data, subject to our legal retention obligations.</li>
+      <li><strong>Objection</strong> — Object to us processing your data for any purpose other than order fulfilment.</li>
+    </ul>
+    <p>To exercise any of these rights, please contact us at <a href="contact.html">our contact page</a>. We will respond to verified requests within 30 days.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-cookie-bite"></i> 8. Cookies</h2>
+    <hr class="section-divider">
+    <p>Our website uses cookies to improve your browsing experience. For full details on what cookies we use and how to manage them, please see our <a href="cookie-policy.html">Cookie Policy</a>.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><i class="fas fa-sync-alt"></i> 9. Changes to This Policy</h2>
+    <hr class="section-divider">
+    <p>We may update this Privacy Policy from time to time. When we make significant changes, we will update the "Last updated" date at the top of this page. We encourage you to review this policy periodically. Continued use of our website after any changes indicates your acceptance of the updated policy.</p>
+  </div>
+
+  <div class="help-cta">
+    <h2>Questions about your data?</h2>
+    <p>If you have any questions or concerns about how we handle your personal information, please don't hesitate to reach out.</p>
+    <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-col">
+      <div class="ft-brand-logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="ft-brand-name">CHUNKZ</span></div>
+      <p class="ft-brand-desc">Urban streetwear that combines comfort, style, and quality for the modern individual.</p>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Shop</div>
+      <ul>
+        <li><a href="index.html#products">All Products</a></li>
+        <li><a href="index.html#products">New Arrivals</a></li>
+        <li><a href="index.html#products">Best Sellers</a></li>
+        <li><a href="index.html#products">Sale</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Customer Service</div>
+      <ul>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="shipping-delivery.html">Shipping &amp; Delivery</a></li>
+        <li><a href="size-guide.html">Size Guide</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-title">Legal</div>
+      <ul>
+        <li><a href="terms-of-service.html">Terms of Service</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 Chunkz. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
