@@ -101,14 +101,12 @@
       .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
       .info-table{font-size:12px}
     }
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px}
     @media(max-width:560px){
-      .info-table thead{display:none}
-      .info-table tbody tr{display:block;background:#fff;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
-      .info-table tbody tr:nth-child(even) td{background:transparent}
-      .info-table tbody td{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--gray-mid);font-size:13px}
-      .info-table tbody td:last-child{border-bottom:none}
-      .info-table tbody td::before{content:attr(data-label);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#888;flex-shrink:0;min-width:80px;padding-top:2px}
-      .badge-paid{font-size:12px;padding:4px 10px}
+      .table-scroll{margin:0 -4px}
+      .info-table{font-size:12px;min-width:480px}
+      .info-table th,.info-table td{padding:9px 12px}
+      .badge-paid{font-size:11px;padding:3px 8px}
     }
     @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
   </style>
@@ -178,6 +176,7 @@
     <hr class="section-divider">
     <p>We process all orders within 2–4 business days after payment is confirmed. Once dispatched, you'll receive a tracking update via WhatsApp or email.</p>
 
+    <div class="table-scroll">
     <table class="info-table">
       <thead>
         <tr>
@@ -216,6 +215,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="alert-info" style="margin-top:16px">
       <strong>Delivery fee note:</strong> For within-Ibadan and local area deliveries, the final delivery fee is negotiated directly between you and the rider/driver at the point of delivery. The figures above are estimates, your rider will confirm the exact amount.
@@ -232,6 +232,7 @@
     <p>We ship worldwide to every country. International orders are handled through a trusted courier partner and include full tracking. The United Kingdom, United States, and Canada are our most common destinations; delivery times for other countries are similar or may vary slightly.</p>
     <p>For international orders, please <a href="/contact">contact us</a> before placing your order so we can confirm shipping rates and the fastest available option for your location.</p>
 
+    <div class="table-scroll">
     <table class="info-table">
       <thead>
         <tr>
@@ -263,6 +264,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="alert-info" style="margin-top:20px">
       We deliver to all countries worldwide. Shipping fees and delivery times vary by destination and package weight. Please <a href="/contact" style="color:inherit;font-weight:700">contact us</a> for a quote before placing your international order.
