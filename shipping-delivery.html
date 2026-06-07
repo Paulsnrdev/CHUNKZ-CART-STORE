@@ -101,6 +101,15 @@
       .ft-inner{grid-template-columns:1fr 1fr;gap:32px}
       .info-table{font-size:12px}
     }
+    @media(max-width:560px){
+      .info-table thead{display:none}
+      .info-table tbody tr{display:block;background:#fff;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+      .info-table tbody tr:nth-child(even) td{background:transparent}
+      .info-table tbody td{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--gray-mid);font-size:13px}
+      .info-table tbody td:last-child{border-bottom:none}
+      .info-table tbody td::before{content:attr(data-label);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#888;flex-shrink:0;min-width:80px;padding-top:2px}
+      .badge-paid{font-size:12px;padding:4px 10px}
+    }
     @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
   </style>
   <!-- Vercel Web Analytics -->
@@ -181,29 +190,29 @@
       <tbody>
 
          <tr>
-          <td>Within Ibadan</td>
-          <td>Standard Delivery</td>
-          <td>1–3 business days</td>
-          <td><span class="badge-paid">₦1,500 – ₦2,000/Pickup</span></td>
+          <td data-label="Zone">Within Ibadan</td>
+          <td data-label="Method">Standard Delivery</td>
+          <td data-label="Est. Delivery">1–3 business days</td>
+          <td data-label="Fee"><span class="badge-paid">₦1,500 – ₦2,000/Pickup</span></td>
         </tr>
 
         <tr>
-          <td>Lagos State</td>
-          <td>Courier Service</td>
-          <td>1–3 business days</td>
-          <td><span class="badge-paid">₦4,000 </span></td>
+          <td data-label="Zone">Lagos State</td>
+          <td data-label="Method">Courier Service</td>
+          <td data-label="Est. Delivery">1–3 business days</td>
+          <td data-label="Fee"><span class="badge-paid">₦4,000</span></td>
         </tr>
         <tr>
-          <td>South West ( Abeokuta, Osun, Ekiti, Ondo, )</td>
-          <td>Courier Service</td>
-          <td>2–4 business days</td>
-          <td><span class="badge-paid">₦3,000 – ₦4,500</span></td>
+          <td data-label="Zone">South West (Abeokuta, Osun, Ekiti, Ondo)</td>
+          <td data-label="Method">Courier Service</td>
+          <td data-label="Est. Delivery">2–4 business days</td>
+          <td data-label="Fee"><span class="badge-paid">₦3,000 – ₦4,500</span></td>
         </tr>
         <tr>
-          <td>Other Nigerian States</td>
-          <td>Courier Service</td>
-          <td>3–7 business days</td>
-          <td><span class="badge-paid">Varies from ₦5,000 and above</span></td>
+          <td data-label="Zone">Other Nigerian States</td>
+          <td data-label="Method">Courier Service</td>
+          <td data-label="Est. Delivery">3–7 business days</td>
+          <td data-label="Fee"><span class="badge-paid">Varies from ₦5,000 and above</span></td>
         </tr>
       </tbody>
     </table>
@@ -233,24 +242,24 @@
       </thead>
       <tbody>
         <tr>
-          <td>United Kingdom</td>
-          <td>International Courier</td>
-          <td>10–14 business days</td>
+          <td data-label="Destination">United Kingdom</td>
+          <td data-label="Method">International Courier</td>
+          <td data-label="Est. Delivery">10–14 business days</td>
         </tr>
         <tr>
-          <td>United States</td>
-          <td>International Courier</td>
-          <td>14–21 business days</td>
+          <td data-label="Destination">United States</td>
+          <td data-label="Method">International Courier</td>
+          <td data-label="Est. Delivery">14–21 business days</td>
         </tr>
         <tr>
-          <td>Canada</td>
-          <td>International Courier</td>
-          <td>14–21 business days</td>
+          <td data-label="Destination">Canada</td>
+          <td data-label="Method">International Courier</td>
+          <td data-label="Est. Delivery">14–21 business days</td>
         </tr>
         <tr>
-          <td>Rest of World</td>
-          <td>International Courier</td>
-          <td>Varies by location</td>
+          <td data-label="Destination">Rest of World</td>
+          <td data-label="Method">International Courier</td>
+          <td data-label="Est. Delivery">Varies by location</td>
         </tr>
       </tbody>
     </table>
