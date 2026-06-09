@@ -721,6 +721,26 @@ if (FIREBASE_READY) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 
+function sendWhatsAppNotification(o, status) {
+  var itemList = o.items.map(function(i) {
+    return i.name + (i.size ? ' (' + i.size + ')' : '') + ' x' + i.qty;
+  }).join('\n');
+  var header = status === 'paid' ? '✅ PAYMENT CONFIRMED - CHUNKZ' : '📋 ORDER PLACED (Awaiting Payment) - CHUNKZ';
+  var msg = header + '\n'
+    + 'Ref: ' + o.orderRef + '\n'
+    + 'Customer: ' + o.name + '\n'
+    + 'Phone: ' + o.phone + '\n'
+    + 'Address: ' + o.address + '\n'
+    + 'Zone: ' + o.deliveryZone + '\n'
+    + 'Total: ' + o.currency + ' ' + Number(o.total).toLocaleString() + '\n'
+    + 'Items:\n' + itemList;
+  fetch('https://7107.api.greenapi.com/waInstance7107647378/sendMessage/a9409aa3668d46f7b0aa677ee89fc1903b1fa868fd7e44e086', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chatId: '2348143828445@c.us', message: msg })
+  }).catch(function() {});
+}
+
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef) {
   if (!FIREBASE_READY) return;
   try {
@@ -1861,6 +1881,7 @@ async function submitOrder(e) {
       checkoutAmount   = grandTotal;
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: grandTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef };
+      sendWhatsAppNotification(pendingOrder, 'pending');
       document.getElementById('payRetryMsg').style.display = 'none';
       proceedToPayment();
     } else {
@@ -1904,6 +1925,7 @@ function proceedToPayment() {
         var o = pendingOrder;
         confirmedRef = o.orderRef;
         saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef);
+        sendWhatsAppNotification(o, 'paid');
         pendingOrder = null;
       }
       cart = [];
