@@ -138,7 +138,7 @@
     @media(min-width:1041px){.mob-nav{display:none !important}}
     @media(max-width:1040px){
       .cart-drawer{display:block}
-      .cart-panel{display:none}
+      .cart-panel,.has-cart .cart-panel{display:none}
       .mob-menu{display:flex}
       .nav-links{display:none}
     }
@@ -449,7 +449,7 @@
           <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
           <div class="contact-detail-text">
             <strong>Our Location</strong>
-            <span>Bowen University - University of Ibadan</span>
+            <span>Nationwide</span>
           </div>
         </div>
         <div class="contact-detail">
@@ -538,7 +538,7 @@
     </div>
   </div>
   <div class="ft-bottom">
-    <p>© 2024 Chunkz. All rights reserved.</p>
+    <p>© 2026 Chunkz. All rights reserved.</p>
   </div>
 </footer>
 
@@ -719,6 +719,26 @@ const FIREBASE_CONFIG = {
 const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
 if (FIREBASE_READY) {
   firebase.initializeApp(FIREBASE_CONFIG);
+}
+
+function sendWhatsAppNotification(o, status) {
+  var itemList = o.items.map(function(i) {
+    return i.name + (i.size ? ' (' + i.size + ')' : '') + ' x' + i.qty;
+  }).join('\n');
+  var header = status === 'paid' ? '✅ PAYMENT CONFIRMED - CHUNKZ' : '📋 ORDER PLACED (Awaiting Payment) - CHUNKZ';
+  var msg = header + '\n'
+    + 'Ref: ' + o.orderRef + '\n'
+    + 'Customer: ' + o.name + '\n'
+    + 'Phone: ' + o.phone + '\n'
+    + 'Address: ' + o.address + '\n'
+    + 'Zone: ' + o.deliveryZone + '\n'
+    + 'Total: ' + o.currency + ' ' + Number(o.total).toLocaleString() + '\n'
+    + 'Items:\n' + itemList;
+  fetch('https://7107.api.greenapi.com/waInstance7107647378/sendMessage/a9409aa3668d46f7b0aa677ee89fc1903b1fa868fd7e44e086', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chatId: '2348143828445@c.us', message: msg })
+  }).catch(function() {});
 }
 
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef) {
@@ -919,7 +939,7 @@ const catalog = {
       { src: 'CHUNKZ JERSEY/White Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       // { src: 'CHUNKZ JERSEY/Jersey B.webp',              ngn: 25000 },
      
-      { src: 'CHUNKZ JERSEY/Blue Jersey.webp',           ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: 'CHUNKZ JERSEY/Purple Jersey.webp',           ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       { src: 'CHUNKZ JERSEY/Pink Jersey.webp',           ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       { src: 'CHUNKZ JERSEY/Dark Pink Jersey.webp',      ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       { src: 'CHUNKZ JERSEY/Green Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
@@ -960,6 +980,8 @@ const catalog = {
       { src: 'JUNE 2026 SET/Female singlet black.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       { src: 'JUNE 2026 SET/Female singlet blue.webp',         ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       { src: 'JUNE 2026 SET/Female singlet white.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Female singlet red minus.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
+      { src: 'JUNE 2026 SET/Female singlet pink.webp',        ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       { src: 'JUNE 2026 SET/Archer Crop Tank.webp',            ngn: 15000,  usd: 15, gbp: 11.5, cad: 22 },
       // { src: 'JUNE 2026 SET/Tank and Short combo.webp',        ngn: 18000 }
     ]
@@ -992,7 +1014,7 @@ const catalog = {
       { src: 'JUNE 2026 SET/Red-Cherub Raglan Crop.webp',    ngn: 12000, usd: 12.5, gbp: 10, cad: 14 },
       { src: 'JUNE 2026 SET/Black Sanctuary Crop.webp',      ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
       { src: 'JUNE 2026 SET/White Sanctuary Crop.webp',      ngn: 10000, usd: 11, gbp: 8.85, cad: 12 },
-      { src: 'JUNE 2026 SET/Hinged White Crop.webp',         ngn: 10000, usd: 11, gbp: 8.85, cad: 12 }
+      { src: 'JUNE 2026 SET/Hinged Black Crop.webp',         ngn: 10000, usd: 11, gbp: 8.85, cad: 12 }
     ]
       },
 
@@ -1861,6 +1883,7 @@ async function submitOrder(e) {
       checkoutAmount   = grandTotal;
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: grandTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef };
+      sendWhatsAppNotification(pendingOrder, 'pending');
       document.getElementById('payRetryMsg').style.display = 'none';
       proceedToPayment();
     } else {
@@ -1904,6 +1927,7 @@ function proceedToPayment() {
         var o = pendingOrder;
         confirmedRef = o.orderRef;
         saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef);
+        sendWhatsAppNotification(o, 'paid');
         pendingOrder = null;
       }
       cart = [];
