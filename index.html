@@ -219,19 +219,6 @@
     .pay-result{display:none;text-align:center;padding:14px;border-radius:8px;margin-top:14px;font-weight:600;font-size:14px}
     .pay-result.ok{background:#d1fae5;color:#065f46}
     .pay-result.fail{background:#fee2e2;color:#b91c1c}
-    .pay-method-group{display:flex;flex-direction:column;gap:10px}
-    .pay-method-card{display:flex;align-items:flex-start;gap:10px;border:2px solid #e5e7eb;border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .2s,background .2s}
-    .pay-method-card:has(input:checked){border-color:#0a0a0a;background:#f9f9f9}
-    .pay-method-card input[type=radio]{margin-top:3px;accent-color:#0a0a0a;flex-shrink:0}
-    .pmc-title{display:block;font-weight:700;font-size:13px;color:#0a0a0a}
-    .pmc-sub{display:block;font-size:11px;color:#777;margin-top:2px}
-    .opay-details{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:16px 18px;margin:14px 0;text-align:left}
-    .opay-details .opay-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#166534;margin-bottom:10px}
-    .opay-details .opay-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:13px}
-    .opay-details .opay-label{color:#555;font-weight:600}
-    .opay-details .opay-val{font-weight:800;color:#0a0a0a;font-family:monospace;font-size:14px}
-    .opay-amount{font-size:22px;font-weight:900;color:#166534;text-align:center;margin:10px 0 4px}
-    .opay-note{font-size:11px;color:#555;text-align:center;margin-top:10px;line-height:1.5}
 
     /* ── Toast ── */
     .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
@@ -653,45 +640,15 @@
           <label id="addrLabel">Delivery Address <span class="req">*</span></label>
           <textarea id="cAddress" required placeholder="123 Main Street, Ikeja, Lagos, Nigeria" style="min-height:70px"></textarea>
         </div>
-        <div class="fg">
-          <label>Payment Method <span class="req">*</span></label>
-          <div class="pay-method-group">
-            <label class="pay-method-card">
-              <input type="radio" name="payMethod" value="flutterwave" checked>
-              <span>
-                <span class="pmc-title">Pay with Card / Bank Transfer</span>
-                <span class="pmc-sub">Visa, Mastercard, USSD &amp; more — powered by Flutterwave</span>
-              </span>
-            </label>
-            <label class="pay-method-card">
-              <input type="radio" name="payMethod" value="opay">
-              <span>
-                <span class="pmc-title">Direct OPay Transfer</span>
-                <span class="pmc-sub">Send directly to our OPay account · No gateway charges · NGN only</span>
-              </span>
-            </label>
-          </div>
-        </div>
         <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY →</button>
       </form>
       <div class="pay-result" id="payRetryMsg" style="display:none"></div>
     </div>
     <div id="successState" style="display:none">
       <div class="success-box">
-        <div class="success-icon" id="successIcon">🎉</div>
-        <div class="success-title" id="successTitle">Payment Confirmed!</div>
-        <p class="success-sub" id="successSub">Your order has been paid and sent to our team.<br>We'll get in touch with you shortly.</p>
-        <!-- OPay transfer instructions (shown only for OPay orders) -->
-        <div id="opayInstructions" style="display:none">
-          <div class="opay-details">
-            <div class="opay-head">Transfer this exact amount to:</div>
-            <div class="opay-row"><span class="opay-label">Bank</span><span class="opay-val">OPay</span></div>
-            <div class="opay-row"><span class="opay-label">Account No.</span><span class="opay-val">7084494423</span></div>
-            <div class="opay-row"><span class="opay-label">Account Name</span><span class="opay-val">Paul Oluwasegun Ajibade</span></div>
-            <div class="opay-amount" id="opayAmountDisplay"></div>
-            <div class="opay-note">Use your Order ID as the transfer narration.<br>Your order will be confirmed once we verify your payment.</div>
-          </div>
-        </div>
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Payment Confirmed!</div>
+        <p class="success-sub">Your order has been paid and sent to our team.<br>We'll get in touch with you shortly.</p>
         <div id="successRefBlock" style="display:none;background:#f4f4f4;border-radius:10px;padding:18px;margin-bottom:18px;text-align:center">
           <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px">Your Order ID</div>
           <div id="successOrderRef" style="font-size:20px;font-weight:900;letter-spacing:2px;color:#0a0a0a;font-family:monospace"></div>
@@ -768,9 +725,7 @@ function sendWhatsAppNotification(o, status) {
   var itemList = o.items.map(function(i) {
     return i.name + (i.size ? ' (' + i.size + ')' : '') + ' x' + i.qty;
   }).join('\n');
-  var header = status === 'paid' ? '✅ PAYMENT CONFIRMED - CHUNKZ'
-             : status === 'opay' ? '💳 OPAY TRANSFER ORDER - CHUNKZ (Awaiting Transfer)'
-             : '📋 ORDER PLACED (Awaiting Payment) - CHUNKZ';
+  var header = status === 'paid' ? '✅ PAYMENT CONFIRMED - CHUNKZ' : '📋 ORDER PLACED (Awaiting Payment) - CHUNKZ';
   var msg = header + '\n'
     + 'Ref: ' + o.orderRef + '\n'
     + 'Customer: ' + o.name + '\n'
@@ -786,16 +741,13 @@ function sendWhatsAppNotification(o, status) {
   }).catch(function() {});
 }
 
-async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
+async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef) {
   if (!FIREBASE_READY) return;
   try {
-    const rates  = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
-    const method = paymentMethod || 'flutterwave';
-    const status = method === 'opay' ? 'awaiting_payment' : 'confirmed';
+    const rates = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
     await firebase.firestore().collection('orders').doc(orderRef).set({
       orderRef:         orderRef,
-      orderStatus:      status,
-      paymentMethod:    method,
+      orderStatus:      'confirmed',
       trackingNumber:   '',
       customerName:     name,
       customerEmail:    email || '',
@@ -1927,18 +1879,13 @@ async function submitOrder(e) {
     });
 
     if (res.ok) {
-      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'flutterwave';
       customer         = { name, email, phone, address };
       checkoutAmount   = grandTotal;
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: grandTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef };
+      sendWhatsAppNotification(pendingOrder, 'pending');
       document.getElementById('payRetryMsg').style.display = 'none';
-      if (payMethod === 'opay') {
-        proceedOPayTransfer();
-      } else {
-        sendWhatsAppNotification(pendingOrder, 'pending');
-        proceedToPayment();
-      }
+      proceedToPayment();
     } else {
       const data = await res.json().catch(function() { return {}; });
       showErr(data.error || 'Order failed. Please try again.');
@@ -2006,37 +1953,6 @@ function proceedToPayment() {
       logo:        'https://chunkzthebrand.com/CHUNKZLOGO.jpg'
     }
   });
-}
-
-/* ═══════════════════════════════════════════════════
-   OPAY DIRECT TRANSFER FLOW
-═══════════════════════════════════════════════════ */
-function proceedOPayTransfer() {
-  if (!pendingOrder) return;
-  var o = pendingOrder;
-
-  saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef, 'opay');
-  sendWhatsAppNotification(o, 'opay');
-  pendingOrder = null;
-
-  cart = [];
-  saveCart();
-  refreshCartUI();
-
-  var sym = { NGN: '₦', USD: '$', GBP: '£', CAD: 'CA$' }[o.currency] || '';
-  document.getElementById('opayAmountDisplay').textContent = sym + Number(o.total).toLocaleString() + ' ' + o.currency;
-  document.getElementById('opayInstructions').style.display = 'block';
-
-  document.getElementById('successIcon').textContent  = '📋';
-  document.getElementById('successTitle').textContent = 'Order Placed!';
-  document.getElementById('successSub').innerHTML     = 'Please transfer the amount below to our OPay account.<br>Your order will be confirmed once we verify your payment.';
-
-  document.getElementById('successOrderRef').textContent = o.orderRef;
-  document.getElementById('successRefBlock').style.display = 'block';
-  document.getElementById('successTrackLink').href = '/track-order?ref=' + o.orderRef;
-
-  document.getElementById('formState').style.display    = 'none';
-  document.getElementById('successState').style.display = 'block';
 }
 
 /* ═══════════════════════════════════════════════════
