@@ -173,6 +173,7 @@
 
     /* ── Status badges ── */
     .st-badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+    .st-awaiting_payment{background:#fef9c3;color:#854d0e}
     .st-confirmed{background:#e0f2fe;color:#0369a1}
     .st-processing{background:#fef3c7;color:#92400e}
     .st-dispatched{background:#dcfce7;color:#166534}
@@ -872,13 +873,13 @@ function renderOrdersTable(orders) {
 
     const statusStr = o.orderStatus || '';
     const stCls     = statusStr ? ('st-' + statusStr) : 'st-unknown';
-    const stLabel   = { confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[statusStr] || '—';
+    const stLabel   = { awaiting_payment:'Awaiting Payment', confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[statusStr] || '—';
     const showTrack = (statusStr === 'dispatched' || statusStr === 'delivered') ? 'block' : 'none';
     const docId     = esc(o._id || '');
 
-    const selOpts = ['confirmed','processing','dispatched','delivered'].map(function(s) {
+    const selOpts = ['awaiting_payment','confirmed','processing','dispatched','delivered'].map(function(s) {
       return '<option value="' + s + '"' + (statusStr === s ? ' selected' : '') + '>' +
-        { confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[s] + '</option>';
+        { awaiting_payment:'Awaiting Payment', confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[s] + '</option>';
     }).join('');
 
     const rowId = 'exp-' + idx;
@@ -898,6 +899,7 @@ function renderOrdersTable(orders) {
         '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || '—') + '</p></div>' +
         '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || '—') + '</p></div>' +
         '<div class="expand-field"><label>Colour Preference</label><p>' + esc(o.colourPreference || '—') + '</p></div>' +
+        '<div class="expand-field"><label>Payment Method</label><p>' + (o.paymentMethod === 'opay' ? 'OPay Direct Transfer' : 'Flutterwave') + '</p></div>' +
         (o.descriptionNote ? '<div class="expand-field"><label>Note</label><p>' + esc(o.descriptionNote) + '</p></div>' : '') +
       '</div>' +
       '<ul class="item-detail-list">' +
