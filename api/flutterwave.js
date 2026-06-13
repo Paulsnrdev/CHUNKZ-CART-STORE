@@ -69,6 +69,17 @@ module.exports = async function handler(req, res) {
       return res.status(flwRes.status).json(data);
     }
 
+    // ── Transfers (outgoing) ────────────────────────────
+    if (action === 'transfers') {
+      const params = new URLSearchParams({ count: '100' });
+      if (req.query.from) params.set('from', req.query.from);
+      if (req.query.to)   params.set('to',   req.query.to);
+
+      const flwRes = await fetch(`${FLW_BASE}/transfers?${params}`, { headers: flwHeaders });
+      const data   = await flwRes.json();
+      return res.status(flwRes.status).json(data);
+    }
+
     // ── Settlements ─────────────────────────────────────
     if (action === 'settlements') {
       const flwRes = await fetch(`${FLW_BASE}/settlements`, { headers: flwHeaders });
