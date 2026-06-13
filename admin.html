@@ -419,7 +419,7 @@ service cloud.firestore {
       <!-- Transactions table -->
       <div class="flw-card">
         <div class="flw-head">
-          <div class="section-title">Flutterwave Transactions</div>
+          <div class="section-title">Incoming Payments</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <span class="orders-count" id="txCount"></span>
             <button class="refresh-btn" onclick="loadFlutterwaveData()">↻ Refresh</button>
@@ -439,6 +439,31 @@ service cloud.firestore {
             </thead>
             <tbody id="txBody">
               <tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Transfers table -->
+      <div class="flw-card" style="margin-top:18px">
+        <div class="flw-head">
+          <div class="section-title">Outgoing Transfers</div>
+          <span class="orders-count" id="trCount"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="flw-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Narration</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="trBody">
+              <tr><td colspan="6"><div class="flw-loading">Loading transfers…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -939,31 +964,34 @@ async function getIdToken() {
 async function loadFlutterwaveData() {
   document.getElementById('balanceGrid').innerHTML = '<div class="flw-loading">Loading balance…</div>';
   document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>';
+  document.getElementById('trBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transfers…</div></td></tr>';
   document.getElementById('txCount').textContent = '';
+  document.getElementById('trCount').textContent = '';
 
   var token = await getIdToken();
   if (!token) {
     document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">Not authenticated. Please log in again.</div></td></tr>';
+    document.getElementById('trBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">Not authenticated. Please log in again.</div></td></tr>';
     return;
   }
 
   var headers = { Authorization: 'Bearer ' + token };
 
-  // Load balance and transactions in parallel
-  var [balRes, txRes] = await Promise.all([
+  var [balRes, txRes, trRes] = await Promise.all([
     fetch('/api/flutterwave?action=balance', { headers: headers })
       .then(function(r) { return r.json(); })
       .catch(function(e) { return { _fetchError: e.message || 'Network error' }; }),
     fetch('/api/flutterwave?action=transactions', { headers: headers })
       .then(function(r) { return r.json(); })
+      .catch(function(e) { return { _fetchError: e.message || 'Network error' }; }),
+    fetch('/api/flutterwave?action=transfers', { headers: headers })
+      .then(function(r) { return r.json(); })
       .catch(function(e) { return { _fetchError: e.message || 'Network error' }; })
   ]);
 
-  console.log('[FLW balance]', balRes);
-  console.log('[FLW transactions]', txRes);
-
   renderBalance(balRes);
   renderTransactions(txRes);
+  renderTransfers(trRes);
 }
 
 function renderBalance(data) {
@@ -1022,6 +1050,47 @@ function renderTransactions(data) {
       '<td class="total-val">' + sym + Number(tx.amount || 0).toLocaleString() + '</td>' +
       '<td>' + (tx.currency || '—') + '</td>' +
       '<td>' + method + '</td>' +
+      '<td><span class="' + stCls + '">' + (status || '—') + '</span></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function renderTransfers(data) {
+  var tbody   = document.getElementById('trBody');
+  var countEl = document.getElementById('trCount');
+
+  if (!data || data.status !== 'success') {
+    var msg = (data && (data.error || data.message || data._fetchError))
+      || 'Could not load transfers.';
+    tbody.innerHTML = '<tr><td colspan="6"><div class="flw-loading" style="color:var(--accent)">' + msg + '</div></td></tr>';
+    return;
+  }
+
+  var trs = data.data || [];
+  countEl.textContent = trs.length + ' transfer' + (trs.length !== 1 ? 's' : '');
+
+  if (trs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💸</div><p>No outgoing transfers yet.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = trs.map(function(tr) {
+    var ts      = tr.created_at ? new Date(tr.created_at) : null;
+    var dateStr = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    var sym     = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[tr.currency] || '';
+    var status  = (tr.status || '').toLowerCase();
+    var stCls   = 'st-badge flw-' + (status === 'successful' ? 'successful' : status || 'pending');
+    var recipient = esc(tr.fullname || tr.account_number || '—');
+    var bank      = esc(tr.bank_name || tr.bank_code || '');
+
+    return '<tr>' +
+      '<td class="date-val">' + dateStr + '</td>' +
+      '<td><div class="cust-name">' + recipient + '</div>' +
+      '<div class="cust-phone">' + bank + '</div>' +
+      '<div class="tx-ref">' + esc(tr.reference || '') + '</div></td>' +
+      '<td class="total-val" style="color:var(--accent)">−' + sym + Number(tr.amount || 0).toLocaleString() + '</td>' +
+      '<td>' + (tr.currency || '—') + '</td>' +
+      '<td>' + esc(tr.narration || '—') + '</td>' +
       '<td><span class="' + stCls + '">' + (status || '—') + '</span></td>' +
     '</tr>';
   }).join('');
