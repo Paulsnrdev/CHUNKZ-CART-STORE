@@ -630,11 +630,13 @@ function getFilteredOrders() {
 ═══════════════════════════════════════════════════ */
 function renderAll() {
   const orders = getFilteredOrders();
-  renderStats(orders);
-  renderTimeChart(orders);
-  renderCollChart(orders);
-  renderCollTable(orders);
-  renderOrdersTable(orders);
+  // Exclude unpaid OPay orders from stats/charts — only count confirmed payments
+  const paidOrders = orders.filter(function(o) { return o.orderStatus !== 'awaiting_payment'; });
+  renderStats(paidOrders);
+  renderTimeChart(paidOrders);
+  renderCollChart(paidOrders);
+  renderCollTable(paidOrders);
+  renderOrdersTable(orders); // show all orders in the table so admin can verify OPay payments
 
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dataContent').style.display  = 'block';
