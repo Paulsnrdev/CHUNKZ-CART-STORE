@@ -80,6 +80,7 @@
     .stat-card.orders{border-left-color:#4361ee}
     .stat-card.items{border-left-color:var(--success)}
     .stat-card.top{border-left-color:#f8961e}
+    .stat-card.pending{border-left-color:#d97706;background:#fffbeb}
     .stat-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
     .stat-value{font-size:26px;font-weight:900;color:var(--black);line-height:1;word-break:break-all}
     .stat-sub{font-size:11px;color:var(--gray-dark);margin-top:6px}
@@ -349,6 +350,11 @@ service cloud.firestore {
           <div class="stat-label">Best Collection</div>
           <div class="stat-value" id="statTop" style="font-size:18px">—</div>
           <div class="stat-sub" id="statTopSub"></div>
+        </div>
+        <div class="stat-card pending" id="pendingCard" style="display:none">
+          <div class="stat-label">⏳ Awaiting Payment</div>
+          <div class="stat-value" id="statPending" style="color:#d97706">0</div>
+          <div class="stat-sub" id="statPendingSub">OPay orders — verify &amp; confirm</div>
         </div>
       </div>
 
@@ -631,8 +637,9 @@ function getFilteredOrders() {
 function renderAll() {
   const orders = getFilteredOrders();
   // Exclude unpaid OPay orders from stats/charts — only count confirmed payments
-  const paidOrders = orders.filter(function(o) { return o.orderStatus !== 'awaiting_payment'; });
-  renderStats(paidOrders);
+  const pendingOrders = orders.filter(function(o) { return o.orderStatus === 'awaiting_payment'; });
+  const paidOrders    = orders.filter(function(o) { return o.orderStatus !== 'awaiting_payment'; });
+  renderStats(paidOrders, pendingOrders);
   renderTimeChart(paidOrders);
   renderCollChart(paidOrders);
   renderCollTable(paidOrders);
@@ -653,7 +660,7 @@ function fmtNGN(n) {
   return '₦' + Math.round(n).toLocaleString('en-NG');
 }
 
-function renderStats(orders) {
+function renderStats(orders, pendingOrders) {
   let totalNGN  = 0;
   let itemCount = 0;
   const collRevMap = {};
@@ -681,6 +688,13 @@ function renderStats(orders) {
   document.getElementById('statItemsSub').textContent   = 'units across ' + Object.keys(collOrdMap).length + ' collections';
   document.getElementById('statTop').textContent        = topColl ? COLL_LABELS[topColl[0]] || topColl[0] : '—';
   document.getElementById('statTopSub').textContent     = topColl ? fmtNGN(topColl[1]) + ' revenue' : 'No data yet';
+
+  const pending     = pendingOrders || [];
+  const pendingNGN  = pending.reduce(function(sum, o) { return sum + toNGN(o.total || 0, o.currency || 'NGN'); }, 0);
+  const pendingCard = document.getElementById('pendingCard');
+  pendingCard.style.display = pending.length > 0 ? 'block' : 'none';
+  document.getElementById('statPending').textContent    = pending.length + ' order' + (pending.length !== 1 ? 's' : '');
+  document.getElementById('statPendingSub').textContent = fmtNGN(pendingNGN) + ' — OPay orders awaiting verification';
 }
 
 /* ═══════════════════════════════════════════════════
