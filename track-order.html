@@ -125,7 +125,7 @@
       <div class="items-title">Order Items</div>
       <div id="orderItems"></div>
       <div class="total-row">
-        <span>Total Paid</span>
+        <span id="totalLabel">Total Paid</span>
         <span id="orderTotal"></span>
       </div>
     </div>
@@ -205,18 +205,21 @@ function showErr(msg) {
   errEl.style.display = 'block';
 }
 
-var STATUS_ORDER  = ['confirmed', 'processing', 'dispatched', 'delivered'];
+var STATUS_ORDER_OPAY = ['awaiting_payment', 'confirmed', 'processing', 'dispatched', 'delivered'];
+var STATUS_ORDER      = ['confirmed', 'processing', 'dispatched', 'delivered'];
 var STATUS_LABELS = {
-  confirmed:  'Order Confirmed',
-  processing: 'Processing',
-  dispatched: 'Dispatched',
-  delivered:  'Delivered'
+  awaiting_payment: 'Awaiting Payment',
+  confirmed:        'Order Confirmed',
+  processing:       'Processing',
+  dispatched:       'Dispatched',
+  delivered:        'Delivered'
 };
 var STATUS_DESCS = {
-  confirmed:  'Payment received and your order has been confirmed. Our team will begin processing it shortly.',
-  processing: 'We\'re packing your order and preparing it for dispatch.',
-  dispatched: 'Your order has been handed to the courier and is on its way to you.',
-  delivered:  'Your order has been delivered. Thank you for shopping with Chunkz!'
+  awaiting_payment: 'Your order has been placed. Please transfer the exact amount to our OPay account using your Order ID as the narration. We will confirm your order once we verify the transfer.',
+  confirmed:        'Payment received and your order has been confirmed. Our team will begin processing it shortly.',
+  processing:       'We\'re packing your order and preparing it for dispatch.',
+  dispatched:       'Your order has been handed to the courier and is on its way to you.',
+  delivered:        'Your order has been delivered. Thank you for shopping with Chunkz!'
 };
 
 function renderResult(ref, o) {
@@ -233,11 +236,13 @@ function renderResult(ref, o) {
   document.getElementById('resZone').textContent     = o.deliveryZone ? 'Zone: ' + o.deliveryZone : '';
 
   // Build timeline
+  var isOpay    = o.paymentMethod === 'opay';
+  var steps     = isOpay ? STATUS_ORDER_OPAY : STATUS_ORDER;
   var status    = o.orderStatus || 'confirmed';
-  var statusIdx = STATUS_ORDER.indexOf(status);
+  var statusIdx = steps.indexOf(status);
   if (statusIdx < 0) statusIdx = 0;
 
-  var tlHtml = STATUS_ORDER.map(function(s, i) {
+  var tlHtml = steps.map(function(s, i) {
     var isDone   = i < statusIdx;
     var isActive = i === statusIdx;
     var cls      = 'tl-step' + (isDone ? ' tl-done' : isActive ? ' tl-active' : '');
@@ -273,8 +278,8 @@ function renderResult(ref, o) {
 
   document.getElementById('orderItems').innerHTML = itemsHtml ||
     '<div style="font-size:13px;color:#999;padding:8px 0">No item details available.</div>';
-  document.getElementById('orderTotal').textContent =
-    sym + (o.total || 0).toLocaleString() + ' ' + (o.currency || '');
+  document.getElementById('totalLabel').textContent  = status === 'awaiting_payment' ? 'Order Total' : 'Total Paid';
+  document.getElementById('orderTotal').textContent  = sym + (o.total || 0).toLocaleString() + ' ' + (o.currency || '');
 }
 
 function escHtml(s) {
