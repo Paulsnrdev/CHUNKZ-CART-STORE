@@ -192,6 +192,8 @@
     .su-save{background:var(--black);color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
     .su-save:hover{background:#222}
     .su-msg{font-size:11px;margin-top:6px}
+    .su-delete{margin-top:10px;background:none;border:1.5px solid #fca5a5;color:var(--accent);padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
+    .su-delete:hover{background:var(--accent);color:#fff}
     .ref-mono{font-size:10px;font-family:monospace;color:#999;margin-top:2px;letter-spacing:.5px}
   </style>
   <!-- Vercel Web Analytics -->
@@ -933,6 +935,7 @@ function renderOrdersTable(orders) {
             '<button class="su-save" onclick="updateOrderStatus(\'' + docId + '\',' + idx + ');event.stopPropagation()">Save</button>' +
           '</div>' +
           '<div class="su-msg" id="msg-' + idx + '"></div>' +
+          '<button class="su-delete" onclick="deleteOrder(\'' + docId + '\',' + idx + ');event.stopPropagation()">🗑 Delete Order</button>' +
         '</div>'
       ) : '') +
     '</div></td></tr>';
@@ -1154,6 +1157,17 @@ async function updateOrderStatus(docId, idx) {
   } catch(e) {
     msgEl.textContent = 'Failed to save. Check your connection.';
     msgEl.style.color = '#e63946';
+  }
+}
+
+async function deleteOrder(docId, idx) {
+  if (!confirm('Delete this order permanently? This cannot be undone.')) return;
+  try {
+    await firebase.firestore().collection('orders').doc(docId).delete();
+    allOrders = allOrders.filter(function(o) { return o._id !== docId; });
+    renderAll();
+  } catch(e) {
+    alert('Failed to delete order. Check your connection.');
   }
 }
 </script>
