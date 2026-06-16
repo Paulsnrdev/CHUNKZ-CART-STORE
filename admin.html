@@ -334,7 +334,10 @@ service cloud.firestore {
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card revenue">
-          <div class="stat-label">Total Revenue (NGN)</div>
+          <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between">
+            Total Revenue (NGN)
+            <button id="revToggle" onclick="toggleRevenue()" style="background:none;border:none;cursor:pointer;font-size:15px;line-height:1;color:var(--gray-dark);padding:0 2px" title="Show/hide balance">👁</button>
+          </div>
           <div class="stat-value" id="statRevenue">₦0</div>
           <div class="stat-sub" id="statRevenueSub"></div>
         </div>
@@ -570,6 +573,8 @@ document.getElementById('adminPass') && document.getElementById('adminPass').add
 ═══════════════════════════════════════════════════ */
 let allOrders = [];
 let activeFilter = 'all';
+let revenueHidden = false;
+let lastRevenue = '₦0';
 let timeChartInst = null;
 let collChartInst = null;
 
@@ -682,7 +687,8 @@ function renderStats(orders, pendingOrders) {
 
   const topColl = Object.entries(collRevMap).sort(function(a,b){ return b[1]-a[1]; })[0];
 
-  document.getElementById('statRevenue').textContent    = fmtNGN(totalNGN);
+  lastRevenue = fmtNGN(totalNGN);
+  document.getElementById('statRevenue').textContent    = revenueHidden ? '₦••••••' : lastRevenue;
   document.getElementById('statRevenueSub').textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
   document.getElementById('statOrders').textContent     = orders.length;
   document.getElementById('statOrdersSub').textContent  = activeFilter === 'all' ? 'all time' : 'in selected period';
@@ -1158,6 +1164,12 @@ async function updateOrderStatus(docId, idx) {
     msgEl.textContent = 'Failed to save. Check your connection.';
     msgEl.style.color = '#e63946';
   }
+}
+
+function toggleRevenue() {
+  revenueHidden = !revenueHidden;
+  document.getElementById('statRevenue').textContent = revenueHidden ? '₦••••••' : lastRevenue;
+  document.getElementById('revToggle').textContent   = revenueHidden ? '🙈' : '👁';
 }
 
 async function deleteOrder(docId, idx) {
