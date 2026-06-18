@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chunkz — Catalog Manager</title>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-storage-compat.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Loader ── */
+    #appLoader {
+      position: fixed; inset: 0; background: #0f0f0f;
+      display: flex; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #222; border-top-color: #e8c96c;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Login ── */
+    #loginScreen {
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; padding: 32px 24px;
+    }
+    .login-logo {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; margin-bottom: 20px;
+      border: 2px solid #e8c96c;
+    }
+    .login-title { font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #e8c96c; margin-bottom: 4px; }
+    .login-sub { font-size: 13px; color: #555; margin-bottom: 36px; }
+    .login-form { width: 100%; max-width: 360px; }
+    .login-form input {
+      width: 100%; background: #1a1a1a; border: 1px solid #2a2a2a;
+      border-radius: 12px; color: #fff; font-size: 16px;
+      padding: 15px 16px; margin-bottom: 12px; outline: none;
+      -webkit-appearance: none; font-family: inherit;
+    }
+    .login-form input:focus { border-color: #e8c96c; }
+    .login-form input::placeholder { color: #555; }
+    .btn-login {
+      width: 100%; background: #e8c96c; color: #000;
+      border: none; border-radius: 12px; font-size: 16px;
+      font-weight: 800; padding: 16px; cursor: pointer;
+      letter-spacing: 1px; -webkit-tap-highlight-color: transparent;
+      margin-top: 4px;
+    }
+    .btn-login:active { opacity: 0.85; }
+    .login-error { color: #ff5555; font-size: 13px; margin-top: 14px; text-align: center; min-height: 20px; }
+
+    /* ── App ── */
+    #app { display: none; padding-bottom: 100px; }
+
+    .top-bar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid #1a1a1a;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 10px; }
+    .top-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .top-bar h1 { font-size: 17px; font-weight: 800; letter-spacing: 2px; color: #e8c96c; }
+    .btn-ghost {
+      background: transparent; border: 1px solid #2a2a2a;
+      color: #888; border-radius: 8px; font-size: 13px;
+      padding: 8px 14px; cursor: pointer; font-family: inherit;
+    }
+    .btn-ghost:active { background: #1a1a1a; }
+
+    .stats-row { display: flex; gap: 12px; padding: 16px 20px 8px; }
+    .stat-chip {
+      flex: 1; background: #1a1a1a; border-radius: 10px;
+      padding: 12px 14px; text-align: center;
+    }
+    .stat-num { font-size: 22px; font-weight: 800; color: #e8c96c; }
+    .stat-lbl { font-size: 11px; color: #555; margin-top: 2px; letter-spacing: 0.5px; }
+
+    .action-row { display: flex; gap: 10px; padding: 12px 20px; }
+    .btn-accent {
+      flex: 1; background: #e8c96c; color: #000;
+      border: none; border-radius: 10px; font-size: 14px;
+      font-weight: 700; padding: 13px; cursor: pointer;
+      font-family: inherit; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-accent:active { opacity: 0.85; }
+    .btn-outline {
+      flex: 1; background: transparent; border: 1px solid #2a2a2a;
+      color: #aaa; border-radius: 10px; font-size: 13px;
+      padding: 13px; cursor: pointer; font-family: inherit;
+    }
+    .btn-outline:active { background: #1a1a1a; }
+
+    .section-label {
+      padding: 4px 20px 10px; font-size: 11px;
+      color: #444; letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* ── Category cards ── */
+    .cat-card {
+      background: #1a1a1a; margin: 0 20px 10px;
+      border-radius: 14px; display: flex; overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cat-thumb {
+      width: 88px; height: 88px; object-fit: cover; flex-shrink: 0; display: block;
+    }
+    .cat-thumb-ph {
+      width: 88px; height: 88px; background: #222; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; color: #333;
+    }
+    .cat-info { flex: 1; padding: 11px 12px; min-width: 0; }
+    .cat-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .cat-sub { font-size: 11px; color: #555; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cat-count { font-size: 11px; color: #e8c96c; margin-bottom: 8px; }
+    .cat-btns { display: flex; gap: 6px; }
+    .btn-sm {
+      background: #222; border: none; color: #aaa;
+      border-radius: 7px; font-size: 12px; padding: 5px 10px;
+      cursor: pointer; font-family: inherit;
+    }
+    .btn-sm:active { background: #2c2c2c; }
+    .btn-sm.accent { color: #e8c96c; }
+    .btn-sm.danger { color: #ff5555; }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed; bottom: 28px; right: 24px;
+      width: 58px; height: 58px; background: #e8c96c;
+      color: #000; border: none; border-radius: 50%;
+      font-size: 30px; cursor: pointer; z-index: 80;
+      box-shadow: 0 6px 20px rgba(232,201,108,0.45);
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1; -webkit-tap-highlight-color: transparent;
+    }
+    .fab:active { transform: scale(0.94); }
+
+    /* ── Overlay ── */
+    #overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      z-index: 100; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    #overlay.show { opacity: 1; pointer-events: auto; }
+
+    /* ── Sheets ── */
+    .sheet {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #161616; border-radius: 20px 20px 0 0;
+      z-index: 200; max-height: 94vh; overflow-y: auto;
+      transform: translateY(102%);
+      transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+      -webkit-overflow-scrolling: touch;
+    }
+    .sheet.open { transform: translateY(0); }
+    .sheet.fullscreen {
+      border-radius: 0; top: 0; max-height: 100vh; z-index: 150;
+    }
+    .sheet-handle {
+      width: 40px; height: 4px; background: #2a2a2a;
+      border-radius: 2px; margin: 12px auto 0;
+    }
+    .sheet-title-bar { padding: 16px 20px 16px; border-bottom: 1px solid #222; }
+    .sheet-title { font-size: 18px; font-weight: 800; }
+    .sheet-subtitle { font-size: 12px; color: #555; margin-top: 3px; }
+
+    .sheet-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 20px; border-bottom: 1px solid #222;
+      position: sticky; top: 0; background: #161616; z-index: 10;
+    }
+    .btn-back {
+      background: #222; border: none; color: #fff;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: 18px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .sheet-header-title { font-size: 16px; font-weight: 700; flex: 1; min-width: 0; }
+    .sheet-header-sub { font-size: 12px; color: #e8c96c; }
+
+    /* ── Form fields ── */
+    .form-section { padding: 20px 20px 0; }
+    .field-group { margin-bottom: 16px; }
+    .field-label { font-size: 11px; color: #666; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; display: block; }
+    .field-input {
+      width: 100%; background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 10px; color: #fff; font-size: 15px;
+      padding: 13px 14px; outline: none; -webkit-appearance: none; font-family: inherit;
+    }
+    .field-input:focus { border-color: #e8c96c; }
+    .field-input::placeholder { color: #444; }
+    .field-hint { font-size: 11px; color: #444; margin-top: 5px; }
+
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .price-field {}
+    .price-label { font-size: 11px; color: #666; letter-spacing: 1px; margin-bottom: 6px; display: block; }
+    .price-input {
+      width: 100%; background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 10px; color: #fff; font-size: 15px;
+      padding: 12px 12px; outline: none; -webkit-appearance: none; font-family: inherit;
+    }
+    .price-input:focus { border-color: #e8c96c; }
+
+    /* ── Image upload ── */
+    .upload-wrap { margin-bottom: 16px; position: relative; }
+    .upload-box {
+      border: 2px dashed #2a2a2a; border-radius: 12px;
+      padding: 24px 20px; text-align: center; cursor: pointer;
+      position: relative; overflow: hidden; background: #1a1a1a;
+      transition: border-color 0.2s;
+    }
+    .upload-box:active { border-color: #e8c96c; }
+    .upload-box input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0;
+    }
+    .upload-icon { font-size: 40px; margin-bottom: 8px; }
+    .upload-text { font-size: 14px; color: #888; }
+    .upload-hint-text { font-size: 12px; color: #444; margin-top: 4px; }
+    .upload-preview {
+      width: 100%; max-height: 220px; object-fit: contain;
+      border-radius: 8px; display: none; margin-bottom: 8px;
+    }
+    .upload-change-btn {
+      display: none; font-size: 12px; color: #e8c96c;
+      background: transparent; border: none; cursor: pointer; margin-top: 6px;
+    }
+    .progress-wrap { margin-top: 8px; display: none; }
+    .progress-track { background: #222; border-radius: 4px; height: 5px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #e8c96c; border-radius: 4px; width: 0%; transition: width 0.15s; }
+    .progress-label { font-size: 11px; color: #555; margin-top: 4px; }
+
+    /* ── Form footer ── */
+    .form-footer { display: flex; gap: 10px; padding: 20px; margin-top: 8px; }
+    .btn-save {
+      flex: 1; background: #e8c96c; color: #000; border: none;
+      border-radius: 12px; font-size: 15px; font-weight: 800;
+      padding: 16px; cursor: pointer; font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-save:active { opacity: 0.85; }
+    .btn-save:disabled { opacity: 0.5; cursor: default; }
+    .btn-cancel-sm {
+      background: #1e1e1e; color: #666; border: none;
+      border-radius: 12px; font-size: 15px; padding: 16px 20px;
+      cursor: pointer; font-family: inherit;
+    }
+    .btn-cancel-sm:active { background: #252525; }
+
+    /* ── Products sheet ── */
+    .prod-action-bar { padding: 14px 20px; }
+    .prod-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; padding: 0 20px 20px;
+    }
+    .prod-card { background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+    .prod-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+    .prod-img-ph {
+      width: 100%; aspect-ratio: 1 / 1; background: #222;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; color: #333;
+    }
+    .prod-info { padding: 8px 10px 10px; }
+    .prod-name { font-size: 11px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prod-price { font-size: 12px; color: #e8c96c; margin-bottom: 8px; }
+    .prod-btns { display: flex; gap: 5px; }
+    .btn-prod {
+      flex: 1; background: #222; border: none; color: #aaa;
+      border-radius: 6px; font-size: 11px; padding: 6px 4px;
+      cursor: pointer; text-align: center; font-family: inherit;
+    }
+    .btn-prod.del { color: #ff5555; }
+    .btn-prod:active { background: #2a2a2a; }
+
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: #444; font-size: 14px;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ── Seed notice ── */
+    .seed-notice {
+      margin: 16px 20px; background: #1a1a1a;
+      border: 1px solid #2a2a2a; border-radius: 14px;
+      padding: 20px; text-align: center;
+    }
+    .seed-notice-icon { font-size: 36px; margin-bottom: 10px; }
+    .seed-notice h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .seed-notice p { color: #666; font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 110px; left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: #222; color: #fff; padding: 12px 22px;
+      border-radius: 10px; font-size: 14px; z-index: 9999;
+      opacity: 0; transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none; white-space: nowrap;
+      border-left: 3px solid #e8c96c; max-width: calc(100vw - 40px);
+      white-space: normal; text-align: center;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.err { border-color: #ff5555; }
+
+    /* ── Misc ── */
+    .divider { height: 1px; background: #1a1a1a; margin: 8px 0; }
+    .text-danger { color: #ff5555; }
+    .cover-current { font-size: 11px; color: #555; margin-top: 6px; word-break: break-all; }
+  </style>
+</head>
+<body>
+
+<!-- ─── Initial loader ─── -->
+<div id="appLoader"><div class="spinner"></div></div>
+
+<!-- ─── Login ─── -->
+<div id="loginScreen">
+  <img src="CHUNKZLOGO.jpg" class="login-logo" alt="Chunkz">
+  <div class="login-title">CHUNKZ</div>
+  <div class="login-sub">Catalog Manager</div>
+  <div class="login-form">
+    <input type="email" id="loginEmail" placeholder="Email address" autocomplete="email">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">Login</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ─── App ─── -->
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="CHUNKZLOGO.jpg" class="top-logo" alt="">
+      <h1>CATALOG</h1>
+    </div>
+    <button class="btn-ghost" onclick="doLogout()">Logout</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-chip">
+      <div class="stat-num" id="statCats">0</div>
+      <div class="stat-lbl">Categories</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-num" id="statProds">0</div>
+      <div class="stat-lbl">Products</div>
+    </div>
+  </div>
+
+  <div id="seedNotice" style="display:none">
+    <div class="seed-notice">
+      <div class="seed-notice-icon">📦</div>
+      <h3>First Time Setup</h3>
+      <p>Your catalog is empty. Import all your existing products from the site with one tap.</p>
+      <button class="btn-accent" onclick="seedCatalog()">Import Existing Products</button>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn-accent" onclick="openCategoryEditor()">+ Add Category</button>
+    <button class="btn-outline" onclick="confirmSeed()">Re-Import</button>
+  </div>
+
+  <div class="section-label">ALL CATEGORIES</div>
+  <div id="categoryList"></div>
+</div>
+
+<!-- FAB -->
+<button class="fab" title="Add category" onclick="openCategoryEditor()">+</button>
+
+<!-- Overlay -->
+<div id="overlay" onclick="handleOverlayClick()"></div>
+
+<!-- ─── Category Editor Sheet ─── -->
+<div class="sheet" id="sheetCatEditor">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title-bar">
+    <div class="sheet-title" id="catEditorTitle">Add Category</div>
+    <div class="sheet-subtitle" id="catEditorSub">New product category</div>
+  </div>
+  <div class="form-section">
+    <div class="field-group">
+      <label class="field-label">Category ID (no spaces)</label>
+      <input class="field-input" id="catKey" placeholder="e.g. shirts, hoodie" autocapitalize="none">
+      <div class="field-hint">Used as the unique identifier. Cannot be changed after saving.</div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Title</label>
+      <input class="field-input" id="catTitle" placeholder="e.g. Shirts">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Subtitle</label>
+      <input class="field-input" id="catSubtitle" placeholder="e.g. Premium Tees & Graphic Shirts">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Button Label</label>
+      <input class="field-input" id="catCTA" placeholder="View Collection" value="View Collection">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Category Cover Image</label>
+      <div class="upload-wrap" id="coverUploadWrap">
+        <div class="upload-box" id="coverUploadBox">
+          <input type="file" id="coverFileInput" accept="image/*" onchange="handleCoverFile(this)">
+          <img class="upload-preview" id="coverPreview" alt="">
+          <div id="coverPlaceholder">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text">Tap to upload cover image</div>
+            <div class="upload-hint-text">From camera or gallery</div>
+          </div>
+          <button class="upload-change-btn" id="coverChangeBtn" onclick="document.getElementById('coverFileInput').click(); event.stopPropagation();">Change image</button>
+        </div>
+        <div class="cover-current" id="coverCurrentPath"></div>
+        <div class="progress-wrap" id="coverProgressWrap">
+          <div class="progress-track"><div class="progress-bar" id="coverProgressBar"></div></div>
+          <div class="progress-label" id="coverProgressLabel">Uploading…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Default Prices</label>
+      <div class="price-grid">
+        <div class="price-field">
+          <label class="price-label">₦ NGN</label>
+          <input class="price-input" id="catPriceNGN" type="number" placeholder="25000">
+        </div>
+        <div class="price-field">
+          <label class="price-label">$ USD</label>
+          <input class="price-input" id="catPriceUSD" type="number" placeholder="23">
+        </div>
+        <div class="price-field">
+          <label class="price-label">£ GBP</label>
+          <input class="price-input" id="catPriceGBP" type="number" placeholder="18">
+        </div>
+        <div class="price-field">
+          <label class="price-label">CA$ CAD</label>
+          <input class="price-input" id="catPriceCAD" type="number" placeholder="33">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn-cancel-sm" onclick="closeSheet('sheetCatEditor')">Cancel</button>
+    <button class="btn-save" id="catSaveBtn" onclick="saveCategoryEditor()">Save Category</button>
+  </div>
+</div>
+
+<!-- ─── Products Sheet (full-screen) ─── -->
+<div class="sheet fullscreen" id="sheetProducts">
+  <div class="sheet-header">
+    <button class="btn-back" onclick="closeSheet('sheetProducts')">&#8592;</button>
+    <div>
+      <div class="sheet-header-title" id="prodSheetTitle">Products</div>
+      <div class="sheet-header-sub" id="prodSheetSub"></div>
+    </div>
+    <button class="btn-accent" style="flex:0 0 auto;padding:9px 14px;font-size:13px;" onclick="openProductEditor()">+ Add</button>
+  </div>
+  <div id="prodList"></div>
+</div>
+
+<!-- ─── Product Editor Sheet ─── -->
+<div class="sheet" id="sheetProdEditor" style="z-index:300;">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title-bar">
+    <div class="sheet-title" id="prodEditorTitle">Add Product</div>
+  </div>
+  <div class="form-section">
+    <div class="field-group">
+      <label class="field-label">Product Name</label>
+      <input class="field-input" id="prodName" placeholder="e.g. Chunkz City Black Tee">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Product Image</label>
+      <div class="upload-wrap">
+        <div class="upload-box" id="prodUploadBox">
+          <input type="file" id="prodFileInput" accept="image/*" capture="environment" onchange="handleProdFile(this)">
+          <img class="upload-preview" id="prodPreview" alt="">
+          <div id="prodPlaceholder">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Take photo or upload from gallery</div>
+            <div class="upload-hint-text">Tap to open camera / files</div>
+          </div>
+          <button class="upload-change-btn" id="prodChangeBtn" onclick="document.getElementById('prodFileInput').click(); event.stopPropagation();">Change image</button>
+        </div>
+        <div class="cover-current" id="prodCurrentSrc"></div>
+        <div class="progress-wrap" id="prodProgressWrap">
+          <div class="progress-track"><div class="progress-bar" id="prodProgressBar"></div></div>
+          <div class="progress-label" id="prodProgressLabel">Uploading…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Prices</label>
+      <div class="price-grid">
+        <div class="price-field">
+          <label class="price-label">₦ NGN</label>
+          <input class="price-input" id="prodNGN" type="number" placeholder="25000">
+        </div>
+        <div class="price-field">
+          <label class="price-label">$ USD</label>
+          <input class="price-input" id="prodUSD" type="number" placeholder="23">
+        </div>
+        <div class="price-field">
+          <label class="price-label">£ GBP</label>
+          <input class="price-input" id="prodGBP" type="number" placeholder="18">
+        </div>
+        <div class="price-field">
+          <label class="price-label">CA$ CAD</label>
+          <input class="price-input" id="prodCAD" type="number" placeholder="33">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-footer">
+    <button class="btn-cancel-sm" onclick="closeSheet('sheetProdEditor')">Cancel</button>
+    <button class="btn-save" id="prodSaveBtn" onclick="saveProductEditor()">Save Product</button>
+  </div>
+</div>
+
+<!-- ─── Toast ─── -->
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   FIREBASE
+═══════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
+  authDomain:        "chunkz-store.firebaseapp.com",
+  projectId:         "chunkz-store",
+  storageBucket:     "chunkz-store.firebasestorage.app",
+  messagingSenderId: "418094301866",
+  appId:             "1:418094301866:web:a326b6057a1176ea80c6d3"
+};
+firebase.initializeApp(FIREBASE_CONFIG);
+const auth     = firebase.auth();
+const db       = firebase.firestore();
+const storage  = firebase.storage();
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let catalogData   = {};   // { catKey: { title, subtitle, ... } }
+let activeCatKey  = null; // currently viewing products for this category
+let editCatKey    = null; // category being edited (null = new)
+let editProdIdx   = null; // product index being edited (-1 = new)
+let pendingCoverUrl = null;
+let pendingProdUrl  = null;
+let openSheets    = [];   // stack of open sheet ids
+
+/* ═══════════════════════════════════════
+   AUTH
+═══════════════════════════════════════ */
+auth.onAuthStateChanged(user => {
+  document.getElementById('appLoader').style.display = 'none';
+  if (user) {
+    showApp();
+    loadCatalog();
+  } else {
+    showLogin();
+  }
+});
+
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+async function doLogin() {
+  const btn   = document.getElementById('loginBtn');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  const err   = document.getElementById('loginError');
+  err.textContent = '';
+  btn.textContent = 'Logging in…';
+  btn.disabled = true;
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    err.textContent = 'Wrong email or password.';
+    btn.textContent = 'Login';
+    btn.disabled = false;
+  }
+}
+
+function doLogout() {
+  if (!confirm('Log out?')) return;
+  auth.signOut();
+}
+
+/* ═══════════════════════════════════════
+   CATALOG LOADING
+═══════════════════════════════════════ */
+async function loadCatalog() {
+  try {
+    const snap = await db.collection('catalog').orderBy('order').get();
+    catalogData = {};
+    snap.forEach(doc => { catalogData[doc.id] = doc.data(); });
+    renderDashboard();
+  } catch(e) {
+    showToast('Failed to load catalog', true);
+    renderDashboard();
+  }
+}
+
+/* ═══════════════════════════════════════
+   DASHBOARD RENDER
+═══════════════════════════════════════ */
+function renderDashboard() {
+  const keys    = Object.keys(catalogData);
+  const total   = keys.reduce((s, k) => s + (catalogData[k].images || []).length, 0);
+  document.getElementById('statCats').textContent  = keys.length;
+  document.getElementById('statProds').textContent = total;
+  document.getElementById('seedNotice').style.display = keys.length === 0 ? 'block' : 'none';
+
+  const list = document.getElementById('categoryList');
+  list.innerHTML = '';
+  keys.forEach(key => {
+    const cat   = catalogData[key];
+    const count = (cat.images || []).length;
+    const card  = document.createElement('div');
+    card.className = 'cat-card';
+
+    let thumbHtml;
+    if (cat.coverImage) {
+      thumbHtml = `<img class="cat-thumb" src="${esc(cat.coverImage)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                   <div class="cat-thumb-ph" style="display:none">🏷️</div>`;
+    } else {
+      thumbHtml = `<div class="cat-thumb-ph">🏷️</div>`;
+    }
+
+    card.innerHTML = `
+      ${thumbHtml}
+      <div class="cat-info">
+        <div class="cat-name">${esc(cat.title || key)}</div>
+        <div class="cat-sub">${esc(cat.subtitle || '')}</div>
+        <div class="cat-count">${count} product${count !== 1 ? 's' : ''}</div>
+        <div class="cat-btns">
+          <button class="btn-sm accent" onclick="openProductsSheet('${esc(key)}')">Products</button>
+          <button class="btn-sm" onclick="openCategoryEditor('${esc(key)}')">Edit</button>
+          <button class="btn-sm danger" onclick="deleteCategory('${esc(key)}')">Delete</button>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════
+   SHEET SYSTEM
+═══════════════════════════════════════ */
+function openSheet(id) {
+  const el = document.getElementById(id);
+  el.classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  if (!openSheets.includes(id)) openSheets.push(id);
+}
+function closeSheet(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('open');
+  openSheets = openSheets.filter(s => s !== id);
+  if (openSheets.length === 0) {
+    document.getElementById('overlay').classList.remove('show');
+  }
+}
+function handleOverlayClick() {
+  // Close the top-most sheet (except fullscreen products while prod editor is open)
+  if (openSheets.includes('sheetProdEditor')) {
+    closeSheet('sheetProdEditor'); return;
+  }
+  if (openSheets.includes('sheetCatEditor')) {
+    closeSheet('sheetCatEditor'); return;
+  }
+  if (openSheets.includes('sheetProducts')) {
+    closeSheet('sheetProducts'); return;
+  }
+}
+
+/* ═══════════════════════════════════════
+   CATEGORY EDITOR
+═══════════════════════════════════════ */
+function openCategoryEditor(key) {
+  editCatKey      = key || null;
+  pendingCoverUrl = null;
+
+  const isEdit = !!key;
+  document.getElementById('catEditorTitle').textContent = isEdit ? 'Edit Category' : 'Add Category';
+  document.getElementById('catEditorSub').textContent   = isEdit ? key : 'New product category';
+
+  const cat = key ? catalogData[key] : {};
+
+  // Populate fields
+  const keyInput = document.getElementById('catKey');
+  keyInput.value    = key || '';
+  keyInput.disabled = isEdit;
+  keyInput.style.opacity = isEdit ? '0.4' : '1';
+
+  document.getElementById('catTitle').value    = cat.title    || '';
+  document.getElementById('catSubtitle').value = cat.subtitle || '';
+  document.getElementById('catCTA').value      = cat.ctaLabel || 'View Collection';
+  document.getElementById('catPriceNGN').value = cat.prices?.NG?.amount || '';
+  document.getElementById('catPriceUSD').value = cat.prices?.US?.amount || '';
+  document.getElementById('catPriceGBP').value = cat.prices?.GB?.amount || '';
+  document.getElementById('catPriceCAD').value = cat.prices?.CA?.amount || '';
+
+  // Cover image
+  resetUploadBox('coverPreview', 'coverPlaceholder', 'coverChangeBtn', 'coverFileInput');
+  document.getElementById('coverCurrentPath').textContent = cat.coverImage
+    ? 'Current: ' + cat.coverImage.split('/').pop() : '';
+  if (cat.coverImage) {
+    const prev = document.getElementById('coverPreview');
+    prev.src = cat.coverImage;
+    prev.style.display = 'block';
+    document.getElementById('coverPlaceholder').style.display = 'none';
+    document.getElementById('coverChangeBtn').style.display   = 'block';
+  }
+  document.getElementById('coverProgressWrap').style.display = 'none';
+
+  document.getElementById('catSaveBtn').disabled = false;
+  document.getElementById('catSaveBtn').textContent = 'Save Category';
+
+  openSheet('sheetCatEditor');
+}
+
+async function saveCategoryEditor() {
+  const key = editCatKey || document.getElementById('catKey').value.trim().toLowerCase().replace(/\s+/g,'');
+  if (!key) { showToast('Category ID is required', true); return; }
+
+  const btn = document.getElementById('catSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  // Upload new cover if selected
+  let coverImage = editCatKey ? (catalogData[editCatKey]?.coverImage || '') : '';
+  if (pendingCoverUrl) {
+    coverImage = pendingCoverUrl;
+  }
+
+  const ngn = parseFloat(document.getElementById('catPriceNGN').value) || 0;
+  const usd = parseFloat(document.getElementById('catPriceUSD').value) || 0;
+  const gbp = parseFloat(document.getElementById('catPriceGBP').value) || 0;
+  const cad = parseFloat(document.getElementById('catPriceCAD').value) || 0;
+
+  const catData = {
+    title:      document.getElementById('catTitle').value.trim(),
+    subtitle:   document.getElementById('catSubtitle').value.trim(),
+    ctaLabel:   document.getElementById('catCTA').value.trim() || 'View Collection',
+    coverImage: coverImage,
+    prices: {
+      NG: { amount: ngn, currency: 'NGN', symbol: '₦'   },
+      US: { amount: usd, currency: 'USD', symbol: '$'    },
+      GB: { amount: gbp, currency: 'GBP', symbol: '£'    },
+      CA: { amount: cad, currency: 'CAD', symbol: 'CA$'  }
+    },
+    images: editCatKey ? (catalogData[editCatKey]?.images || []) : [],
+    order:  editCatKey ? (catalogData[editCatKey]?.order ?? Date.now()) : Date.now()
+  };
+
+  try {
+    await db.collection('catalog').doc(key).set(catData);
+    catalogData[key] = catData;
+    closeSheet('sheetCatEditor');
+    renderDashboard();
+    showToast(editCatKey ? 'Category updated!' : 'Category added!');
+  } catch(e) {
+    showToast('Save failed: ' + e.message, true);
+    btn.disabled = false;
+    btn.textContent = 'Save Category';
+  }
+}
+
+async function deleteCategory(key) {
+  const cat   = catalogData[key];
+  const count = (cat?.images || []).length;
+  if (!confirm(`Delete "${cat?.title || key}" and all ${count} products? This cannot be undone.`)) return;
+  try {
+    await db.collection('catalog').doc(key).delete();
+    delete catalogData[key];
+    renderDashboard();
+    showToast('Category deleted');
+  } catch(e) {
+    showToast('Delete failed', true);
+  }
+}
+
+/* ═══════════════════════════════════════
+   PRODUCTS SHEET
+═══════════════════════════════════════ */
+function openProductsSheet(key) {
+  activeCatKey = key;
+  const cat = catalogData[key] || {};
+  document.getElementById('prodSheetTitle').textContent = cat.title || key;
+  document.getElementById('prodSheetSub').textContent   = (cat.images || []).length + ' products';
+  renderProducts();
+  openSheet('sheetProducts');
+}
+
+function renderProducts() {
+  const cat    = catalogData[activeCatKey] || {};
+  const images = cat.images || [];
+  document.getElementById('prodSheetSub').textContent = images.length + ' products';
+
+  const list = document.getElementById('prodList');
+  if (images.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">👕</div>No products yet.<br>Tap "+ Add" to add the first one.</div>`;
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'prod-grid';
+  images.forEach((entry, i) => {
+    const src  = typeof entry === 'string' ? entry : entry.src;
+    const name = entry.name || cleanName(src);
+    const ngn  = entry.ngn  || entry.prices?.NG?.amount || 0;
+
+    const card = document.createElement('div');
+    card.className = 'prod-card';
+    card.innerHTML = `
+      <img class="prod-img" src="${esc(src)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="prod-img-ph" style="display:none">🖼️</div>
+      <div class="prod-info">
+        <div class="prod-name">${esc(name)}</div>
+        <div class="prod-price">₦${Number(ngn).toLocaleString()}</div>
+        <div class="prod-btns">
+          <button class="btn-prod" onclick="openProductEditor(${i})">Edit</button>
+          <button class="btn-prod del" onclick="deleteProduct(${i})">Delete</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  list.innerHTML = '';
+  list.appendChild(grid);
+}
+
+/* ═══════════════════════════════════════
+   PRODUCT EDITOR
+═══════════════════════════════════════ */
+function openProductEditor(idx) {
+  editProdIdx     = idx !== undefined ? idx : -1;
+  pendingProdUrl  = null;
+  const isEdit    = editProdIdx >= 0;
+  const entry     = isEdit ? (catalogData[activeCatKey]?.images[editProdIdx] || {}) : {};
+
+  document.getElementById('prodEditorTitle').textContent = isEdit ? 'Edit Product' : 'Add Product';
+
+  const src  = typeof entry === 'string' ? entry : (entry.src || '');
+  const name = entry.name || (src ? cleanName(src) : '');
+  document.getElementById('prodName').value = name;
+  document.getElementById('prodNGN').value  = entry.ngn  || entry.prices?.NG?.amount || '';
+  document.getElementById('prodUSD').value  = entry.usd  || entry.prices?.US?.amount || '';
+  document.getElementById('prodGBP').value  = entry.gbp  || entry.prices?.GB?.amount || '';
+  document.getElementById('prodCAD').value  = entry.cad  || entry.prices?.CA?.amount || '';
+
+  resetUploadBox('prodPreview', 'prodPlaceholder', 'prodChangeBtn', 'prodFileInput');
+  document.getElementById('prodCurrentSrc').textContent = src ? 'Current: ' + src.split('/').pop().split('?')[0] : '';
+  if (src) {
+    const prev = document.getElementById('prodPreview');
+    prev.src   = src;
+    prev.style.display = 'block';
+    document.getElementById('prodPlaceholder').style.display = 'none';
+    document.getElementById('prodChangeBtn').style.display   = 'block';
+  }
+  document.getElementById('prodProgressWrap').style.display = 'none';
+
+  document.getElementById('prodSaveBtn').disabled    = false;
+  document.getElementById('prodSaveBtn').textContent = 'Save Product';
+
+  openSheet('sheetProdEditor');
+}
+
+async function saveProductEditor() {
+  const btn  = document.getElementById('prodSaveBtn');
+  btn.disabled  = true;
+  btn.textContent = 'Saving…';
+
+  const cat    = catalogData[activeCatKey];
+  const images = cat.images || [];
+  const isEdit = editProdIdx >= 0;
+  const oldEntry = isEdit ? images[editProdIdx] : {};
+  const oldSrc   = typeof oldEntry === 'string' ? oldEntry : (oldEntry.src || '');
+
+  const src  = pendingProdUrl || oldSrc;
+  if (!src) { showToast('Please upload an image', true); btn.disabled = false; btn.textContent = 'Save Product'; return; }
+
+  const name = document.getElementById('prodName').value.trim() || cleanName(src);
+  const ngn  = parseFloat(document.getElementById('prodNGN').value) || 0;
+  const usd  = parseFloat(document.getElementById('prodUSD').value) || 0;
+  const gbp  = parseFloat(document.getElementById('prodGBP').value) || 0;
+  const cad  = parseFloat(document.getElementById('prodCAD').value) || 0;
+
+  const newEntry = { src, name, ngn, usd, gbp, cad };
+
+  if (isEdit) {
+    images[editProdIdx] = newEntry;
+  } else {
+    images.push(newEntry);
+  }
+
+  try {
+    await db.collection('catalog').doc(activeCatKey).update({ images });
+    cat.images = images;
+    closeSheet('sheetProdEditor');
+    renderProducts();
+    showToast(isEdit ? 'Product updated!' : 'Product added!');
+  } catch(e) {
+    showToast('Save failed: ' + e.message, true);
+    btn.disabled = false;
+    btn.textContent = 'Save Product';
+  }
+}
+
+async function deleteProduct(idx) {
+  const cat    = catalogData[activeCatKey];
+  const images = cat.images || [];
+  const entry  = images[idx];
+  const name   = entry?.name || cleanName(entry?.src || entry || '');
+  if (!confirm(`Delete "${name}"?`)) return;
+  images.splice(idx, 1);
+  try {
+    await db.collection('catalog').doc(activeCatKey).update({ images });
+    cat.images = images;
+    renderProducts();
+    renderDashboard();
+    showToast('Product deleted');
+  } catch(e) {
+    showToast('Delete failed', true);
+  }
+}
+
+/* ═══════════════════════════════════════
+   IMAGE UPLOAD
+═══════════════════════════════════════ */
+function handleCoverFile(input) {
+  if (!input.files[0]) return;
+  uploadImage(input.files[0], 'catalog-images/covers',
+    'coverPreview', 'coverPlaceholder', 'coverChangeBtn',
+    'coverProgressWrap', 'coverProgressBar', 'coverProgressLabel',
+    url => { pendingCoverUrl = url; }
+  );
+}
+
+function handleProdFile(input) {
+  if (!input.files[0]) return;
+  uploadImage(input.files[0], 'catalog-images/' + (activeCatKey || 'misc'),
+    'prodPreview', 'prodPlaceholder', 'prodChangeBtn',
+    'prodProgressWrap', 'prodProgressBar', 'prodProgressLabel',
+    url => { pendingProdUrl = url; }
+  );
+}
+
+function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, progressWrapId, progressBarId, progressLabelId, onDone) {
+  // Show local preview immediately
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById(previewId);
+    prev.src   = e.target.result;
+    prev.style.display = 'block';
+    document.getElementById(placeholderId).style.display = 'none';
+    document.getElementById(changeBtnId).style.display   = 'block';
+  };
+  reader.readAsDataURL(file);
+
+  // Upload to Firebase Storage
+  const ext  = file.name.split('.').pop().toLowerCase();
+  const name = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const ref  = storage.ref(storagePath + '/' + name);
+  const task = ref.put(file);
+
+  const wrap  = document.getElementById(progressWrapId);
+  const bar   = document.getElementById(progressBarId);
+  const label = document.getElementById(progressLabelId);
+  wrap.style.display = 'block';
+  bar.style.width    = '0%';
+
+  task.on('state_changed',
+    snap => {
+      const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+      bar.style.width    = pct + '%';
+      label.textContent  = 'Uploading ' + pct + '%…';
+    },
+    err => {
+      wrap.style.display = 'none';
+      showToast('Upload failed: ' + err.message, true);
+    },
+    async () => {
+      const url = await task.snapshot.ref.getDownloadURL();
+      bar.style.width    = '100%';
+      label.textContent  = 'Upload complete!';
+      setTimeout(() => { wrap.style.display = 'none'; }, 1500);
+      onDone(url);
+    }
+  );
+}
+
+function resetUploadBox(previewId, placeholderId, changeBtnId, fileInputId) {
+  const prev = document.getElementById(previewId);
+  prev.src   = '';
+  prev.style.display = 'none';
+  document.getElementById(placeholderId).style.display = 'block';
+  document.getElementById(changeBtnId).style.display   = 'none';
+  document.getElementById(fileInputId).value = '';
+}
+
+/* ═══════════════════════════════════════
+   SEED EXISTING CATALOG
+═══════════════════════════════════════ */
+function confirmSeed() {
+  if (!confirm('This will re-import all original products from the site. Any edits you have made to those products will be overwritten. New products you added will not be affected.\n\nContinue?')) return;
+  seedCatalog();
+}
+
+async function seedCatalog() {
+  document.getElementById('seedNotice').querySelector('button').textContent = 'Importing…';
+  try {
+    const batch = db.batch();
+    let order   = 0;
+    for (const [key, cat] of Object.entries(SEED_CATALOG)) {
+      const ref = db.collection('catalog').doc(key);
+      batch.set(ref, { ...cat, order: order++ });
+    }
+    await batch.commit();
+    showToast('All products imported!');
+    await loadCatalog();
+  } catch(e) {
+    showToast('Import failed: ' + e.message, true);
+  }
+}
+
+/* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function cleanName(src) {
+  if (!src) return '';
+  return src.split('/').pop().split('?')[0]
+    .replace(/\.[^.]+$/, '').replace(/[_\-()]+/g, ' ')
+    .replace(/\s+/g, ' ').trim()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+let toastTimer;
+function showToast(msg, isErr) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show' + (isErr ? ' err' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+/* ═══════════════════════════════════════
+   SEED DATA  — original hardcoded catalog
+   (used for one-time import to Firestore)
+═══════════════════════════════════════ */
+const SEED_CATALOG = {
+  shirts: {
+    title: 'Shirts', subtitle: 'Premium Tees & Graphic Shirts',
+    coverImage: 'JUNE 2026 SET/Chunkz City Black Tee.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:25000,currency:'NGN',symbol:'₦'}, US:{amount:23,currency:'USD',symbol:'$'}, GB:{amount:18,currency:'GBP',symbol:'£'}, CA:{amount:33,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Chunkz City Black Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Chunkz City White Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Chunkz Black Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Chunkz Comic Tee 1.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Chunkz Comic Black Tee 2.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Chunkz Comic White Tee 2.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Blokecore White Tee.webp',ngn:22500,usd:20,gbp:16,cad:31},
+      {src:'JUNE 2026 SET/Black Horizon Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/Tenacity Shirt.webp',ngn:22500,usd:20,gbp:16,cad:33},
+      {src:'JUNE 2026 SET/Black Surveillance Tee.webp',ngn:22500,usd:20,gbp:16,cad:31},
+      {src:'JUNE 2026 SET/White Surveillance Tee.webp',ngn:22500,usd:20,gbp:16,cad:31},
+      {src:'JUNE 2026 SET/Black Tagging Graffiti Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/White Tagging Graffiti Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/No Way Today Black Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/No Way Today Black Tee 1.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/No Way Today White Tee.webp',ngn:22500,usd:20,gbp:16,cad:33},
+      {src:'JUNE 2026 SET/Target-Lock White Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Ringer Slit-Globe Tee.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'JUNE 2026 SET/Black V-Neck Distressed Star Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Green V-Neck Distressed Star Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Red V-Neck Distressed Star Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/Black Gram Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Red Splatter Portrait Black Tee.webp',ngn:22500,usd:20,gbp:16,cad:33},
+      {src:'JUNE 2026 SET/Red Splatter Portrait White Tee.webp',ngn:22500,usd:20,gbp:16,cad:33},
+      {src:'JUNE 2026 SET/Tactical Vest Graphic Tee.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'JUNE 2026 SET/Cherub Worldwide Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Heaven Saints Oversized White Tee.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'JUNE 2026 SET/Heaven Saints Oversized White Tee 1.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Chunkz First Set/Black Luxury Tee.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Chunkz First Set/White Luxury Tee.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Chunkz First Set/White Luxury Tee 2.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Chunkz First Set/black coop shirt.webp',ngn:20000,usd:20,gbp:15,cad:27},
+      {src:'Chunkz First Set/SMK Black Tee.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/Spray white shirt.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/Black shirt Gojo-Str.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/white shirt (Boy on tire).webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Copy of SUMMER SET/Black la marque.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Copy of SUMMER SET/White la marque.webp',ngn:22500,usd:21,gbp:17,cad:32},
+      {src:'Copy of SUMMER SET/White Paradise.webp',ngn:23000,usd:21,gbp:17,cad:32},
+      {src:'Copy of SUMMER SET/black winning (red).webp',ngn:25000,usd:23,gbp:18,cad:33}
+    ]
+  },
+  hoodie: {
+    title: 'Hoodie', subtitle: 'Bold & Warm Pullover Hoodies',
+    coverImage: 'JUNE 2026 SET/Chunkz Zipper Hoodie.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:27500,currency:'NGN',symbol:'₦'}, US:{amount:25,currency:'USD',symbol:'$'}, GB:{amount:20,currency:'GBP',symbol:'£'}, CA:{amount:33,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Chunkz Zipper Hoodie.webp',ngn:27500,usd:25,gbp:18.5,cad:35},
+      {src:'Chunkz First Set/chunkz hoodie 1.webp',ngn:25000,usd:23,gbp:18,cad:33},
+      {src:'Chunkz First Set/chunkz hoodie 2.webp',ngn:24000,usd:23,gbp:18,cad:33},
+      {src:'JUNE 2026 SET/Hoodie and Pant Combo.webp',ngn:47500,usd:40,gbp:30,cad:55},
+      {src:'Chunkz First Set/Hoodie And Pant Combo 2.webp',ngn:45000,usd:38.5,gbp:28.5,cad:52}
+    ]
+  },
+  sweatshirt: {
+    title: 'Sweatshirt', subtitle: 'Cozy Crewneck Sweatshirts',
+    coverImage: 'Chunkz First Set/Global Sweatshirt.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:25000,currency:'NGN',symbol:'₦'}, US:{amount:24,currency:'USD',symbol:'$'}, GB:{amount:18.5,currency:'GBP',symbol:'£'}, CA:{amount:33,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'Chunkz First Set/Global Sweatshirt.webp',ngn:25000,usd:24,gbp:18.5,cad:33},
+      {src:'Chunkz First Set/Anime Sweatshirt.webp',ngn:23000,usd:22,gbp:18,cad:30},
+      {src:'Chunkz First Set/SLD Sweatshirt.webp',ngn:23000,usd:22,gbp:18,cad:30}
+    ]
+  },
+  sweatpant: {
+    title: 'Sweatpant', subtitle: 'Comfortable Urban Sweatpants',
+    coverImage: 'JUNE 2026 SET/Chunkz Sweatpant new.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:20000,currency:'NGN',symbol:'₦'}, US:{amount:20,currency:'USD',symbol:'$'}, GB:{amount:15,currency:'GBP',symbol:'£'}, CA:{amount:27,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Chunkz Sweatpant new.webp',ngn:20000,usd:20,gbp:15,cad:27}
+    ]
+  },
+  tracksuit: {
+    title: 'Tracksuit', subtitle: 'Matching Tracksuit Sets',
+    coverImage: 'JUNE 2026 SET/White Tech Tracksuit Set.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:65000,currency:'NGN',symbol:'₦'}, US:{amount:50,currency:'USD',symbol:'$'}, GB:{amount:37.5,currency:'GBP',symbol:'£'}, CA:{amount:80,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Minimal Piping Tracksuit Set.webp',ngn:50000,usd:50,gbp:37.5,cad:70},
+      {src:'JUNE 2026 SET/Pink Tech Tracksuit Set.webp',ngn:60000,usd:53,gbp:40,cad:73.5},
+      {src:'JUNE 2026 SET/Red Tech Tracksuit Set.webp',ngn:60000,usd:53,gbp:40,cad:73.5},
+      {src:'JUNE 2026 SET/White Tech Tracksuit Set.webp',ngn:60000,usd:53,gbp:40,cad:73.5},
+      {src:'JUNE 2026 SET/Topographic Tracksuit Set.webp',ngn:65000,usd:57,gbp:42.5,cad:80}
+    ]
+  },
+  jersey: {
+    title: 'Jersey', subtitle: 'Street Sport Jerseys',
+    coverImage: 'CHUNKZ JERSEY/Black Jersey.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:25000,currency:'NGN',symbol:'₦'}, US:{amount:25,currency:'USD',symbol:'$'}, GB:{amount:19,currency:'GBP',symbol:'£'}, CA:{amount:35,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'CHUNKZ JERSEY/Black Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/Jersey Back.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/White Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/Purple Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/Pink Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/Dark Pink Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ JERSEY/Green Jersey.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ CAMO JERSEY/Jersey Camo.webp',ngn:25000,usd:25,gbp:19,cad:35},
+      {src:'CHUNKZ CAMO JERSEY/Jersey Camo Back.webp',ngn:25000,usd:25,gbp:19,cad:35}
+    ]
+  },
+  tanktop: {
+    title: 'Tank Top', subtitle: 'Sleek Summer Tank Tops',
+    coverImage: 'JUNE 2026 SET/Singlet Tanktop.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:15000,currency:'NGN',symbol:'₦'}, US:{amount:15,currency:'USD',symbol:'$'}, GB:{amount:11.5,currency:'GBP',symbol:'£'}, CA:{amount:22,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'Copy of SUMMER SET/White Singlet tank-top.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'Copy of SUMMER SET/Black Singlet tank-top.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'Copy of SUMMER SET/White vest tank.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'Copy of SUMMER SET/Black vest tank.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Singlet Tanktop.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Tank top black-green.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Tank top black-red.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Tank top white-green.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Tank top white-red.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/White-Pink Tank.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Chunkz Singlet (black).webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Chunkz Singlet (green).webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Female singlet black.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Female singlet blue.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Female singlet white.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Female singlet red minus.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Female singlet pink.webp',ngn:15000,usd:15,gbp:11.5,cad:22},
+      {src:'JUNE 2026 SET/Archer Crop Tank.webp',ngn:15000,usd:15,gbp:11.5,cad:22}
+    ]
+  },
+  croptop: {
+    title: 'Crop Top', subtitle: 'Female Summer Crop Tops',
+    coverImage: 'JUNE 2026 SET/Ringer Slit-Globe Crop.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:15000,currency:'NGN',symbol:'₦'}, US:{amount:13.5,currency:'USD',symbol:'$'}, GB:{amount:10,currency:'GBP',symbol:'£'}, CA:{amount:18,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Ringer Slit-Globe Crop.webp',ngn:15000,usd:13.5,gbp:10,cad:18},
+      {src:'Copy of SUMMER SET/White croptop (fw).webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'Copy of SUMMER SET/White Croptop world.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'Copy of SUMMER SET/Black croptop (fw).webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'Copy of SUMMER SET/Black croptop (SHJ).webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'Copy of SUMMER SET/Raglan crop top.webp',ngn:12000,usd:12.5,gbp:10,cad:14},
+      {src:'Copy of SUMMER SET/croptop bfly blue.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'Copy of SUMMER SET/croptop bfly pink.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'JUNE 2026 SET/Camo Globe Black Crop.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'JUNE 2026 SET/Camo Globe White Crop.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'JUNE 2026 SET/Black-Cherub Raglan Crop.webp',ngn:12000,usd:12.5,gbp:10,cad:14},
+      {src:'JUNE 2026 SET/Pink-Cherub Raglan Crop.webp',ngn:12000,usd:12.5,gbp:10,cad:14},
+      {src:'JUNE 2026 SET/Red-Cherub Raglan Crop.webp',ngn:12000,usd:12.5,gbp:10,cad:14},
+      {src:'JUNE 2026 SET/Black Sanctuary Crop.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'JUNE 2026 SET/White Sanctuary Crop.webp',ngn:10000,usd:11,gbp:8.85,cad:12},
+      {src:'JUNE 2026 SET/Hinged Black Crop.webp',ngn:10000,usd:11,gbp:8.85,cad:12}
+    ]
+  },
+  shorts: {
+    title: 'Shorts', subtitle: 'Comfortable Everyday Shorts',
+    coverImage: 'JUNE 2026 SET/New Chunkz Black Short.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:15000,currency:'NGN',symbol:'₦'}, US:{amount:16.5,currency:'USD',symbol:'$'}, GB:{amount:12.5,currency:'GBP',symbol:'£'}, CA:{amount:22,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/New Chunkz Black Short.webp',ngn:15000,usd:16.5,gbp:12.5,cad:22},
+      {src:'JUNE 2026 SET/New Chunkz brown short.webp',ngn:15000,usd:16.5,gbp:12.5,cad:22},
+      {src:'JUNE 2026 SET/New Chunkz grey short.webp',ngn:15000,usd:16.5,gbp:12.5,cad:22},
+      {src:'JUNE 2026 SET/New Chunkz pink short.webp',ngn:15000,usd:16.5,gbp:12.5,cad:22},
+      {src:'Copy of SUMMER SET/Black short.webp',ngn:15000,usd:16.5,gbp:12.5,cad:22},
+      {src:'Chunkz First Set/Anime Short.webp',ngn:15000,usd:18,gbp:14,cad:24}
+    ]
+  },
+  truckerhat: {
+    title: 'Trucker Hat', subtitle: 'Signature Chunkz Trucker Hats',
+    coverImage: 'Chunkz First Set/Cap Section.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:5000,currency:'NGN',symbol:'₦'}, US:{amount:5,currency:'USD',symbol:'$'}, GB:{amount:4,currency:'GBP',symbol:'£'}, CA:{amount:6,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'Chunkz First Set/Cap Section.webp',ngn:5000,usd:5,gbp:4,cad:6},
+      {src:'Chunkz First Set/BLACKCap Section.webp',ngn:5000,usd:5,gbp:4,cad:6}
+    ]
+  },
+  polo: {
+    title: 'Polo', subtitle: 'Clean & Classic Polo Styles',
+    coverImage: 'JUNE 2026 SET/Black Chunkz Crest Polo.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:27500,currency:'NGN',symbol:'₦'}, US:{amount:24.5,currency:'USD',symbol:'$'}, GB:{amount:18.5,currency:'GBP',symbol:'£'}, CA:{amount:33,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Black Chunkz Crest Polo.webp',ngn:27500,usd:24.5,gbp:18.5,cad:33},
+      {src:'JUNE 2026 SET/White Chunkz Crest Polo.webp',ngn:27500,usd:24.5,gbp:18.5,cad:33},
+      {src:'JUNE 2026 SET/Black Short-sleeved Polo.webp',ngn:25000,usd:23.5,gbp:18,cad:31},
+      {src:'JUNE 2026 SET/White Short-sleeved Polo.webp',ngn:25000,usd:23.5,gbp:18,cad:31},
+      {src:'JUNE 2026 SET/Black Chunkz Crest Polo 1.webp',ngn:27500,usd:24.5,gbp:18.5,cad:33},
+      {src:'JUNE 2026 SET/Grey Chunkz Crest Polo.webp',ngn:27500,usd:24.5,gbp:18.5,cad:33},
+      {src:'JUNE 2026 SET/Red Chunkz Crest Polo.webp',ngn:27500,usd:24.5,gbp:18.5,cad:33},
+      {src:'Copy of SUMMER SET/Polo (zipless).webp',ngn:23500,usd:23,gbp:17.5,cad:30},
+      {src:'Copy of SUMMER SET/Polo (zipper 1).webp',ngn:23500,usd:23,gbp:17.5,cad:30}
+    ]
+  },
+  jortscargo: {
+    title: 'Jorts / Cargo', subtitle: 'Cargo Shorts & Denim Jorts',
+    coverImage: 'JUNE 2026 SET/Chunkz Jort.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:20000,currency:'NGN',symbol:'₦'}, US:{amount:22,currency:'USD',symbol:'$'}, GB:{amount:16.5,currency:'GBP',symbol:'£'}, CA:{amount:30,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Chunkz Jort.webp',ngn:20000,usd:22,gbp:16.5,cad:30},
+      {src:'Chunkz First Set/Chunkz Jorts.webp',ngn:20000,usd:22,gbp:16.5,cad:30},
+      {src:'Chunkz First Set/Cargo Pant.webp',ngn:20000,usd:22,gbp:16.5,cad:30},
+      {src:'Chunkz First Set/Cargo Pant 1.webp',ngn:20000,usd:22,gbp:16.5,cad:30}
+    ]
+  },
+  quarterzzip: {
+    title: 'Quarter Zip', subtitle: 'Stylish Quarter-Zip Pullovers',
+    coverImage: 'JUNE 2026 SET/Chunkz Quater Zip.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:27000,currency:'NGN',symbol:'₦'}, US:{amount:25,currency:'USD',symbol:'$'}, GB:{amount:20,currency:'GBP',symbol:'£'}, CA:{amount:36.5,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Chunkz Quater Zip.webp',ngn:25000,usd:24,gbp:19.5,cad:35},
+      {src:'JUNE 2026 SET/White Collar Quater Zip.webp',ngn:27000,usd:25,gbp:20,cad:36.5}
+    ]
+  },
+  raglanlong: {
+    title: 'Raglan Longsleeve', subtitle: 'Premium Raglan Longsleeve Tops',
+    coverImage: 'Chunkz First Set/Raglan Longsleeve.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:27000,currency:'NGN',symbol:'₦'}, US:{amount:25,currency:'USD',symbol:'$'}, GB:{amount:20,currency:'GBP',symbol:'£'}, CA:{amount:36.5,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'Chunkz First Set/Raglan Longsleeve.webp',ngn:25000,usd:24,gbp:19.5,cad:35},
+      {src:'Chunkz First Set/Raglan Longsleeve 1.webp',ngn:25000,usd:24,gbp:19.5,cad:35},
+      {src:'JUNE 2026 SET/Black Double-Sleeve Layer.webp',ngn:27000,usd:25,gbp:20,cad:36.5},
+      {src:'JUNE 2026 SET/New Plain Raglan Longsleeve.webp',ngn:25000,usd:24,gbp:19.5,cad:35},
+      {src:'JUNE 2026 SET/New Camou Raglan longsleeve.webp',ngn:25000,usd:24,gbp:19.5,cad:35}
+    ]
+  },
+  raglanshirt: {
+    title: 'Raglan Shirt', subtitle: 'Classic Raglan Shirt Styles',
+    coverImage: 'Chunkz First Set/Raglan Shirt.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:23000,currency:'NGN',symbol:'₦'}, US:{amount:23,currency:'USD',symbol:'$'}, GB:{amount:16.5,currency:'GBP',symbol:'£'}, CA:{amount:31.75,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'Chunkz First Set/Raglan Shirt.webp',ngn:23000,usd:23,gbp:16.5,cad:31.75},
+      {src:'Chunkz First Set/Raglan Shirt 1.webp',ngn:23000,usd:23,gbp:16.5,cad:31.75},
+      {src:'Chunkz First Set/Raglan Shirt 2.webp',ngn:23000,usd:23,gbp:16.5,cad:31.75},
+      {src:'Chunkz First Set/Raglan shirt 3.webp',ngn:23000,usd:23,gbp:16.5,cad:31.75}
+    ]
+  },
+  socks: {
+    title: 'Socks', subtitle: 'Chunkz Branded Socks',
+    coverImage: 'JUNE 2026 SET/Socks mockup 1.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:5000,currency:'NGN',symbol:'₦'}, US:{amount:5,currency:'USD',symbol:'$'}, GB:{amount:4,currency:'GBP',symbol:'£'}, CA:{amount:7,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Socks mockup 1.webp',ngn:5000,usd:5,gbp:4,cad:7},
+      {src:'JUNE 2026 SET/Socks mockup 2.webp',ngn:5500,usd:5,gbp:4,cad:7}
+    ]
+  },
+  chunkzcombo: {
+    title: 'Chunkz Combo', subtitle: 'Curated Bundle Sets',
+    coverImage: 'JUNE 2026 SET/Hoodie and Pant Combo.webp', ctaLabel: 'View Collection',
+    prices: { NG:{amount:55000,currency:'NGN',symbol:'₦'}, US:{amount:48.5,currency:'USD',symbol:'$'}, GB:{amount:37,currency:'GBP',symbol:'£'}, CA:{amount:65,currency:'CAD',symbol:'CA$'} },
+    images: [
+      {src:'JUNE 2026 SET/Camo Combo.webp',ngn:50000,usd:45,gbp:35,cad:60},
+      {src:'JUNE 2026 SET/Cherub Worldwide Combo.webp',ngn:40000,usd:40,gbp:29.5,cad:50},
+      {src:'JUNE 2026 SET/Hoodie and Pant Combo.webp',ngn:47500,usd:40,gbp:30,cad:55},
+      {src:'JUNE 2026 SET/Black Tank and Short combo .webp',ngn:30000,usd:28,gbp:21,cad:38},
+      {src:'JUNE 2026 SET/White Tank and Short combo .webp',ngn:30000,usd:28,gbp:21,cad:38},
+      {src:'Chunkz First Set/Hoodie And Pant Combo 2.webp',ngn:45000,usd:38.5,gbp:28.5,cad:52},
+      {src:'Chunkz First Set/Raglan & Jort Combo.webp',ngn:42500,usd:35,gbp:26,cad:47.5},
+      {src:'Chunkz First Set/Raglan Combo.webp',ngn:40000,usd:31,gbp:24.5,cad:45},
+      {src:'Chunkz First Set/Vandal Longlseeve & Short.webp',ngn:40000,usd:31,gbp:24.5,cad:45},
+      {src:'JUNE 2026 SET/Rebel Fly Short Set.webp',ngn:25000,usd:23.5,gbp:18,cad:30},
+      {src:'JUNE 2026 SET/Full Brown Combo.webp',ngn:47500,usd:40,gbp:30,cad:55},
+      {src:'JUNE 2026 SET/Full Black Combo.webp',ngn:55000,usd:48,gbp:37,cad:65},
+      {src:'JUNE 2026 SET/Full Green Combo.webp',ngn:47500,usd:40,gbp:30,cad:55},
+      {src:'Chunkz First Set/SLD & PANT COMBO.webp',ngn:43500,usd:35,gbp:26,cad:47}
+    ]
+  }
+};
+</script>
+</body>
+</html>
