@@ -9,10 +9,12 @@
     { "source": "/track-order.html",       "destination": "/track-order",       "permanent": true },
     { "source": "/terms-of-service.html",  "destination": "/terms-of-service",  "permanent": true },
     { "source": "/privacy-policy.html",    "destination": "/privacy-policy",    "permanent": true },
-    { "source": "/cookie-policy.html",     "destination": "/cookie-policy",     "permanent": true }
+    { "source": "/cookie-policy.html",     "destination": "/cookie-policy",     "permanent": true },
+    { "source": "/catalog-admin.html",    "destination": "/catalog-admin",     "permanent": true }
   ],
   "rewrites": [
     { "source": "/admin",             "destination": "/admin.html" },
+    { "source": "/catalog-admin",     "destination": "/catalog-admin.html" },
     { "source": "/contact",           "destination": "/contact.html" },
     { "source": "/faqs",              "destination": "/faqs.html" },
     { "source": "/size-guide",        "destination": "/size-guide.html" },
