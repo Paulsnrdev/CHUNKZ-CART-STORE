@@ -1485,7 +1485,7 @@ function appendGalleryItems(catKey, from, to) {
     const entry  = cat.images[i];
     const src    = imgSrc(entry);
     const itemPr = getPrice({ prices: imgPrices(cat, entry) });
-    const name   = cleanImageName(src);
+    const name   = entry.name || cleanImageName(src);
     const card   = document.createElement('div');
     card.className = 'prod-card';
     card.innerHTML =
@@ -2117,6 +2117,18 @@ renderCategories();  // render immediately with NG default so page isn't blank
 refreshCartUI();
 detectCountry();     // re-renders with correct local currency once IP resolves
 detectDeliveryCountry(); // warm up delivery country cache before checkout opens
+
+// Load catalog from Firestore (catalog-admin.html manages this).
+// Falls back silently to the hardcoded catalog above if Firestore is empty/unavailable.
+if (FIREBASE_READY) {
+  firebase.firestore().collection('catalog').orderBy('order').get().then(function(snap) {
+    if (!snap.empty) {
+      Object.keys(catalog).forEach(function(k) { delete catalog[k]; });
+      snap.forEach(function(doc) { catalog[doc.id] = doc.data(); });
+      renderCategories();
+    }
+  }).catch(function() {});
+}
 
 // Set favicon as a circular logo on a white circle background
 (function() {
