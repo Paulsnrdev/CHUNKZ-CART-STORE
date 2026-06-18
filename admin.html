@@ -1142,24 +1142,62 @@ async function updateOrderStatus(docId, idx) {
   var status   = selEl.value;
   var tracking = trackEl ? trackEl.value.trim() : '';
 
-  msgEl.textContent  = 'Saving…';
-  msgEl.style.color  = '#666';
+  msgEl.textContent   = 'Saving…';
+  msgEl.style.color   = '#666';
   msgEl.style.display = 'block';
 
   try {
+    // 1. Update Firestore
     var update = { orderStatus: status };
     if (tracking) update.trackingNumber = tracking;
     await firebase.firestore().collection('orders').doc(docId).update(update);
 
-    msgEl.textContent = 'Status updated to "' + status + '".';
-    msgEl.style.color = '#2a9d8f';
-
+    // Update local cache and grab order data for email
+    var orderData = null;
     allOrders.forEach(function(o) {
       if (o._id === docId) {
         o.orderStatus = status;
         if (tracking) o.trackingNumber = tracking;
+        orderData = o;
       }
     });
+
+    // 2. Send email notification (non-blocking — a failed email won't undo the save)
+    if (orderData && orderData.customerEmail) {
+      msgEl.textContent = 'Saved. Sending email to customer…';
+      try {
+        var token = await getIdToken();
+        var notifyRes = await fetch('/api/notify', {
+          method:  'POST',
+          headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerEmail:  orderData.customerEmail,
+            customerName:   orderData.customerName || '',
+            orderId:        docId,
+            status:         status,
+            trackingNumber: tracking || orderData.trackingNumber || ''
+          })
+        });
+        var nd = await notifyRes.json();
+        if (nd.success) {
+          msgEl.textContent = 'Status updated & email sent to customer ✓';
+          msgEl.style.color = '#2a9d8f';
+        } else if (nd.skipped) {
+          msgEl.textContent = 'Status updated. (No email sent for awaiting_payment status.)';
+          msgEl.style.color = '#2a9d8f';
+        } else {
+          msgEl.textContent = 'Status updated. Email error: ' + (nd.error || 'check RESEND_API_KEY in Vercel');
+          msgEl.style.color = '#f8961e';
+        }
+      } catch(emailErr) {
+        msgEl.textContent = 'Status updated. Email failed — check RESEND_API_KEY in Vercel.';
+        msgEl.style.color = '#f8961e';
+      }
+    } else {
+      msgEl.textContent = 'Status updated. (No email on file for this customer — notification skipped.)';
+      msgEl.style.color = '#2a9d8f';
+    }
+
   } catch(e) {
     msgEl.textContent = 'Failed to save. Check your connection.';
     msgEl.style.color = '#e63946';

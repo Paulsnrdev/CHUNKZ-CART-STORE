@@ -192,7 +192,12 @@ async function trackOrder() {
     document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   } catch(e) {
-    showErr('Could not load your order. Please check your internet connection and try again.');
+    console.error('[TrackOrder] Firestore error:', e);
+    var msg = 'Could not load your order. Please check your internet connection and try again.';
+    if (e && e.code === 'permission-denied') {
+      msg = 'Access denied. Please contact us directly to track this order.';
+    }
+    showErr(msg);
   } finally {
     btn.disabled    = false;
     btn.textContent = 'Track';
