@@ -284,7 +284,17 @@
       cursor: pointer; text-align: center; font-family: inherit;
     }
     .btn-prod.del { color: #ff5555; }
+    .btn-prod.hide-btn { color: #888; }
+    .btn-prod.show-btn { color: #e8c96c; }
     .btn-prod:active { background: #2a2a2a; }
+
+    .prod-card.hidden-item { opacity: 0.45; }
+    .hidden-badge {
+      font-size: 9px; font-weight: 800;
+      background: #333; color: #666;
+      padding: 2px 6px; border-radius: 4px;
+      letter-spacing: 1px; display: inline-block; margin-bottom: 3px;
+    }
 
     .empty-state {
       text-align: center; padding: 60px 20px; color: #444; font-size: 14px;
@@ -828,20 +838,23 @@ function renderProducts() {
   const grid = document.createElement('div');
   grid.className = 'prod-grid';
   images.forEach((entry, i) => {
-    const src  = typeof entry === 'string' ? entry : entry.src;
-    const name = entry.name || cleanName(src);
-    const ngn  = entry.ngn  || entry.prices?.NG?.amount || 0;
+    const src      = typeof entry === 'string' ? entry : entry.src;
+    const name     = entry.name || cleanName(src);
+    const ngn      = entry.ngn  || entry.prices?.NG?.amount || 0;
+    const isHidden = !!entry.hidden;
 
     const card = document.createElement('div');
-    card.className = 'prod-card';
+    card.className = 'prod-card' + (isHidden ? ' hidden-item' : '');
     card.innerHTML = `
       <img class="prod-img" src="${esc(src)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="prod-img-ph" style="display:none">🖼️</div>
       <div class="prod-info">
+        ${isHidden ? '<div class="hidden-badge">HIDDEN</div>' : ''}
         <div class="prod-name">${esc(name)}</div>
         <div class="prod-price">₦${Number(ngn).toLocaleString()}</div>
         <div class="prod-btns">
           <button class="btn-prod" onclick="openProductEditor(${i})">Edit</button>
+          <button class="btn-prod ${isHidden ? 'show-btn' : 'hide-btn'}" onclick="toggleProductVisibility(${i})">${isHidden ? 'Show' : 'Hide'}</button>
           <button class="btn-prod del" onclick="deleteProduct(${i})">Delete</button>
         </div>
       </div>`;
@@ -943,6 +956,24 @@ async function deleteProduct(idx) {
     showToast('Product deleted');
   } catch(e) {
     showToast('Delete failed', true);
+  }
+}
+
+async function toggleProductVisibility(idx) {
+  const cat    = catalogData[activeCatKey];
+  const images = cat.images || [];
+  const entry  = images[idx];
+  const wasHidden = !!entry.hidden;
+  images[idx] = typeof entry === 'string'
+    ? { src: entry, hidden: true }
+    : { ...entry, hidden: !wasHidden };
+  try {
+    await db.collection('catalog').doc(activeCatKey).update({ images });
+    cat.images = images;
+    renderProducts();
+    showToast(wasHidden ? 'Item is now visible on the store' : 'Item hidden from store');
+  } catch(e) {
+    showToast('Failed to update visibility', true);
   }
 }
 
