@@ -2124,7 +2124,11 @@ if (FIREBASE_READY) {
   firebase.firestore().collection('catalog').orderBy('order').get().then(function(snap) {
     if (!snap.empty) {
       Object.keys(catalog).forEach(function(k) { delete catalog[k]; });
-      snap.forEach(function(doc) { catalog[doc.id] = doc.data(); });
+      snap.forEach(function(doc) {
+      var data = doc.data();
+      if (data.images) data.images = data.images.filter(function(img) { return !img.hidden; });
+      catalog[doc.id] = data;
+    });
       renderCategories();
     }
   }).catch(function() {});
