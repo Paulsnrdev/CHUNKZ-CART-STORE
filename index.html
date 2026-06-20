@@ -787,7 +787,7 @@ function sendWhatsAppNotification(o, status) {
 }
 
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
-  const rates       = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+  const rates       = { NGN: 1, USD: 1375, GBP: 1820, CAD: 970 };
   const method      = paymentMethod || 'flutterwave';
   const isPending   = method === 'opay' || method === 'flutterwave_pending';
   const status      = isPending ? 'awaiting_payment' : 'confirmed';
@@ -1418,9 +1418,9 @@ function imgPrices(cat, entry) {
     var n = entry.ngn;
     return {
       NG: { amount: n,                                currency: 'NGN', symbol: '₦'  },
-      US: { amount: entry.usd || Math.round(n/925),  currency: 'USD', symbol: '$'  },
-      GB: { amount: entry.gbp || Math.round(n/1120), currency: 'GBP', symbol: '£'  },
-      CA: { amount: entry.cad || Math.round(n/690),  currency: 'CAD', symbol: 'CA$'}
+      US: { amount: entry.usd || Math.round(n/1375),  currency: 'USD', symbol: '$'  },
+      GB: { amount: entry.gbp || Math.round(n/1820), currency: 'GBP', symbol: '£'  },
+      CA: { amount: entry.cad || Math.round(n/970),  currency: 'CAD', symbol: 'CA$'}
     };
   }
   return cat.prices;
@@ -1817,7 +1817,7 @@ function getDeliveryFeeInCartCurrency() {
   var feeNGN = DELIVERY_ZONES[zone].fee;
   if (feeNGN === 0) return 0;
   var curr  = cartCurrencyCode();
-  var rates = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+  var rates = { NGN: 1, USD: 1375, GBP: 1820, CAD: 975 };
   if (curr === 'NGN') return feeNGN;
   return Math.round(feeNGN / (rates[curr] || 1));
 }
