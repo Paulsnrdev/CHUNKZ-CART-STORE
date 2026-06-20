@@ -787,34 +787,48 @@ function sendWhatsAppNotification(o, status) {
 }
 
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
-  if (!FIREBASE_READY) return;
+  const rates  = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+  const method = paymentMethod || 'flutterwave';
+  const status = method === 'opay' ? 'awaiting_payment' : 'confirmed';
+  const orderData = {
+    orderRef:         orderRef,
+    orderStatus:      status,
+    paymentMethod:    method,
+    trackingNumber:   '',
+    customerName:     name,
+    customerEmail:    email || '',
+    customerPhone:    phone,
+    deliveryAddress:  address,
+    deliveryZone:     deliveryZone  || '',
+    deliveryFeeNGN:   deliveryFeeNGN || 0,
+    colourPreference: colour || '',
+    descriptionNote:  desc   || '',
+    items: orderCart.map(function(i) {
+      return { name: i.name, collection: i.pid, size: i.size || '', qty: i.qty, price: i.price, currency: i.currency };
+    }),
+    total:      total,
+    currency:   currency,
+    totalNGN:   Math.round(total * (rates[currency] || 1)),
+    timestamp:  new Date().toISOString()
+  };
+
+  if (FIREBASE_READY) {
+    try {
+      await firebase.firestore().collection('orders').doc(orderRef).set(orderData);
+      return;
+    } catch(e) {
+      console.error('Client Firestore write failed, using server fallback:', e);
+    }
+  }
+
   try {
-    const rates  = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
-    const method = paymentMethod || 'flutterwave';
-    const status = method === 'opay' ? 'awaiting_payment' : 'confirmed';
-    await firebase.firestore().collection('orders').doc(orderRef).set({
-      orderRef:         orderRef,
-      orderStatus:      status,
-      paymentMethod:    method,
-      trackingNumber:   '',
-      customerName:     name,
-      customerEmail:    email || '',
-      customerPhone:    phone,
-      deliveryAddress:  address,
-      deliveryZone:     deliveryZone  || '',
-      deliveryFeeNGN:   deliveryFeeNGN || 0,
-      colourPreference: colour || '',
-      descriptionNote:  desc   || '',
-      items: orderCart.map(function(i) {
-        return { name: i.name, collection: i.pid, size: i.size || '', qty: i.qty, price: i.price, currency: i.currency };
-      }),
-      total:      total,
-      currency:   currency,
-      totalNGN:   Math.round(total * (rates[currency] || 1)),
-      timestamp:  new Date().toISOString()
+    await fetch('/api/save-order', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(orderData)
     });
   } catch(e) {
-    console.error('Firestore write failed (order still sent via email):', e);
+    console.error('Server save-order also failed:', e);
   }
 }
 
