@@ -787,13 +787,15 @@ function sendWhatsAppNotification(o, status) {
 }
 
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
-  const rates  = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
-  const method = paymentMethod || 'flutterwave';
-  const status = method === 'opay' ? 'awaiting_payment' : 'confirmed';
+  const rates       = { NGN: 1, USD: 925, GBP: 1120, CAD: 690 };
+  const method      = paymentMethod || 'flutterwave';
+  const isPending   = method === 'opay' || method === 'flutterwave_pending';
+  const status      = isPending ? 'awaiting_payment' : 'confirmed';
+  const storedMethod = method === 'flutterwave_pending' ? 'flutterwave' : method;
   const orderData = {
     orderRef:         orderRef,
     orderStatus:      status,
-    paymentMethod:    method,
+    paymentMethod:    storedMethod,
     trackingNumber:   '',
     customerName:     name,
     customerEmail:    email || '',
@@ -1977,6 +1979,10 @@ function showErr(msg) {
    PLACEHOLDER public key — replace before going live.
 ═══════════════════════════════════════════════════ */
 function proceedToPayment() {
+  if (pendingOrder) {
+    var _o = pendingOrder;
+    saveOrderToFirestore(_o.name, _o.email, _o.phone, _o.address, _o.colour, _o.desc, _o.items, _o.total, _o.currency, _o.deliveryZone, _o.deliveryFeeNGN, _o.orderRef, 'flutterwave_pending');
+  }
   FlutterwaveCheckout({
     public_key:      'FLWPUBK-3068baabe1a595fda4d152e3e078e92e-X',
     tx_ref:          'ORDER-' + Date.now(),
