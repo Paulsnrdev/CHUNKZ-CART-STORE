@@ -329,6 +329,47 @@
     .divider { height: 1px; background: #1a1a1a; margin: 8px 0; }
     .text-danger { color: #ff5555; }
     .cover-current { font-size: 11px; color: #555; margin-top: 6px; word-break: break-all; }
+
+    /* ── Discount Card ── */
+    .discount-card {
+      margin: 0 20px 16px; background: #1a1a1a;
+      border-radius: 14px; padding: 16px;
+      border: 1px solid #2a2a2a; transition: border-color 0.2s;
+    }
+    .discount-card.active { border-color: #e8c96c; }
+    .discount-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .discount-title { font-size: 14px; font-weight: 700; }
+    .discount-subtitle { font-size: 11px; color: #555; margin-top: 2px; }
+    .toggle { position: relative; width: 46px; height: 26px; cursor: pointer; display: inline-block; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #333;
+      border-radius: 13px; transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 20px; height: 20px;
+      background: #666; border-radius: 50%; top: 3px; left: 3px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: #e8c96c; }
+    .toggle input:checked + .toggle-slider::before { background: #000; transform: translateX(20px); }
+    .discount-fields { display: flex; gap: 10px; }
+    .disc-field { flex: 1; }
+    .disc-label { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+    .disc-input {
+      width: 100%; background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 10px; color: #fff; font-size: 15px;
+      padding: 12px; outline: none; font-family: inherit; -webkit-appearance: none;
+    }
+    .disc-input:focus { border-color: #e8c96c; }
+    .btn-save-discount {
+      width: 100%; margin-top: 14px; background: #e8c96c; color: #000;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 800;
+      padding: 13px; cursor: pointer; font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-save-discount:active { opacity: 0.85; }
+    .discount-live { font-size: 12px; color: #e8c96c; margin-top: 10px; text-align: center; display: none; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -377,6 +418,32 @@
       <p>Your catalog is empty. Import all your existing products from the site with one tap.</p>
       <button class="btn-accent" onclick="seedCatalog()">Import Existing Products</button>
     </div>
+  </div>
+
+  <!-- ─── Sale Discount Card ─── -->
+  <div class="discount-card" id="discountCard">
+    <div class="discount-header">
+      <div>
+        <div class="discount-title">Sale Discount</div>
+        <div class="discount-subtitle">Apply a % off to all store prices</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="discountToggle" onchange="onDiscountToggle()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="discount-fields">
+      <div class="disc-field">
+        <label class="disc-label">Discount %</label>
+        <input class="disc-input" id="discountPercent" type="number" min="1" max="99" placeholder="20" value="20">
+      </div>
+      <div class="disc-field">
+        <label class="disc-label">Sale Label</label>
+        <input class="disc-input" id="discountLabel" type="text" placeholder="e.g. Holiday Sale" maxlength="30">
+      </div>
+    </div>
+    <button class="btn-save-discount" onclick="saveDiscount()">Save Discount Settings</button>
+    <div class="discount-live" id="discountLive">🔥 Sale is LIVE on the store</div>
   </div>
 
   <div class="action-row">
@@ -594,6 +661,7 @@ function showLogin() {
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
+  loadDiscountSettings();
 }
 
 async function doLogin() {
@@ -616,6 +684,48 @@ async function doLogin() {
 function doLogout() {
   if (!confirm('Log out?')) return;
   auth.signOut();
+}
+
+/* ═══════════════════════════════════════
+   DISCOUNT SETTINGS
+═══════════════════════════════════════ */
+async function loadDiscountSettings() {
+  try {
+    const doc = await db.collection('settings').doc('siteConfig').get();
+    if (doc.exists) {
+      const d = doc.data();
+      document.getElementById('discountToggle').checked = !!d.discountActive;
+      if (d.discountPercent) document.getElementById('discountPercent').value = d.discountPercent;
+      if (d.discountLabel)   document.getElementById('discountLabel').value   = d.discountLabel;
+      updateDiscountCard(!!d.discountActive);
+    }
+  } catch(e) {}
+}
+
+function onDiscountToggle() {
+  updateDiscountCard(document.getElementById('discountToggle').checked);
+}
+
+function updateDiscountCard(active) {
+  document.getElementById('discountCard').classList.toggle('active', active);
+  document.getElementById('discountLive').style.display = active ? 'block' : 'none';
+}
+
+async function saveDiscount() {
+  const active  = document.getElementById('discountToggle').checked;
+  const percent = parseFloat(document.getElementById('discountPercent').value) || 20;
+  const label   = document.getElementById('discountLabel').value.trim();
+  if (percent < 1 || percent > 99) { showToast('Discount must be between 1 and 99%', true); return; }
+  try {
+    await db.collection('settings').doc('siteConfig').set(
+      { discountActive: active, discountPercent: percent, discountLabel: label },
+      { merge: true }
+    );
+    updateDiscountCard(active);
+    showToast(active ? 'Sale is now LIVE on the store!' : 'Discount turned off');
+  } catch(e) {
+    showToast('Save failed: ' + e.message, true);
+  }
 }
 
 /* ═══════════════════════════════════════

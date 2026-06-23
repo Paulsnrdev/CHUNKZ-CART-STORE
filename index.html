@@ -58,6 +58,8 @@
     .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px}
     .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
     .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
+    /* ── Sale Banner ── */
+    #saleBanner{display:none;background:var(--accent);color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:62px;z-index:90}
     .hero-marquee{overflow:hidden;background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:28px;padding:9px 0;width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 20s linear infinite;animation:marqueeScroll 20s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -416,6 +418,9 @@
   </div>
 </section>
 
+<!-- Sale Banner (shown when discount is active) -->
+<div id="saleBanner"></div>
+
 <!-- ══════════════ MAIN LAYOUT ══════════════ -->
 <div class="main-wrap" id="mainWrap">
 
@@ -763,6 +768,8 @@ const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
 if (FIREBASE_READY) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
+
+var siteDiscount = { active: false, percent: 0, label: '' };
 
 function sendWhatsAppNotification(o, status) {
   var itemList = o.items.map(function(i) {
@@ -1389,7 +1396,13 @@ function getPrice(cat) {
 }
 
 function fmt(priceObj) {
-  return priceObj.symbol + priceObj.amount.toLocaleString();
+  var base = priceObj.symbol + priceObj.amount.toLocaleString();
+  if (siteDiscount.active && siteDiscount.percent > 0) {
+    var discAmount = Math.round(priceObj.amount * (1 - siteDiscount.percent / 100));
+    return '<s style="color:#999;font-size:.9em;font-weight:400">' + base + '</s> ' +
+           '<span style="color:var(--accent);font-weight:800">' + priceObj.symbol + discAmount.toLocaleString() + '</span>';
+  }
+  return base;
 }
 
 /* HTML-escape helper used when building innerHTML strings */
@@ -2150,6 +2163,23 @@ if (FIREBASE_READY) {
       catalog[doc.id] = data;
     });
       renderCategories();
+    }
+  }).catch(function() {});
+}
+
+// Load discount settings from Firestore and apply to store prices.
+if (FIREBASE_READY) {
+  firebase.firestore().collection('settings').doc('siteConfig').get().then(function(doc) {
+    if (doc.exists) {
+      var d = doc.data();
+      if (d.discountActive && d.discountPercent > 0) {
+        siteDiscount = { active: true, percent: d.discountPercent, label: d.discountLabel || '' };
+        var banner = document.getElementById('saleBanner');
+        var pct    = Math.round(d.discountPercent);
+        banner.textContent = '🔥 ' + (d.discountLabel || 'SPECIAL SALE') + ' — ' + pct + '% OFF ALL ITEMS';
+        banner.style.display = 'block';
+        renderCategories();
+      }
     }
   }).catch(function() {});
 }
