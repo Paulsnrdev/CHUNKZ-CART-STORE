@@ -1,6 +1,6 @@
 {
   "redirects": [
-    { "source": "/admin.html",             "destination": "/admin",             "permanent": true },
+    { "source": "/admin.html",             "destination": "/bestsite",             "permanent": true },
     { "source": "/contact.html",           "destination": "/contact",           "permanent": true },
     { "source": "/faqs.html",              "destination": "/faqs",              "permanent": true },
     { "source": "/size-guide.html",        "destination": "/size-guide",        "permanent": true },
@@ -13,7 +13,7 @@
     { "source": "/catalog-admin.html",    "destination": "/catalog-admin",     "permanent": true }
   ],
   "rewrites": [
-    { "source": "/admin",             "destination": "/admin.html" },
+    { "source": "/bestsite",             "destination": "/admin.html" },
     { "source": "/catalog-admin",     "destination": "/catalog-admin.html" },
     { "source": "/contact",           "destination": "/contact.html" },
     { "source": "/faqs",              "destination": "/faqs.html" },
