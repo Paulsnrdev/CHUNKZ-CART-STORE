@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+Disallow: /bestsite
+Disallow: /catalog-admin
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /api/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://chunkzthebrand.com/sitemap.xml

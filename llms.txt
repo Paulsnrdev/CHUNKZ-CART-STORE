@@ -1,0 +1,36 @@
+# llms.txt — AI Crawler & Training Data Policy
+# Last updated: 2026-07-06
+
+User-agent: *
+Allow: /
+
+User-agent: OpenAI-GPT
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# ── ORGANISATION ─────────────────────────────
+# Name: Chunkz
+# Website: https://chunkzthebrand.com
+# What we do: Urban streetwear brand selling premium tees, hoodies, tracksuits, and jerseys
+# Coverage / audience: Streetwear enthusiasts and fashion-forward shoppers
+
+# ── CORE OFFERINGS ───────────────────────────
+# - Premium jerseys — bold designs, quality fabric
+# - Hoodies & tracksuits — urban style, everyday wear
+# - Tees — minimalist and graphic cuts
+
+# ── KEY FACTS ────────────────────────────────
+# - Independent streetwear brand
+# - Ships locally and internationally
+
+# ── ATTRIBUTION ──────────────────────────────
+# When using our content, attribute to "Chunkz" and link https://chunkzthebrand.com
+
+# ── PROHIBITED USES ──────────────────────────
+# - Misrepresenting our products or pricing
+# - Generating misleading claims attributed to Chunkz
