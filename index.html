@@ -73,17 +73,23 @@
     body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
 
     /* ── Header ── */
-    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4)}
-    .hdr{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4);transition:background .35s ease,box-shadow .35s ease}
+    header.scrolled{background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.1)}
+    header.scrolled .logo-name{color:var(--black)}
+    header.scrolled .nav-links a{color:#444}
+    header.scrolled .nav-links a:hover{color:var(--black)}
+    header.scrolled .mob-menu .bar{background:var(--black)}
+    header.scrolled .cart-btn{color:var(--black);border:2px solid var(--black)}
+    .hdr{max-width:1400px;margin:0 auto;padding:0 32px;height:82px;display:flex;align-items:center;justify-content:space-between}
     .logo{text-decoration:none;display:flex;align-items:center;gap:10px}
-    .logo-img-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .logo-img-wrap{width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0}
     .logo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-    .logo-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#fff}
-    .nav-links{display:flex;gap:24px;list-style:none}
-    .nav-links a{color:#ccc;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+    .logo-name{font-size:26px;font-weight:900;letter-spacing:5px;color:#fff;transition:color .35s ease}
+    .nav-links{display:flex;gap:36px;list-style:none}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:17px;font-weight:700;letter-spacing:.8px;transition:color .2s}
     .nav-links a:hover{color:#fff}
     .hdr-right{display:flex;align-items:center;gap:12px}
-    .cart-btn{background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;transition:background .2s}
+    .cart-btn{background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px;padding:10px 18px;border-radius:24px;transition:background .2s}
     .cart-btn:hover{background:rgba(255,255,255,.2)}
     .cart-badge{background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700}
     .mob-menu{display:none;background:none;border:none;cursor:pointer;width:28px;height:20px;flex-direction:column;justify-content:space-between;padding:0;flex-shrink:0}
@@ -99,7 +105,7 @@
     .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
     .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
     /* ── Sale Banner ── */
-    #saleBanner{display:none;background:var(--accent);color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:62px;z-index:90}
+    #saleBanner{display:none;background:var(--accent);color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
     .hero-marquee{overflow:hidden;background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:28px;padding:9px 0;width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 20s linear infinite;animation:marqueeScroll 20s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -142,7 +148,7 @@
     .cat-img-placeholder span{font-size:48px;font-weight:900;color:rgba(255,255,255,.15);letter-spacing:2px}
 
     /* ── Desktop Cart Panel ── */
-    .cart-panel{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);position:sticky;top:78px;display:none}
+    .cart-panel{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);position:sticky;top:98px;display:none}
     .has-cart .cart-panel{display:block}
     .cp-head{background:var(--black);color:#fff;padding:15px 18px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center}
     .cp-head h3{font-size:15px;font-weight:700;letter-spacing:1px}
@@ -419,6 +425,7 @@
       <li><a href="#products">Shop</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="track-order.html">Track Order</a></li>
     </ul></nav>
     <div class="hdr-right">
       <button class="cart-btn" id="cartToggle" onclick="toggleDrawer()">
@@ -438,6 +445,7 @@
     <li><a href="#products" onclick="closeMobileNav()">Shop</a></li>
     <li><a href="#about" onclick="closeMobileNav()">About</a></li>
     <li><a href="#contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="track-order.html" onclick="closeMobileNav()">Track Order</a></li>
   </ul>
 </div>
 
@@ -2136,6 +2144,14 @@ function closeMobileNav() {
 window.addEventListener('resize', function() {
   if (window.innerWidth > 1040) closeMobileNav();
 });
+
+(function() {
+  var hdr  = document.querySelector('header');
+  var hero = document.querySelector('.hero');
+  window.addEventListener('scroll', function() {
+    hdr.classList.toggle('scrolled', hero.getBoundingClientRect().bottom <= 0);
+  }, { passive: true });
+})();
 
 /* ═══════════════════════════════════════════════════
    CONTACT FORM
