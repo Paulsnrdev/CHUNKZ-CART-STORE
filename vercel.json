@@ -10,10 +10,12 @@
     { "source": "/terms-of-service.html",  "destination": "/terms-of-service",  "permanent": true },
     { "source": "/privacy-policy.html",    "destination": "/privacy-policy",    "permanent": true },
     { "source": "/cookie-policy.html",     "destination": "/cookie-policy",     "permanent": true },
-    { "source": "/catalog-admin.html",    "destination": "/catalog-admin",     "permanent": true }
+    { "source": "/catalog-admin.html",    "destination": "/catalog-admin",     "permanent": true },
+    { "source": "/about.html",           "destination": "/about",             "permanent": true }
   ],
   "rewrites": [
     { "source": "/bestsite",             "destination": "/admin.html" },
+    { "source": "/about",               "destination": "/about.html" },
     { "source": "/catalog-admin",     "destination": "/catalog-admin.html" },
     { "source": "/contact",           "destination": "/contact.html" },
     { "source": "/faqs",              "destination": "/faqs.html" },
@@ -44,6 +46,12 @@
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://checkout.flutterwave.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://firebasestorage.googleapis.com https://chunkz-store.firebasestorage.app https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://ipapi.co https://ipinfo.io https://7107.api.greenapi.com https://formspree.io https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://checkout.flutterwave.com https://api.flutterwave.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src 'self' https://checkout.flutterwave.com https://chunkz-store.firebaseapp.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
         }
+      ]
+    },
+    {
+      "source": "/(.*\\.(?:webp|jpg|jpeg|png|gif|ico|svg|woff2|woff|ttf|otf))",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     }
   ]

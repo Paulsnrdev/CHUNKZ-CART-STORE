@@ -60,6 +60,8 @@
   <link rel="dns-prefetch" href="https://ipapi.co">
   <!-- Preload logo so header renders without delay -->
   <link rel="preload" href="CHUNKZLOGO.jpg" as="image">
+  <!-- Preload first category cover — likely the LCP element on mobile -->
+  <link rel="preload" href="JUNE 2026 SET/Chunkz City Black Tee.webp" as="image" fetchpriority="high">
   <!-- Font Awesome loaded async to avoid blocking render -->
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
@@ -101,7 +103,7 @@
     /* ── Hero ── */
     .hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#16213e 100%);color:#fff;padding:40px 20px;text-align:center}
     .hero h1{font-size:clamp(36px,7vw,78px);font-weight:900;letter-spacing:5px;margin-bottom:14px}
-    .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px}
+    .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px;min-height:44px}
     .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
     .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
     /* ── Sale Banner ── */
@@ -423,7 +425,7 @@
     <nav><ul class="nav-links">
       <li><a href="#">Home</a></li>
       <li><a href="#products">Shop</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="about.html">About</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="track-order.html">Track Order</a></li>
     </ul></nav>
@@ -443,7 +445,7 @@
   <ul>
     <li><a href="#" onclick="closeMobileNav()">Home</a></li>
     <li><a href="#products" onclick="closeMobileNav()">Shop</a></li>
-    <li><a href="#about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="about.html" onclick="closeMobileNav()">About</a></li>
     <li><a href="#contact" onclick="closeMobileNav()">Contact</a></li>
     <li><a href="track-order.html" onclick="closeMobileNav()">Track Order</a></li>
   </ul>
@@ -476,7 +478,25 @@
   <div id="products">
     <h2 class="sec-title">OUR COLLECTION</h2>
     <p class="sec-intro">Tap any category to explore the full design gallery</p>
-    <div class="cat-grid" id="categoriesGrid"></div>
+    <div class="cat-grid" id="categoriesGrid">
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+      <div class="cat-card" aria-hidden="true"><div class="cat-img-wrap"></div><div class="cat-footer"><div style="height:15px;background:#e8e8e8;border-radius:4px"></div><div style="height:28px;width:90px;background:#dedede;border-radius:8px"></div></div></div>
+    </div>
   </div>
 
   <!-- Desktop cart column -->
@@ -1494,13 +1514,14 @@ function renderCategories() {
   const grid = document.getElementById('categoriesGrid');
   grid.innerHTML = '';
 
-  Object.entries(catalog).forEach(([key, cat]) => {
+  Object.entries(catalog).forEach(([key, cat], idx) => {
     const card = document.createElement('div');
     card.className = 'cat-card';
     const isMobile = window.innerWidth < 600;
-    const loading = isMobile ? 'lazy' : 'eager';
+    const loading = (idx === 0 || !isMobile) ? 'eager' : 'lazy';
+    const priority = idx === 0 ? ' fetchpriority="high"' : '';
     const imgHtml = cat.coverImage
-      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="' + loading + '" decoding="async" onload="markImageReady(this)" onerror="this.style.display=\'none\'">'
+      ? '<img class="cat-img" src="' + esc(cat.coverImage) + '" alt="' + esc(cat.title) + '" loading="' + loading + '" decoding="async"' + priority + ' onload="markImageReady(this)" onerror="this.style.display=\'none\'">'
       : '<div class="cat-img-placeholder"><span>' + cat.title[0] + '</span></div>';
     card.innerHTML =
       '<div class="cat-img-wrap">' + imgHtml + '</div>' +
