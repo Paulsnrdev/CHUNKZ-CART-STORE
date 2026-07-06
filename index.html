@@ -26,11 +26,28 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ClothingStore",
-    "name": "Chunkz",
-    "url": "https://chunkzthebrand.com",
-    "logo": "https://chunkzthebrand.com/CHUNKZLOGO.jpg",
-    "description": "Urban Streetwear. Premium quality clothing including tees, hoodies, tracksuits, jerseys and more."
+    "@graph": [
+      {
+        "@type": "ClothingStore",
+        "name": "Chunkz",
+        "url": "https://chunkzthebrand.com",
+        "logo": "https://chunkzthebrand.com/CHUNKZLOGO.jpg",
+        "description": "Urban Streetwear. Premium quality clothing including tees, hoodies, tracksuits, jerseys and more.",
+        "areaServed": ["NG", "GB", "US", "CA"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "url": "https://chunkzthebrand.com/contact"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "name": "Chunkz",
+        "url": "https://chunkzthebrand.com",
+        "description": "Urban Streetwear. Premium quality tees, hoodies, tracksuits, jerseys and more.",
+        "inLanguage": "en"
+      }
+    ]
   }
   </script>
 
