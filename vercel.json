@@ -1,4 +1,10 @@
 {
+  "crons": [
+    {
+      "path": "/api/cron-send-followups",
+      "schedule": "0 8 * * *"
+    }
+  ],
   "redirects": [
     { "source": "/admin.html",             "destination": "/bestsite",             "permanent": true },
     { "source": "/contact.html",           "destination": "/contact",           "permanent": true },
@@ -14,6 +20,7 @@
     { "source": "/about.html",           "destination": "/about",             "permanent": true }
   ],
   "rewrites": [
+    { "source": "/follow-up/:token",     "destination": "/follow-up.html" },
     { "source": "/bestsite",             "destination": "/admin.html" },
     { "source": "/about",               "destination": "/about.html" },
     { "source": "/catalog-admin",     "destination": "/catalog-admin.html" },

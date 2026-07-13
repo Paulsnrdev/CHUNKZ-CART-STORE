@@ -1,7 +1,9 @@
 'use strict';
 
 const crypto = require('crypto');
-const { db } = require('./_lib/firebase-admin');
+const { db }         = require('./_lib/firebase-admin');
+const { buildDay0 }  = require('./_lib/emails');
+const { sendEmail }  = require('./_lib/resend');
 
 function verifyAdminToken(idToken) {
   if (!idToken) return false;
@@ -77,6 +79,26 @@ module.exports = async function handler(req, res) {
     });
 
     await batch.commit();
+
+    // Send Day 0 email — best-effort, never block the response
+    if (order.customerEmail) {
+      try {
+        const email = buildDay0({
+          token,
+          customerName:     order.customerName     || '',
+          orderRef:         order.orderRef          || orderId,
+          items:            order.items             || [],
+          totalNGN:         order.totalNGN          || order.total || 0,
+          colourPreference: order.colourPreference  || '',
+        });
+        await sendEmail({ to: order.customerEmail, subject: email.subject, html: email.html });
+        await followUpRef.update({ day0: 'sent' });
+      } catch (emailErr) {
+        console.error('[mark-delivered] Day 0 email failed:', emailErr.message);
+      }
+    } else {
+      console.warn('[mark-delivered] No customerEmail for order', orderId);
+    }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
