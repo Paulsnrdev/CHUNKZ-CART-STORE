@@ -40,7 +40,7 @@ function ctaButton(label, url, bgColor) {
 }
 
 function emailWrapper({ preheader, token, bodyRows }) {
-  const unsubUrl = SITE_URL + '/api/opt-out-confirm?token=' + token;
+  const unsubUrl = SITE_URL + '/api/opt-out?token=' + token;
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>

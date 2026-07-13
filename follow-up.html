@@ -463,7 +463,7 @@
     var btn = document.getElementById('checkinSubmitBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     try {
-      var r = await fetch('/api/submit-checkin', {
+      var r = await fetch('/api/submit-feedback?type=checkin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: token, response: selCheckin, comment: comment }),
@@ -499,7 +499,7 @@
     var btn = document.getElementById('reviewSubmitBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     try {
-      var r = await fetch('/api/submit-review', {
+      var r = await fetch('/api/submit-feedback?type=review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: token, rating: selRating, comment: comment }),

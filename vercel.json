@@ -1,8 +1,12 @@
 {
   "crons": [
     {
-      "path": "/api/cron-send-followups",
+      "path": "/api/cron?action=send-followups",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron?action=awaiting-payment",
+      "schedule": "0 * * * *"
     }
   ],
   "redirects": [

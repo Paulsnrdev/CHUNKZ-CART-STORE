@@ -1476,7 +1476,7 @@ async function fuAction(docId, stage, action, btn) {
   var origText = btn.textContent;
   btn.disabled = true; btn.textContent = '…';
   try {
-    var resp = await fetch('/api/admin/followup', {
+    var resp = await fetch('/api/admin?action=followup', {
       method:  'POST',
       headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
       body:    JSON.stringify({ action: action, orderId: docId, stage: stage }),
@@ -1591,7 +1591,7 @@ async function openEmailPreview(docId) {
   var tok = await getIdToken();
   if (!tok) { alert('Not authenticated'); return; }
   try {
-    var resp = await fetch('/api/admin/preview-email?orderId=' + encodeURIComponent(docId), {
+    var resp = await fetch('/api/admin?action=preview-email&orderId=' + encodeURIComponent(docId), {
       headers: { Authorization: 'Bearer ' + tok },
     });
     if (!resp.ok) {
@@ -1623,7 +1623,7 @@ async function loadMetrics() {
   var tok = await getIdToken();
   if (!tok) return;
   try {
-    var resp = await fetch('/api/admin/metrics', { headers: { Authorization: 'Bearer ' + tok } });
+    var resp = await fetch('/api/admin?action=metrics', { headers: { Authorization: 'Bearer ' + tok } });
     var data = await resp.json();
     if (!data.ok) throw new Error(data.error || 'Failed');
     renderMetrics(data);
@@ -1722,7 +1722,7 @@ async function loadPromoSettings() {
   var tok = await getIdToken();
   if (!tok) return;
   try {
-    var resp = await fetch('/api/admin/settings', { headers: { Authorization: 'Bearer ' + tok } });
+    var resp = await fetch('/api/admin?action=settings', { headers: { Authorization: 'Bearer ' + tok } });
     var data = await resp.json();
     if (data.ok) {
       document.getElementById('setPromoDisc').value = data.promoDiscountPct;
@@ -1738,7 +1738,7 @@ async function savePromoSettings() {
   var msg  = document.getElementById('settingsMsg');
   if (!tok) return;
   try {
-    var resp = await fetch('/api/admin/settings', {
+    var resp = await fetch('/api/admin?action=settings', {
       method:  'POST',
       headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
       body:    JSON.stringify({ promoDiscountPct: disc, promoExpiryHrs: exp }),

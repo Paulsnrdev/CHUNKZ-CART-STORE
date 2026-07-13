@@ -729,7 +729,7 @@
         </div>
         <div class="fg">
           <label id="addrLabel">Delivery Address <span class="req">*</span></label>
-          <textarea id="cAddress" required placeholder="123 Main Street, Ikeja, Lagos, Nigeria" style="min-height:70px"></textarea>
+          <textarea id="cAddress" required placeholder="123 Main Street, Woolwich, Worldwide" style="min-height:70px"></textarea>
         </div>
         <div class="fg">
           <label>Payment Method <span class="req">*</span></label>
@@ -753,7 +753,7 @@
         <div class="fg" id="promoFg">
           <label>Promo Code</label>
           <div style="display:flex;gap:8px;align-items:stretch">
-            <input type="text" id="cPromo" placeholder="e.g. CHUNKZ-7F2A9K" style="text-transform:uppercase;flex:1">
+            <input type="text" id="cPromo" placeholder="e.g. CHUNKZ-XXXXXX" style="text-transform:uppercase;flex:1">
             <button type="button" id="promoApplyBtn" onclick="applyPromoCode()" style="background:var(--black);color:#fff;border:none;padding:0 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;white-space:nowrap">Apply</button>
           </div>
           <div id="promoMsg" style="display:none;font-size:12px;margin-top:6px;font-weight:600"></div>
@@ -1903,7 +1903,7 @@ function openCheckout() {
   document.getElementById('osDeliveryRow').style.display  = 'none';
   document.getElementById('osDeliveryNote').style.display = 'none';
   document.getElementById('cAddress').required    = true;
-  document.getElementById('cAddress').placeholder = '123 Main Street, Ikeja, Lagos, Nigeria';
+  document.getElementById('cAddress').placeholder = '123 Main Street, Woolwich, Worldwide';
   detectDeliveryCountry().then(filterDeliveryZones);
 
   // Reset promo state for a fresh checkout session
@@ -1952,7 +1952,7 @@ function updateDeliveryFee() {
     addrLabel.innerHTML   = 'Pickup Notes';
   } else {
     addrInput.required    = true;
-    addrInput.placeholder = '123 Main Street, Ikeja, Lagos, Nigeria';
+    addrInput.placeholder = '123 Main Street, Woolwich, Worldwide';
     addrLabel.innerHTML   = 'Delivery Address <span class="req">*</span>';
   }
 
@@ -2033,7 +2033,7 @@ async function applyPromoCode() {
 
   if (applyBtn) { applyBtn.disabled = true; applyBtn.textContent = '…'; }
   try {
-    const res  = await fetch('/api/promo/validate', {
+    const res  = await fetch('/api/promo?action=validate', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ code, cartItems }),
@@ -2064,7 +2064,7 @@ async function applyPromoCode() {
 }
 
 function redeemPromo(code, orderId, email) {
-  fetch('/api/promo/redeem', {
+  fetch('/api/promo?action=redeem', {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify({ code: code, orderId: orderId, email: email || '' }),
