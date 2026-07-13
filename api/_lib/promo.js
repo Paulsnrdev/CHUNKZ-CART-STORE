@@ -17,10 +17,25 @@ function generateCode() {
   return code;
 }
 
+async function getPromoSettings() {
+  try {
+    const snap = await db.collection('settings').doc('promoConfig').get();
+    if (snap.exists) {
+      const d = snap.data();
+      return {
+        discPct:   d.promoDiscountPct != null ? d.promoDiscountPct : DISC_PCT,
+        expiryHrs: d.promoExpiryHrs   != null ? d.promoExpiryHrs   : EXPIRY_HRS,
+      };
+    }
+  } catch (e) {}
+  return { discPct: DISC_PCT, expiryHrs: EXPIRY_HRS };
+}
+
 async function createPromo({ followUpId, productId, productName }) {
+  const { discPct, expiryHrs } = await getPromoSettings();
   const code      = generateCode();
   const now       = new Date();
-  const expiresAt = new Date(now.getTime() + EXPIRY_HRS * 3600 * 1000).toISOString();
+  const expiresAt = new Date(now.getTime() + expiryHrs * 3600 * 1000).toISOString();
 
   const data = {
     code,
@@ -28,7 +43,7 @@ async function createPromo({ followUpId, productId, productName }) {
     referredBy:      followUpId,
     productId:       productId   || null,
     productName:     productName || null,
-    discountPct:     DISC_PCT,
+    discountPct:     discPct,
     expiresAt,
     createdAt:       now.toISOString(),
     redeemed:        false,

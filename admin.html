@@ -196,6 +196,58 @@
     .su-delete{margin-top:10px;background:none;border:1.5px solid #fca5a5;color:var(--accent);padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
     .su-delete:hover{background:var(--accent);color:#fff}
     .ref-mono{font-size:10px;font-family:monospace;color:#999;margin-top:2px;letter-spacing:.5px}
+
+    /* ── Follow-up stages ── */
+    .fu-stages{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+    .fu-stage-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fafafa;border-radius:8px;border:1px solid var(--gray-mid);flex-wrap:wrap}
+    .fu-stage-lbl{font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--black);min-width:120px}
+    .fu-stage-actions{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap}
+    .fu-btn{background:none;border:1.5px solid var(--gray-mid);color:var(--gray-dark);padding:4px 11px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+    .fu-btn:hover{border-color:var(--black);color:var(--black)}
+    .fu-btn.danger{border-color:#fca5a5;color:var(--accent)}
+    .fu-btn.danger:hover{background:var(--accent);color:#fff}
+    .fu-btn.primary{border-color:var(--black);background:var(--black);color:#fff}
+    .fu-btn.primary:hover{background:#333}
+    .fu-loading-sm{font-size:12px;color:var(--gray-dark);padding:10px 0;font-style:italic}
+    /* ── Recommendation card ── */
+    .rec-display{display:flex;gap:12px;align-items:flex-start;padding:12px;background:#fafafa;border-radius:8px;border:1px solid var(--gray-mid);margin-top:6px}
+    .rec-img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0;background:var(--gray-mid)}
+    .rec-body{flex:1;min-width:0}
+    .rec-name{font-size:13px;font-weight:700;margin-bottom:2px}
+    .rec-source{font-size:10px;color:#4361ee;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+    .rec-pitch{font-size:12px;color:var(--gray-dark);line-height:1.4;margin-bottom:6px}
+    .rec-price{font-size:13px;font-weight:800;color:var(--accent)}
+    /* ── Metrics ── */
+    .metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+    .metric-card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+    .metric-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
+    .metric-value{font-size:26px;font-weight:900;color:var(--black);line-height:1;word-break:break-all}
+    .metric-sub{font-size:11px;color:var(--gray-dark);margin-top:5px}
+    .src-table{width:100%;border-collapse:collapse;font-size:13px}
+    .src-table th{text-align:left;padding:9px 12px;background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark)}
+    .src-table th:first-child{border-radius:6px 0 0 6px}
+    .src-table th:last-child{border-radius:0 6px 6px 0}
+    .src-table td{padding:10px 12px;border-bottom:1px solid var(--gray-mid)}
+    .src-table tr:last-child td{border-bottom:none}
+    /* ── Reviews ── */
+    .review-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:12px}
+    .review-stars{font-size:18px;margin-bottom:4px}
+    .review-meta{font-size:11px;color:var(--gray-dark);margin-bottom:8px}
+    .review-comment{font-size:13px;color:var(--black);line-height:1.5}
+    /* ── Settings ── */
+    .settings-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);max-width:520px;margin-bottom:20px}
+    .settings-title{font-size:15px;font-weight:800;margin-bottom:4px}
+    .settings-sub{font-size:12px;color:var(--gray-dark);margin-bottom:18px;line-height:1.5}
+    .settings-row{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+    .settings-field{flex:1;min-width:140px}
+    .settings-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:6px}
+    .settings-field input{width:100%;padding:9px 12px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;font-family:inherit;outline:none}
+    .settings-field input:focus{border-color:var(--black)}
+    .settings-save{background:var(--black);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
+    .settings-save:hover{background:#222}
+    .settings-msg{font-size:12px;margin-top:10px;min-height:18px}
+    /* ── Email preview modal ── */
+    #emailPreviewModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
   </style>
   <!-- Vercel Web Analytics -->
   <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
@@ -321,7 +373,10 @@ service cloud.firestore {
     <!-- View switcher -->
     <div class="view-tabs">
       <button class="view-tab active" id="tabOrders" onclick="switchView('orders',this)">Orders &amp; Analytics</button>
-      <button class="view-tab" id="tabTx" onclick="switchView('transactions',this)">Flutterwave Payments</button>
+      <button class="view-tab" id="tabTx" onclick="switchView('transactions',this)">Payments</button>
+      <button class="view-tab" id="tabMetrics" onclick="switchView('metrics',this)">Metrics</button>
+      <button class="view-tab" id="tabReviews" onclick="switchView('reviews',this)">Reviews</button>
+      <button class="view-tab" id="tabSettings" onclick="switchView('settings',this)">Settings</button>
     </div>
 
     <!-- Filter bar -->
@@ -492,6 +547,56 @@ service cloud.firestore {
 
     </div><!-- /txContent -->
 
+    <!-- ═══ METRICS VIEW ═══ -->
+    <div id="metricsContent" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
+        <div class="section-title">Follow-up &amp; Upsell Metrics</div>
+        <button class="refresh-btn" onclick="metricsLoaded=false;loadMetrics()">↻ Refresh</button>
+      </div>
+      <div id="metricsBody"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- ═══ REVIEWS VIEW ═══ -->
+    <div id="reviewsContent" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
+        <div class="section-title">Customer Reviews</div>
+        <button class="refresh-btn" onclick="reviewsLoaded=false;loadReviews()">↻ Refresh</button>
+      </div>
+      <div id="reviewsBody"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- ═══ SETTINGS VIEW ═══ -->
+    <div id="settingsContent" style="display:none">
+      <div class="section-title" style="margin-bottom:22px">System Settings</div>
+      <div class="settings-card">
+        <div class="settings-title">Promo Code Settings</div>
+        <div class="settings-sub">Applied to every new promo code generated by the Day 8 follow-up. Already-issued codes keep their original values.</div>
+        <div class="settings-row">
+          <div class="settings-field">
+            <label>Discount %</label>
+            <input type="number" id="setPromoDisc" min="1" max="99" value="15">
+          </div>
+          <div class="settings-field">
+            <label>Expiry (hours)</label>
+            <input type="number" id="setPromoExp" min="1" max="720" value="72">
+          </div>
+        </div>
+        <button class="settings-save" onclick="savePromoSettings()">Save Settings</button>
+        <div class="settings-msg" id="settingsMsg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ EMAIL PREVIEW MODAL ═══ -->
+<div id="emailPreviewModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:720px;max-width:95vw;height:85vh;display:flex;flex-direction:column;overflow:hidden">
+    <div style="padding:14px 20px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <strong style="font-size:15px">Day 8 Email Preview</strong>
+      <button onclick="closeEmailPreview()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#666;line-height:1;padding:0 4px">&times;</button>
+    </div>
+    <iframe id="emailPreviewFrame" style="flex:1;border:none"></iframe>
   </div>
 </div>
 
@@ -916,7 +1021,7 @@ function renderOrdersTable(orders) {
     }).join('');
 
     const rowId = 'exp-' + idx;
-    return '<tr class="order-row" onclick="toggleExpand(\'' + rowId + '\')">' +
+    return '<tr class="order-row" onclick="toggleExpand(\'' + rowId + '\',\'' + docId + '\',\'' + statusStr + '\')">' +
       '<td class="date-val">' + dateStr + '</td>' +
       '<td><div class="cust-name">' + esc(o.customerName || '—') + '</div>' +
       '<div class="cust-phone">' + esc(o.customerPhone || '') + '</div>' +
@@ -953,15 +1058,10 @@ function renderOrdersTable(orders) {
           '<button class="su-delete" onclick="deleteOrder(\'' + docId + '\',' + idx + ');event.stopPropagation()">🗑 Delete Order</button>' +
         '</div>' +
         (statusStr === 'delivered' ? (
-          '<div class="su-block" style="border-top:1px solid var(--gray-mid);padding-top:14px;margin-top:4px">' +
-            '<div class="su-title">Day 8 Recommendation Override</div>' +
-            '<div style="font-size:11px;color:var(--gray-dark);margin-bottom:10px">Override which product Claude recommends in the Day 8 email. Leave product URL blank to clear the override.</div>' +
-            '<div class="su-form" style="flex-direction:column;gap:8px">' +
-              '<input type="text" id="ovr-pid-' + idx + '" placeholder="Product image URL (from catalog)" style="font-size:12px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;width:100%;font-family:inherit">' +
-              '<input type="text" id="ovr-pitch-' + idx + '" placeholder="Custom pitch — leave blank to let Claude write it" style="font-size:12px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;width:100%;font-family:inherit">' +
-              '<button class="su-save" onclick="setRecOverride(\'' + docId + '\',' + idx + ');event.stopPropagation()">Set Override</button>' +
-            '</div>' +
-            '<div class="su-msg" id="ovr-msg-' + idx + '"></div>' +
+          '<div class="su-block" id="fu-sect-' + docId + '" style="border-top:1px solid var(--gray-mid);padding-top:14px;margin-top:4px">' +
+            '<div class="su-title">FOLLOW-UP SEQUENCE</div>' +
+            '<div class="fu-loading-sm" id="fu-loading-' + docId + '">Loading follow-up data…</div>' +
+            '<div id="fu-data-' + docId + '" style="display:none"></div>' +
           '</div>'
         ) : '')
       ) : '') +
@@ -969,10 +1069,15 @@ function renderOrdersTable(orders) {
   }).join('');
 }
 
-function toggleExpand(id) {
-  const row = document.getElementById(id);
+function toggleExpand(id, docId, status) {
+  var row = document.getElementById(id);
   if (!row) return;
-  row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+  var isOpening = row.style.display === 'none';
+  row.style.display = isOpening ? 'table-row' : 'none';
+  if (isOpening && docId && status === 'delivered' && !row.dataset.fuLoaded) {
+    row.dataset.fuLoaded = 'true';
+    loadFollowUpSection(docId);
+  }
 }
 
 function esc(s) {
@@ -982,21 +1087,42 @@ function esc(s) {
 /* ═══════════════════════════════════════════════════
    VIEW SWITCHER
 ═══════════════════════════════════════════════════ */
-var txLoaded = false;
+var txLoaded       = false;
+var metricsLoaded  = false;
+var reviewsLoaded  = false;
+var settingsLoaded = false;
 
 function switchView(view, btn) {
   document.querySelectorAll('.view-tab').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
 
-  var isOrders = view === 'orders';
-  document.getElementById('ordersFilterBar').style.display = isOrders ? 'flex' : 'none';
-  document.getElementById('loadingState').style.display    = isOrders && !document.getElementById('dataContent').style.display.includes('block') ? 'block' : 'none';
-  document.getElementById('dataContent').style.display     = isOrders ? (allOrders.length >= 0 ? 'block' : 'none') : 'none';
-  document.getElementById('txContent').style.display       = isOrders ? 'none' : 'block';
+  var ids = ['dataContent','txContent','metricsContent','reviewsContent','settingsContent'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  document.getElementById('ordersFilterBar').style.display = 'none';
+  document.getElementById('loadingState').style.display    = 'none';
 
-  if (!isOrders && !txLoaded) {
-    txLoaded = true;
-    loadFlutterwaveData();
+  if (view === 'orders') {
+    document.getElementById('ordersFilterBar').style.display = 'flex';
+    if (allOrders.length >= 0) {
+      document.getElementById('dataContent').style.display = 'block';
+    } else {
+      document.getElementById('loadingState').style.display = 'block';
+    }
+  } else if (view === 'transactions') {
+    document.getElementById('txContent').style.display = 'block';
+    if (!txLoaded) { txLoaded = true; loadFlutterwaveData(); }
+  } else if (view === 'metrics') {
+    document.getElementById('metricsContent').style.display = 'block';
+    if (!metricsLoaded) { metricsLoaded = true; loadMetrics(); }
+  } else if (view === 'reviews') {
+    document.getElementById('reviewsContent').style.display = 'block';
+    if (!reviewsLoaded) { reviewsLoaded = true; loadReviews(); }
+  } else if (view === 'settings') {
+    document.getElementById('settingsContent').style.display = 'block';
+    if (!settingsLoaded) { settingsLoaded = true; loadPromoSettings(); }
   }
 }
 
@@ -1247,6 +1373,386 @@ async function deleteOrder(docId, idx) {
   } catch(e) {
     alert('Failed to delete order. Check your connection.');
   }
+}
+
+/* ═══════════════════════════════════════════════════
+   FOLLOW-UP SECTION (lazy-loaded per order)
+═══════════════════════════════════════════════════ */
+var adminCatalogData    = null;
+var adminCatalogLoading = false;
+var pendingPickerDocIds = [];
+
+async function loadFollowUpSection(docId) {
+  var loadEl = document.getElementById('fu-loading-' + docId);
+  var dataEl = document.getElementById('fu-data-'    + docId);
+  if (!loadEl || !dataEl) return;
+
+  try {
+    var fuSnap = await firebase.firestore().collection('followUps').doc(docId).get();
+    if (!fuSnap.exists) {
+      loadEl.innerHTML = '<span style="color:var(--accent)">No follow-up record. Mark order as Delivered to start the sequence.</span>';
+      return;
+    }
+    var fu = fuSnap.data();
+    loadEl.style.display = 'none';
+    dataEl.innerHTML     = buildFollowUpHtml(fu, docId);
+    dataEl.style.display = 'block';
+    ensureAdminCatalog(docId);
+  } catch (e) {
+    loadEl.innerHTML = '<span style="color:var(--accent)">Error: ' + esc(e.message) + '</span>';
+  }
+}
+
+function buildFollowUpHtml(fu, docId) {
+  var STAGE_LABELS  = { day0:'Day 0 — Delivered', day3:'Day 3', day6:'Day 6 — Review', day8:'Day 8 — Upsell' };
+  var STATUS_CLS    = { pending:'st-confirmed', sent:'st-dispatched', opened:'st-delivered', completed:'st-delivered', cancelled:'st-unknown', skipped:'st-unknown' };
+
+  var stagesHtml = ['day0','day3','day6','day8'].map(function(stage) {
+    var status = fu[stage] || 'pending';
+    var cls    = STATUS_CLS[status] || 'st-unknown';
+    return '<div class="fu-stage-row">' +
+      '<span class="fu-stage-lbl">' + STAGE_LABELS[stage] + '</span>' +
+      '<span class="st-badge ' + cls + '">' + status + '</span>' +
+      '<div class="fu-stage-actions">' +
+        (status === 'pending'   ? '<button class="fu-btn primary" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'trigger\',this);event.stopPropagation()">Send Now</button>' : '') +
+        (status !== 'pending' && status !== 'cancelled' && status !== 'skipped' ? '<button class="fu-btn" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'resend\',this);event.stopPropagation()">Resend</button>' : '') +
+        (status === 'pending' || status === 'sent' ? '<button class="fu-btn danger" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'cancel\',this);event.stopPropagation()">Cancel</button>' : '') +
+        (stage === 'day8' ? '<button class="fu-btn" onclick="openEmailPreview(\'' + docId + '\');event.stopPropagation()">Preview</button>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  var recHtml;
+  if (fu.recommendedProductId) {
+    recHtml = '<div class="rec-display">' +
+      '<img class="rec-img" src="' + esc(fu.recommendedProductId) + '" onerror="this.style.background=\'#eee\'">' +
+      '<div class="rec-body">' +
+        '<div class="rec-name">' + esc(fu.recommendedProductName || '—') + '</div>' +
+        '<div class="rec-source">' + esc(fu.recommendationSource || '—') + '</div>' +
+        '<div class="rec-pitch">' + esc(fu.recommendedPitch || '—') + '</div>' +
+        (fu.recommendedPriceNGN ? '<div class="rec-price">₦' + Number(fu.recommendedPriceNGN).toLocaleString() + '</div>' : '') +
+        (fu.promoCode ? '<div style="font-size:11px;margin-top:4px;color:var(--gray-dark)">Promo: <strong>' + esc(fu.promoCode) + '</strong></div>' : '') +
+      '</div>' +
+    '</div>';
+  } else {
+    recHtml = '<div style="font-size:12px;color:var(--gray-dark);padding:8px 0">No recommendation resolved yet. Will be resolved when Day 8 sends, or set an override below.</div>';
+  }
+
+  var overrideHtml =
+    '<div style="margin-top:12px">' +
+      '<div class="su-title" style="font-size:10px;margin-bottom:8px">OVERRIDE RECOMMENDATION</div>' +
+      '<div id="fu-cat-select-' + docId + '"><div class="fu-loading-sm">Loading product picker…</div></div>' +
+      '<textarea id="fu-pitch-' + docId + '" placeholder="Custom pitch (blank = Claude writes it)" rows="2" ' +
+        'style="width:100%;margin-top:8px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;font-family:inherit;resize:vertical">' +
+        esc(fu.adminOverridePitch || '') +
+      '</textarea>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">' +
+        '<button class="su-save" onclick="saveRecOverrideNew(\'' + docId + '\');event.stopPropagation()">Set Override</button>' +
+        '<button class="su-save" style="background:#e63946" onclick="clearRecOverrideNew(\'' + docId + '\');event.stopPropagation()">Clear Override</button>' +
+      '</div>' +
+      '<div class="su-msg" id="ovr-msg-' + docId + '"></div>' +
+    '</div>';
+
+  return '<div class="fu-stages">' + stagesHtml + '</div>' +
+    '<div style="margin-top:12px"><div class="su-title" style="font-size:10px;margin-bottom:8px">CURRENT RECOMMENDATION</div>' + recHtml + '</div>' +
+    overrideHtml;
+}
+
+function refreshFollowUpSection(docId) {
+  var dataEl = document.getElementById('fu-data-'    + docId);
+  var loadEl = document.getElementById('fu-loading-' + docId);
+  if (dataEl && loadEl) {
+    dataEl.style.display  = 'none';
+    loadEl.style.display  = 'block';
+    loadEl.innerHTML      = 'Refreshing…';
+    loadFollowUpSection(docId);
+  }
+}
+
+async function fuAction(docId, stage, action, btn) {
+  if (action === 'cancel' && !confirm('Cancel ' + stage + ' for this order?')) return;
+  var tok = await getIdToken();
+  if (!tok) return;
+  var origText = btn.textContent;
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    var resp = await fetch('/api/admin/followup', {
+      method:  'POST',
+      headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ action: action, orderId: docId, stage: stage }),
+    });
+    var data = await resp.json();
+    if (data.ok) {
+      btn.textContent = action === 'cancel' ? 'Cancelled' : 'Sent ✓';
+      setTimeout(function() { refreshFollowUpSection(docId); }, 600);
+    } else {
+      alert((data.error || 'Server error'));
+      btn.textContent = origText; btn.disabled = false;
+    }
+  } catch(e) {
+    alert('Network error: ' + e.message);
+    btn.textContent = origText; btn.disabled = false;
+  }
+}
+
+/* ── Catalog picker for override ── */
+async function ensureAdminCatalog(docId) {
+  if (adminCatalogData) { renderCatalogPicker(docId); return; }
+  pendingPickerDocIds.push(docId);
+  if (adminCatalogLoading) return;
+  adminCatalogLoading = true;
+  try {
+    var snap = await firebase.firestore().collection('catalog').get();
+    adminCatalogData = {};
+    snap.forEach(function(d) { adminCatalogData[d.id] = d.data(); });
+    var pending = pendingPickerDocIds.slice();
+    pendingPickerDocIds = [];
+    pending.forEach(function(id) { renderCatalogPicker(id); });
+  } catch(e) { console.error('Catalog load failed', e); }
+}
+
+function renderCatalogPicker(docId) {
+  var el = document.getElementById('fu-cat-select-' + docId);
+  if (!el || !adminCatalogData) return;
+  var opts = ['<option value="">— Select product to override —</option>'];
+  Object.keys(adminCatalogData).forEach(function(catKey) {
+    var cat = adminCatalogData[catKey];
+    (cat.images || []).forEach(function(img) {
+      if (!img || img.hidden) return;
+      var src  = typeof img === 'string' ? img : img.src;
+      var name = img.name || catKey;
+      if (src) opts.push('<option value="' + esc(src) + '">' + esc(cat.title || catKey) + ' — ' + esc(name) + '</option>');
+    });
+  });
+  el.innerHTML = '<select id="fu-product-select-' + docId + '" style="width:100%;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;font-family:inherit">' + opts.join('') + '</select>';
+}
+
+async function saveRecOverrideNew(docId) {
+  var selectEl = document.getElementById('fu-product-select-' + docId);
+  var pitchEl  = document.getElementById('fu-pitch-'          + docId);
+  var msgEl    = document.getElementById('ovr-msg-'           + docId);
+  var productId = selectEl ? selectEl.value.trim() : '';
+  var pitch     = pitchEl  ? pitchEl.value.trim()  : '';
+
+  var productName = ''; var priceNGN = 0;
+  if (productId && adminCatalogData) {
+    outer:
+    for (var catKey in adminCatalogData) {
+      var imgs = adminCatalogData[catKey].images || [];
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        var src = typeof img === 'string' ? img : img.src;
+        if (src === productId) {
+          productName = img.name || catKey;
+          priceNGN    = img.ngn || (img.prices && img.prices.NG && img.prices.NG.amount) || 0;
+          break outer;
+        }
+      }
+    }
+  }
+
+  var update = { adminOverrideProductId: productId || null, adminOverridePitch: pitch || null };
+  if (productId) {
+    update.recommendedProductId   = productId;
+    update.recommendedProductName = productName;
+    update.recommendedPriceNGN    = priceNGN;
+    update.recommendationSource   = 'admin_override';
+    if (pitch) update.recommendedPitch = pitch;
+  }
+
+  try {
+    await firebase.firestore().collection('followUps').doc(docId).set(update, { merge: true });
+    if (msgEl) { msgEl.style.color = 'var(--success)'; msgEl.textContent = productId ? 'Override saved.' : 'Override cleared.'; }
+    setTimeout(function() { refreshFollowUpSection(docId); }, 800);
+  } catch(e) {
+    if (msgEl) { msgEl.style.color = 'var(--accent)'; msgEl.textContent = 'Error: ' + e.message; }
+  }
+}
+
+async function clearRecOverrideNew(docId) {
+  if (!confirm('Clear override? Claude will re-resolve the recommendation when Day 8 sends.')) return;
+  var msgEl = document.getElementById('ovr-msg-' + docId);
+  try {
+    await firebase.firestore().collection('followUps').doc(docId).update({
+      adminOverrideProductId: null, adminOverridePitch: null,
+      recommendedProductId:   null, recommendedProductName: null,
+      recommendedPriceNGN:    null, recommendedPitch:       null,
+      recommendationSource:   null,
+    });
+    if (msgEl) { msgEl.style.color = 'var(--success)'; msgEl.textContent = 'Override cleared.'; }
+    setTimeout(function() { refreshFollowUpSection(docId); }, 800);
+  } catch(e) {
+    if (msgEl) { msgEl.style.color = 'var(--accent)'; msgEl.textContent = 'Error: ' + e.message; }
+  }
+}
+
+/* ── Email preview ── */
+async function openEmailPreview(docId) {
+  var tok = await getIdToken();
+  if (!tok) { alert('Not authenticated'); return; }
+  try {
+    var resp = await fetch('/api/admin/preview-email?orderId=' + encodeURIComponent(docId), {
+      headers: { Authorization: 'Bearer ' + tok },
+    });
+    if (!resp.ok) {
+      var j = await resp.json().catch(function() { return {}; });
+      alert('Preview error: ' + (j.error || resp.status));
+      return;
+    }
+    var html = await resp.text();
+    var blob = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    document.getElementById('emailPreviewFrame').src = blob;
+    document.getElementById('emailPreviewModal').style.display = 'flex';
+  } catch(e) {
+    alert('Preview failed: ' + e.message);
+  }
+}
+
+function closeEmailPreview() {
+  var modal  = document.getElementById('emailPreviewModal');
+  var iframe = document.getElementById('emailPreviewFrame');
+  modal.style.display = 'none';
+  if (iframe.src) { URL.revokeObjectURL(iframe.src); iframe.src = ''; }
+}
+
+/* ═══════════════════════════════════════════════════
+   METRICS
+═══════════════════════════════════════════════════ */
+async function loadMetrics() {
+  document.getElementById('metricsBody').innerHTML = '<div class="loading"><div class="spin"></div></div>';
+  var tok = await getIdToken();
+  if (!tok) return;
+  try {
+    var resp = await fetch('/api/admin/metrics', { headers: { Authorization: 'Bearer ' + tok } });
+    var data = await resp.json();
+    if (!data.ok) throw new Error(data.error || 'Failed');
+    renderMetrics(data);
+  } catch(e) {
+    document.getElementById('metricsBody').innerHTML = '<div style="color:var(--accent);font-size:13px;padding:20px">Failed to load metrics: ' + esc(e.message) + '</div>';
+  }
+}
+
+function renderMetrics(data) {
+  var emails = data.emails || {}; var upsell = data.upsell || {}; var referrals = data.referrals || {}; var revenue = data.revenue || {}; var bySource = data.bySource || {};
+
+  var html = '';
+
+  // Email funnel
+  html += '<div class="chart-card" style="margin-bottom:20px"><div class="chart-title">Email Funnel (all-time)</div><div class="metric-grid">';
+  html += mkMetric('Day 0 Sent',  emails.sentByStage && emails.sentByStage.day0 || 0, '');
+  html += mkMetric('Day 3 Sent',  emails.sentByStage && emails.sentByStage.day3 || 0, '');
+  html += mkMetric('Day 6 Sent',  emails.sentByStage && emails.sentByStage.day6 || 0, '');
+  html += mkMetric('Day 8 Sent',  emails.sentByStage && emails.sentByStage.day8 || 0, '');
+  html += mkMetric('Total Sent',  emails.totalSent  || 0, '');
+  html += mkMetric('Total Opened',emails.totalOpened || 0, (emails.openRate || 0) + '% open rate');
+  html += '</div></div>';
+
+  // Upsell funnel
+  html += '<div class="chart-card" style="margin-bottom:20px"><div class="chart-title">Upsell Funnel</div><div class="metric-grid">';
+  html += mkMetric('Offers Shown',  upsell.shown || 0, '');
+  html += mkMetric('Clicked',       upsell.clicked || 0, (upsell.clickRate || 0) + '% of shown');
+  html += mkMetric('Purchased',     upsell.purchased || 0, (upsell.conversionRate || 0) + '% conversion');
+  html += mkMetric('₦ Revenue',     '₦' + Number(revenue.upsellNGN || 0).toLocaleString(), 'from upsells');
+  html += mkMetric('Shares',        referrals.shared || 0, '');
+  html += mkMetric('New Customers', referrals.newCustomers || 0, (referrals.conversionRate || 0) + '% referral conv.');
+  html += '</div></div>';
+
+  // Reviews
+  html += '<div class="stat-card items" style="margin-bottom:20px">';
+  html += '<div class="stat-label">Reviews collected</div>';
+  html += '<div class="stat-value">' + (data.reviews && data.reviews.count || 0) + '</div>';
+  html += '<div class="stat-sub">Avg rating: ' + (data.reviews && data.reviews.avgRating || '—') + ' / 5</div>';
+  html += '</div>';
+
+  // By source
+  html += '<div class="collections-card"><div class="section-title">Conversion by Recommendation Source</div><div class="table-wrap"><table class="src-table"><thead><tr><th>Source</th><th>Offered</th><th>Purchased</th><th>Rate</th></tr></thead><tbody>';
+  var sources = Object.keys(bySource).sort(function(a,b) { return (bySource[b].purchased || 0) - (bySource[a].purchased || 0); });
+  if (sources.length === 0) {
+    html += '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--gray-dark)">No upsell data yet</td></tr>';
+  } else {
+    sources.forEach(function(src) {
+      var s    = bySource[src];
+      var rate = s.offered > 0 ? Math.round((s.purchased / s.offered) * 100) : 0;
+      html += '<tr><td><strong>' + esc(src) + '</strong></td><td>' + (s.offered || 0) + '</td><td>' + (s.purchased || 0) + '</td><td><strong style="color:var(--success)">' + rate + '%</strong></td></tr>';
+    });
+  }
+  html += '</tbody></table></div></div>';
+
+  document.getElementById('metricsBody').innerHTML = html;
+}
+
+function mkMetric(label, value, sub) {
+  return '<div class="metric-card"><div class="metric-label">' + esc(String(label)) + '</div><div class="metric-value">' + esc(String(value)) + '</div>' + (sub ? '<div class="metric-sub">' + esc(String(sub)) + '</div>' : '') + '</div>';
+}
+
+/* ═══════════════════════════════════════════════════
+   REVIEWS
+═══════════════════════════════════════════════════ */
+async function loadReviews() {
+  document.getElementById('reviewsBody').innerHTML = '<div class="loading"><div class="spin"></div></div>';
+  try {
+    var snap = await firebase.firestore().collection('reviews').orderBy('createdAt','desc').limit(100).get();
+    var reviews = snap.docs.map(function(d) { return d.data(); });
+    if (reviews.length === 0) {
+      document.getElementById('reviewsBody').innerHTML = '<div class="empty-state"><div class="empty-icon">⭐</div><p>No reviews yet.</p></div>';
+      return;
+    }
+    var html = '<div style="margin-bottom:12px;font-size:13px;color:var(--gray-dark)">' + reviews.length + ' review' + (reviews.length !== 1 ? 's' : '') + '</div>';
+    html += reviews.map(function(r) {
+      var filled  = '★'.repeat(r.rating || 0);
+      var empty   = '☆'.repeat(5 - (r.rating || 0));
+      var color   = r.rating >= 4 ? '#f59e0b' : r.rating >= 3 ? '#fb923c' : '#ef4444';
+      var date    = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}) : '—';
+      return '<div class="review-card">' +
+        '<div class="review-stars" style="color:' + color + '">' + filled + empty + '</div>' +
+        '<div class="review-meta">Order: ' + esc(r.orderId || '—') + ' &middot; ' + date + '</div>' +
+        (r.comment ? '<div class="review-comment">' + esc(r.comment) + '</div>' : '<div class="review-comment" style="color:var(--gray-dark);font-style:italic">No comment</div>') +
+      '</div>';
+    }).join('');
+    document.getElementById('reviewsBody').innerHTML = html;
+  } catch(e) {
+    document.getElementById('reviewsBody').innerHTML = '<div style="color:var(--accent);font-size:13px;padding:20px">Failed to load reviews: ' + esc(e.message) + '</div>';
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   PROMO SETTINGS
+═══════════════════════════════════════════════════ */
+async function loadPromoSettings() {
+  var tok = await getIdToken();
+  if (!tok) return;
+  try {
+    var resp = await fetch('/api/admin/settings', { headers: { Authorization: 'Bearer ' + tok } });
+    var data = await resp.json();
+    if (data.ok) {
+      document.getElementById('setPromoDisc').value = data.promoDiscountPct;
+      document.getElementById('setPromoExp').value  = data.promoExpiryHrs;
+    }
+  } catch(e) { console.error('Failed to load settings', e); }
+}
+
+async function savePromoSettings() {
+  var tok  = await getIdToken();
+  var disc = parseInt(document.getElementById('setPromoDisc').value, 10);
+  var exp  = parseInt(document.getElementById('setPromoExp').value,  10);
+  var msg  = document.getElementById('settingsMsg');
+  if (!tok) return;
+  try {
+    var resp = await fetch('/api/admin/settings', {
+      method:  'POST',
+      headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ promoDiscountPct: disc, promoExpiryHrs: exp }),
+    });
+    var data = await resp.json();
+    if (data.ok) {
+      msg.style.color = 'var(--success)'; msg.textContent = 'Settings saved.';
+    } else {
+      msg.style.color = 'var(--accent)';  msg.textContent = data.error || 'Failed';
+    }
+  } catch(e) {
+    msg.style.color = 'var(--accent)'; msg.textContent = 'Error: ' + e.message;
+  }
+  setTimeout(function() { msg.textContent = ''; }, 3000);
 }
 </script>
 </body>

@@ -447,8 +447,31 @@
     <div class="discount-live" id="discountLive">🔥 Sale is LIVE on the store</div>
   </div>
 
+  <!-- ─── Promo Config Card ─── -->
+  <div class="discount-card" id="promoConfigCard" style="margin-top:0">
+    <div class="discount-header">
+      <div>
+        <div class="discount-title">Promo Code Settings</div>
+        <div class="discount-subtitle">Discount % and expiry for auto-generated promo codes</div>
+      </div>
+    </div>
+    <div class="discount-fields">
+      <div class="disc-field">
+        <label class="disc-label">Discount %</label>
+        <input class="disc-input" id="promoDiscPct" type="number" min="1" max="99" placeholder="15" value="15">
+      </div>
+      <div class="disc-field">
+        <label class="disc-label">Expiry (hrs)</label>
+        <input class="disc-input" id="promoExpiryH" type="number" min="1" max="720" placeholder="72" value="72">
+      </div>
+    </div>
+    <button class="btn-save-discount" onclick="savePromoConfig()">Save Promo Settings</button>
+    <div class="discount-live" id="promoConfigMsg" style="display:none"></div>
+  </div>
+
   <div class="action-row">
     <button class="btn-accent" onclick="openCategoryEditor()">+ Add Category</button>
+    <button class="btn-outline" onclick="openGapView()">Pairing Gaps</button>
     <button class="btn-outline" onclick="confirmSeed()">Re-Import</button>
   </div>
 
@@ -627,6 +650,22 @@
   </div>
 </div>
 
+<!-- ─── Pairing Gaps Sheet ─── -->
+<div class="sheet fullscreen" id="sheetGapView">
+  <div class="sheet-header">
+    <button class="btn-back" onclick="closeSheet('sheetGapView')">&#8592;</button>
+    <div>
+      <div class="sheet-header-title">Pairing Gaps</div>
+      <div class="sheet-header-sub" id="gapViewSub">Products Claude will choose for</div>
+    </div>
+  </div>
+  <div style="padding:10px 20px;font-size:12px;color:#555;line-height:1.5;border-bottom:1px solid #1a1a1a">
+    These products have no <strong>pairsWith</strong> entries and are not excluded from recommendations.
+    Claude will pick a recommendation for them on Day 8. Add pairings to take manual control.
+  </div>
+  <div id="gapList" style="padding:16px 20px 80px"></div>
+</div>
+
 <!-- ─── Toast ─── -->
 <div id="toast"></div>
 
@@ -679,6 +718,7 @@ function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   loadDiscountSettings();
+  loadPromoConfig();
 }
 
 async function doLogin() {
@@ -1255,6 +1295,90 @@ function showToast(msg, isErr) {
   el.className   = 'show' + (isErr ? ' err' : '');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+/* ═══════════════════════════════════════
+   PROMO CONFIG
+═══════════════════════════════════════ */
+async function loadPromoConfig() {
+  try {
+    const doc = await db.collection('settings').doc('promoConfig').get();
+    if (doc.exists) {
+      const d = doc.data();
+      if (d.promoDiscountPct != null) document.getElementById('promoDiscPct').value  = d.promoDiscountPct;
+      if (d.promoExpiryHrs   != null) document.getElementById('promoExpiryH').value  = d.promoExpiryHrs;
+    }
+  } catch(e) {}
+}
+
+async function savePromoConfig() {
+  const pct = parseInt(document.getElementById('promoDiscPct').value, 10) || 15;
+  const hrs = parseInt(document.getElementById('promoExpiryH').value, 10) || 72;
+  if (pct < 1 || pct > 99)   { showToast('Discount must be 1–99%', true);      return; }
+  if (hrs < 1 || hrs > 720)  { showToast('Expiry must be 1–720 hours', true);  return; }
+  try {
+    await db.collection('settings').doc('promoConfig').set(
+      { promoDiscountPct: pct, promoExpiryHrs: hrs }, { merge: true }
+    );
+    const msgEl = document.getElementById('promoConfigMsg');
+    msgEl.textContent  = '✓ Saved — new promo codes will use these settings.';
+    msgEl.style.display = 'block';
+    setTimeout(() => { msgEl.style.display = 'none'; }, 3500);
+  } catch(e) {
+    showToast('Save failed: ' + e.message, true);
+  }
+}
+
+/* ═══════════════════════════════════════
+   PAIRING GAP VIEW
+═══════════════════════════════════════ */
+function openGapView() {
+  const gaps = [];
+  Object.entries(catalogData).forEach(([catKey, cat]) => {
+    (cat.images || []).forEach(img => {
+      if (!img || typeof img === 'string') return;
+      if (img.excludeFromRecommendations) return;
+      const pairs = Array.isArray(img.pairsWith) ? img.pairsWith : [];
+      if (pairs.length === 0) {
+        gaps.push({ src: img.src, name: img.name || catKey, catTitle: cat.title || catKey, catKey });
+      }
+    });
+  });
+
+  document.getElementById('gapViewSub').textContent = gaps.length + ' product' + (gaps.length !== 1 ? 's' : '') + ' without pairings';
+
+  const listEl = document.getElementById('gapList');
+  if (gaps.length === 0) {
+    listEl.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div>All recommendable products have pairings defined!</div>`;
+  } else {
+    listEl.innerHTML = gaps.map(g => `
+      <div class="cat-card" style="margin-bottom:12px">
+        <img class="cat-thumb" src="${esc(g.src)}" alt="" onerror="this.style.display='none'">
+        <div class="cat-info">
+          <div class="cat-name">${esc(g.name)}</div>
+          <div class="cat-sub">${esc(g.catTitle)}</div>
+          <div class="cat-count" style="color:#ff5555">No pairings — Claude will choose</div>
+          <div class="cat-btns">
+            <button class="btn-sm accent" onclick="goToProductGap('${esc(g.catKey)}','${esc(g.src)}')">Add Pairings</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  openSheet('sheetGapView');
+}
+
+function goToProductGap(catKey, src) {
+  closeSheet('sheetGapView');
+  openProductsSheet(catKey);
+  setTimeout(() => {
+    const images = (catalogData[catKey] || {}).images || [];
+    const idx = images.findIndex(img => {
+      const s = typeof img === 'string' ? img : img.src;
+      return s === src;
+    });
+    if (idx >= 0) openProductEditor(idx);
+  }, 420);
 }
 
 /* ═══════════════════════════════════════
