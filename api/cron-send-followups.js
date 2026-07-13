@@ -3,6 +3,7 @@
 const { db }                          = require('./_lib/firebase-admin');
 const { sendEmail }                   = require('./_lib/resend');
 const { buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
+const { resolveRecommendation }       = require('./_lib/recommend');
 
 const THREE_DAYS   = 3 * 24 * 60 * 60 * 1000;
 const SIX_DAYS     = 6 * 24 * 60 * 60 * 1000;
@@ -71,9 +72,43 @@ module.exports = async function handler(req, res) {
 
       for (const stage of due) {
         try {
-          const email   = BUILDERS[stage](emailData);
-          const fuRef   = db.collection('followUps').doc(fu.orderId);
+          const fuRef    = db.collection('followUps').doc(fu.orderId);
           const eventRef = db.collection('events').doc();
+
+          // Day 8: resolve recommendation before building email
+          let stageEmailData = emailData;
+          let recSource      = null;
+          if (stage === 'day8') {
+            const rec = await resolveRecommendation(fu, order);
+            recSource = rec.source;
+            if (rec.source === 'skipped') {
+              // Safe fallback — mark skipped and move on, do not send a broken email
+              await fuRef.update({ day8: 'skipped', recommendationSource: 'skipped' });
+              console.log('[cron] day8 skipped (no eligible recommendation)', fu.orderId);
+              skipped.push(fu.orderId + ':day8');
+              continue;
+            }
+            // Persist recommendation so resolve-token and follow-up page can read it
+            await fuRef.update({
+              recommendedProductId:   rec.productId,
+              recommendedProductName: rec.name,
+              recommendedPriceNGN:    rec.priceNGN,
+              recommendedPitch:       rec.pitch,
+              recommendationSource:   rec.source,
+            });
+            stageEmailData = {
+              ...emailData,
+              upsell: {
+                name:     rec.name,
+                imageUrl: rec.imageUrl,
+                priceNGN: rec.priceNGN,
+                pitch:    rec.pitch,
+              },
+            };
+          }
+
+          const email    = BUILDERS[stage](stageEmailData);
+          const metadata = recSource ? { stage, recommendationSource: recSource } : { stage };
 
           await sendEmail({ to: fu.email, subject: email.subject, html: email.html });
 
@@ -82,7 +117,7 @@ module.exports = async function handler(req, res) {
           batch.set(eventRef, {
             orderId:   fu.orderId,
             type:      'email_sent',
-            metadata:  { stage },
+            metadata,
             createdAt: new Date().toISOString(),
           });
           await batch.commit();

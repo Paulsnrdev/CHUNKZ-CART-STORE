@@ -88,9 +88,12 @@
     .success-title{font-size:22px;font-weight:900;margin-bottom:8px}
     .success-sub{color:var(--gray);font-size:14px;line-height:1.6}
 
-    /* Upsell placeholder */
-    .upsell-ph{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:48px 24px;text-align:center;color:var(--gray)}
-    .upsell-ph-icon{font-size:40px;margin-bottom:12px}
+    /* Upsell card */
+    .rec-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px 12px 0 0;display:block}
+    .rec-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+    .rec-info{padding:14px 16px}
+    .rec-name{font-size:16px;font-weight:800;margin-bottom:4px}
+    .rec-price{font-size:14px;font-weight:700;color:#e8c96c}
 
     /* Order ref */
     .order-ref-tag{font-size:11px;color:var(--gray);letter-spacing:1px;margin-bottom:20px}
@@ -268,15 +271,43 @@
     );
   }
 
-  function renderDay8() {
+  function renderDay8(data) {
+    var rec = (data && data.recommendation) || {};
+    var source = rec.source;
+
+    // No recommendation resolved — show a friendly store link instead
+    if (!source || source === 'skipped' || !rec.productId) {
+      setRoot(
+        '<div class="main">' +
+        '<div class="section-tag">Fresh Drops</div>' +
+        '<h1 class="section-title">There\'s always something new.</h1>' +
+        '<p style="color:var(--gray);font-size:14px;line-height:1.6;margin-bottom:28px">Head to the store to see what\'s just dropped.</p>' +
+        '<a href="/" style="display:block;text-align:center;text-decoration:none;background:var(--accent);color:#fff;padding:15px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Shop Chunkz &rarr;</a>' +
+        '</div>' + footer()
+      );
+      return;
+    }
+
+    var imgBlock = rec.imageUrl
+      ? '<img class="rec-img" src="' + esc(rec.imageUrl) + '" alt="' + esc(rec.name || 'Chunkz product') + '" loading="lazy">'
+      : '';
+    var priceBlock = rec.priceNGN
+      ? '<div class="rec-price">&#8358;' + Number(rec.priceNGN).toLocaleString() + '</div>'
+      : '';
+
     setRoot(
       '<div class="main">' +
       '<div class="section-tag">Just For You</div>' +
-      '<h1 class="section-title">We picked something special 🎁</h1>' +
-      '<div class="upsell-ph">' +
-      '<div class="upsell-ph-icon">🛍️</div>' +
-      '<p style="font-size:14px;font-weight:700">Your personalised recommendation is on its way.</p>' +
+      '<h1 class="section-title">We think you\'ll want this next.</h1>' +
+      '<p style="color:var(--gray);font-size:14px;line-height:1.6;margin-bottom:20px">' + esc(rec.pitch || 'Built to match. Made for you.') + '</p>' +
+      '<div class="rec-card">' +
+      imgBlock +
+      '<div class="rec-info">' +
+      '<div class="rec-name">' + esc(rec.name || 'New Drop') + '</div>' +
+      priceBlock +
       '</div>' +
+      '</div>' +
+      '<a href="/" style="display:block;text-align:center;text-decoration:none;background:var(--accent);color:#fff;padding:15px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Shop Now &rarr;</a>' +
       '</div>' + footer()
     );
   }
@@ -288,7 +319,7 @@
       case 'day0': renderDay0(data); break;
       case 'day3': renderDay3(data); break;
       case 'day6': renderDay6(data); break;
-      case 'day8': renderDay8(data); break;
+      case 'day8': renderDay8(data);  break;
       default:     renderError('server_error');
     }
   }

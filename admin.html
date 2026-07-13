@@ -951,7 +951,19 @@ function renderOrdersTable(orders) {
           '</div>' +
           '<div class="su-msg" id="msg-' + idx + '"></div>' +
           '<button class="su-delete" onclick="deleteOrder(\'' + docId + '\',' + idx + ');event.stopPropagation()">🗑 Delete Order</button>' +
-        '</div>'
+        '</div>' +
+        (statusStr === 'delivered' ? (
+          '<div class="su-block" style="border-top:1px solid var(--gray-mid);padding-top:14px;margin-top:4px">' +
+            '<div class="su-title">Day 8 Recommendation Override</div>' +
+            '<div style="font-size:11px;color:var(--gray-dark);margin-bottom:10px">Override which product Claude recommends in the Day 8 email. Leave product URL blank to clear the override.</div>' +
+            '<div class="su-form" style="flex-direction:column;gap:8px">' +
+              '<input type="text" id="ovr-pid-' + idx + '" placeholder="Product image URL (from catalog)" style="font-size:12px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;width:100%;font-family:inherit">' +
+              '<input type="text" id="ovr-pitch-' + idx + '" placeholder="Custom pitch — leave blank to let Claude write it" style="font-size:12px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;width:100%;font-family:inherit">' +
+              '<button class="su-save" onclick="setRecOverride(\'' + docId + '\',' + idx + ');event.stopPropagation()">Set Override</button>' +
+            '</div>' +
+            '<div class="su-msg" id="ovr-msg-' + idx + '"></div>' +
+          '</div>'
+        ) : '')
       ) : '') +
     '</div></td></tr>';
   }).join('');
@@ -1204,6 +1216,26 @@ function toggleRevenue() {
   revenueHidden = !revenueHidden;
   document.getElementById('statRevenue').textContent = revenueHidden ? '₦••••••' : lastRevenue;
   document.getElementById('revToggle').textContent   = revenueHidden ? '🙈' : '👁';
+}
+
+async function setRecOverride(docId, idx) {
+  var pid   = (document.getElementById('ovr-pid-'   + idx) || {}).value || '';
+  var pitch = (document.getElementById('ovr-pitch-' + idx) || {}).value || '';
+  var msgEl = document.getElementById('ovr-msg-' + idx);
+
+  try {
+    var update = {
+      adminOverrideProductId: pid.trim()   || null,
+      adminOverridePitch:     pitch.trim() || null,
+    };
+    await firebase.firestore().collection('followUps').doc(docId).set(update, { merge: true });
+    if (msgEl) {
+      msgEl.style.color = 'var(--success)';
+      msgEl.textContent = pid.trim() ? 'Override saved.' : 'Override cleared.';
+    }
+  } catch(e) {
+    if (msgEl) { msgEl.style.color = 'var(--accent)'; msgEl.textContent = 'Error: ' + e.message; }
+  }
 }
 
 async function deleteOrder(docId, idx) {

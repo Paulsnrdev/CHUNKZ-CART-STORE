@@ -296,15 +296,23 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const productName = escHtml(item.name || item.collection || 'your order');
   const followUpUrl = SITE_URL + '/follow-up/' + token;
 
-  // Phase 5/6 will pass real upsell + promo objects; use placeholders for now
-  const rec = upsell || {};
+  const rec     = upsell || {};
   const recName = escHtml(rec.name || 'New Chunkz Drop');
   const pitch   = escHtml(rec.pitch || 'Something new just dropped in the store. Built with the same quality. Made to match.');
   const promoCode = escHtml((promo && promo.code) || 'CHUNKZ15');
 
   const priceRow = (promo && promo.originalPrice && promo.discountedPrice)
     ? `<p style="margin:4px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;"><s style="color:#555555;">${fmtNGN(promo.originalPrice)}</s>&nbsp;<span style="color:#2a9d8f;font-weight:700;">${fmtNGN(promo.discountedPrice)}</span></p>`
-    : '';
+    : rec.priceNGN
+      ? `<p style="margin:4px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a9d8f;font-weight:700;">${fmtNGN(rec.priceNGN)}</p>`
+      : '';
+
+  const productImageRow = rec.imageUrl ? `
+<tr>
+  <td class="cp" style="padding:0 32px 0;">
+    <img src="${rec.imageUrl}" alt="${recName}" width="496" style="width:100%;max-width:496px;height:auto;border-radius:8px 8px 0 0;display:block;" />
+  </td>
+</tr>` : '';
 
   const bodyRows = `
 <tr>
@@ -315,9 +323,10 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   </td>
 </tr>
 
+${productImageRow}
 <tr>
   <td class="cp" style="padding:0 32px;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#181818;border-radius:8px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#181818;border-radius:${rec.imageUrl ? '0 0 8px 8px' : '8px'};">
       <tr>
         <td style="padding:18px 20px;">
           <p style="margin:0 0 2px;font-family:'Segoe UI',Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;">${recName}</p>

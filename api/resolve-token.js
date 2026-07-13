@@ -70,6 +70,14 @@ module.exports = async function handler(req, res) {
         totalNGN:         order.totalNGN,
         colourPreference: order.colourPreference || '',
       },
+      recommendation: stage === 'day8' ? {
+        productId: followUp.recommendedProductId   || null,
+        name:      followUp.recommendedProductName || null,
+        imageUrl:  followUp.recommendedProductId   || null, // productId IS the imageUrl (Firebase Storage src)
+        priceNGN:  followUp.recommendedPriceNGN    || null,
+        pitch:     followUp.recommendedPitch       || null,
+        source:    followUp.recommendationSource   || null,
+      } : null,
     });
   } catch (err) {
     console.error('[resolve-token]', err);
