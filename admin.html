@@ -1156,9 +1156,22 @@ async function updateOrderStatus(docId, idx) {
   msgEl.style.display = 'block';
 
   try {
-    var update = { orderStatus: status };
-    if (tracking) update.trackingNumber = tracking;
-    await firebase.firestore().collection('orders').doc(docId).update(update);
+    if (status === 'delivered') {
+      var idTok = await getIdToken();
+      if (!idTok) throw new Error('Not authenticated');
+      var body = { orderId: docId };
+      if (tracking) body.trackingNumber = tracking;
+      var resp = await fetch('/api/mark-delivered', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + idTok, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!resp.ok) throw new Error('Server error ' + resp.status);
+    } else {
+      var update = { orderStatus: status };
+      if (tracking) update.trackingNumber = tracking;
+      await firebase.firestore().collection('orders').doc(docId).update(update);
+    }
 
     allOrders.forEach(function(o) {
       if (o._id === docId) {
