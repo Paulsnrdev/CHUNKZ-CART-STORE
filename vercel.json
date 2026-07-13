@@ -3,10 +3,6 @@
     {
       "path": "/api/cron-send-followups",
       "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron-awaiting-payment",
-      "schedule": "0 * * * *"
     }
   ],
   "redirects": [
