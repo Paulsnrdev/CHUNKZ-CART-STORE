@@ -1156,9 +1156,10 @@ async function updateOrderStatus(docId, idx) {
   msgEl.style.display = 'block';
 
   try {
+    var idTok = await getIdToken();
+    if (!idTok) throw new Error('Not authenticated');
+
     if (status === 'delivered') {
-      var idTok = await getIdToken();
-      if (!idTok) throw new Error('Not authenticated');
       var body = { orderId: docId };
       if (tracking) body.trackingNumber = tracking;
       var resp = await fetch('/api/mark-delivered', {
@@ -1167,7 +1168,17 @@ async function updateOrderStatus(docId, idx) {
         body: JSON.stringify(body),
       });
       if (!resp.ok) throw new Error('Server error ' + resp.status);
+    } else if (status === 'confirmed' || status === 'processing' || status === 'dispatched') {
+      var body2 = { orderId: docId, status: status };
+      if (tracking) body2.trackingNumber = tracking;
+      var resp2 = await fetch('/api/send-status-email', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + idTok, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body2),
+      });
+      if (!resp2.ok) throw new Error('Server error ' + resp2.status);
     } else {
+      // awaiting_payment — update status directly, cron handles the reminder email
       var update = { orderStatus: status };
       if (tracking) update.trackingNumber = tracking;
       await firebase.firestore().collection('orders').doc(docId).update(update);

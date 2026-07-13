@@ -167,7 +167,7 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
       <tr>
         <td style="padding:14px 16px;">
           <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#e63946;">KEEP IT FRESH</p>
-          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#888888;line-height:1.65;">Cold wash, inside out. Air dry &mdash; no dryer. Iron on reverse. Treat it right and it&rsquo;ll outlast the hype.</p>
+          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#888888;line-height:1.65;">Cold wash, inside out and air dry. Iron on reverse. Treat it right and it&rsquo;ll outlast the hype.</p>
         </td>
       </tr>
     </table>
@@ -176,7 +176,7 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
 
 <tr>
   <td class="cp" style="padding:22px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Wearing it? Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> &mdash; we repost.</p>
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Wearing it? Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> and we will repost.</p>
   </td>
 </tr>
 
@@ -372,4 +372,251 @@ ${ctaButton('SHARE THE CODE &rarr;', followUpUrl, '#1a1a1a')}
   };
 }
 
-module.exports = { buildDay0, buildDay3, buildDay6, buildDay8 };
+// ── Transactional wrapper (no unsubscribe — order status emails) ───────────────
+function transactionalWrapper({ preheader, bodyRows }) {
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<title>Chunkz</title>
+<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<style>
+* { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }
+body { margin:0; padding:0; background-color:#0a0a0a; word-break:break-word; }
+table, td { mso-table-lspace:0; mso-table-rspace:0; border-collapse:collapse; }
+a[x-apple-data-detectors] { color:inherit!important; text-decoration:none!important; }
+@media only screen and (max-width:600px) {
+  .ew { padding:0!important; }
+  .ec { border-radius:0!important; }
+  .cp { padding-left:20px!important; padding-right:20px!important; }
+}
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#0a0a0a;">
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;color:#0a0a0a;">${escHtml(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#0a0a0a;">
+  <tr>
+    <td align="center" class="ew" style="padding:32px 16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="max-width:560px;" class="ec">
+
+        <!-- brand header -->
+        <tr>
+          <td bgcolor="#e63946" style="border-radius:10px 10px 0 0;padding:18px 32px;text-align:center;">
+            <span style="font-family:'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:900;letter-spacing:7px;color:#ffffff;text-transform:uppercase;">CHUNKZ</span>
+          </td>
+        </tr>
+
+        <!-- card body -->
+        <tr>
+          <td bgcolor="#111111" style="border-radius:0 0 10px 10px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+              ${bodyRows}
+
+              <!-- spacer -->
+              <tr><td style="height:20px;"></td></tr>
+
+              <!-- footer -->
+              <tr>
+                <td class="cp" style="padding:20px 32px;border-top:1px solid #1e1e1e;">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                    <tr>
+                      <td align="center">
+                        <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#444444;line-height:1.5;">Chunkz &middot; Urban streetwear. Nationwide.</p>
+                        <a href="${SITE_URL}" style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#444444;text-decoration:underline;">Visit the store</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
+}
+
+function orderItemRows(items, fallbackName) {
+  if (Array.isArray(items) && items.length > 0) {
+    return items.map(it => {
+      const n = escHtml(it.name || it.collection || 'Item');
+      const s = it.size ? ` &mdash; ${escHtml(it.size)}` : '';
+      const q = (it.qty && it.qty > 1) ? ` &times;${it.qty}` : '';
+      return `<tr><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#cccccc;padding:3px 0;line-height:1.5;">${n}${s}${q}</td></tr>`;
+    }).join('');
+  }
+  return `<tr><td style="font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#cccccc;padding:3px 0;">${escHtml(fallbackName || 'Your item')}</td></tr>`;
+}
+
+function orderSummaryBlock({ items, orderRef, totalNGN, label }) {
+  const heading = label || 'YOUR ORDER';
+  return `
+<tr>
+  <td class="cp" style="padding:0 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#181818;border-radius:8px;">
+      <tr>
+        <td style="padding:14px 18px 0;border-bottom:1px solid #222222;">
+          <p style="margin:0 0 12px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#555555;">${heading}</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:14px 18px;">
+          <table cellpadding="0" cellspacing="0" border="0" role="presentation">
+            ${orderItemRows(items)}
+          </table>
+          <p style="margin:10px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#555555;">
+            ${orderRef ? escHtml(String(orderRef)) + (totalNGN ? ' &middot; ' : '') : ''}${totalNGN ? fmtNGN(totalNGN) : ''}
+          </p>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>`;
+}
+
+// ── Awaiting Payment — 12-hour reminder (cron-triggered) ──────────────────────
+function buildAwaitingPaymentReminder({ customerName, orderRef, items, totalNGN }) {
+  const name = htmlFirst(customerName);
+  const item = primaryItem(items);
+  const productName = item.name || item.collection || 'your order';
+
+  const bodyRows = `
+<tr>
+  <td class="cp" style="padding:36px 32px 0;">
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">STILL WAITING.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your order is waiting for payment.</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">We received your order but haven&rsquo;t been able to confirm payment yet. Head back to the store to complete your checkout.</p>
+  </td>
+</tr>
+
+${orderSummaryBlock({ items, orderRef, totalNGN, label: 'YOUR PENDING ORDER' })}
+
+${ctaButton('COMPLETE YOUR ORDER &rarr;', SITE_URL)}
+
+<tr>
+  <td class="cp" style="padding:18px 32px 0;">
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;line-height:1.6;">Questions? Reach us on Instagram <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a></p>
+  </td>
+</tr>`;
+
+  return {
+    subject: `${rawFirst(customerName)}, your order is waiting for payment 👀`,
+    html: transactionalWrapper({ preheader: `Complete your Chunkz order — we're holding your items.`, bodyRows }),
+  };
+}
+
+// ── Confirmed ─────────────────────────────────────────────────────────────────
+function buildConfirmed({ customerName, orderRef, items, totalNGN }) {
+  const name = htmlFirst(customerName);
+
+  const bodyRows = `
+<tr>
+  <td class="cp" style="padding:36px 32px 0;">
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">CONFIRMED.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your order is confirmed. We&rsquo;ve got you.</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Payment received and order locked in. We&rsquo;ll start getting it ready and keep you posted every step of the way.</p>
+  </td>
+</tr>
+
+${orderSummaryBlock({ items, orderRef, totalNGN })}
+
+<tr>
+  <td class="cp" style="padding:24px 32px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-left:3px solid #2a9d8f;background-color:#141414;border-radius:0 6px 6px 0;">
+      <tr>
+        <td style="padding:14px 16px;">
+          <p style="margin:0 0 4px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#2a9d8f;">WHAT&rsquo;S NEXT</p>
+          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#888888;line-height:1.65;">We&rsquo;ll send another update when your order starts processing. Sit tight.</p>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>`;
+
+  return {
+    subject: `Order confirmed! We've got you 🙌`,
+    html: transactionalWrapper({ preheader: `Your Chunkz order is confirmed — we're on it.`, bodyRows }),
+  };
+}
+
+// ── Processing ────────────────────────────────────────────────────────────────
+function buildProcessing({ customerName, orderRef, items, totalNGN }) {
+  const name = htmlFirst(customerName);
+
+  const bodyRows = `
+<tr>
+  <td class="cp" style="padding:36px 32px 0;">
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">IN THE WORKS.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, we&rsquo;re prepping your order right now.</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Your Chunkz is being packed and prepared. We&rsquo;ll hit you again the moment it ships.</p>
+  </td>
+</tr>
+
+${orderSummaryBlock({ items, orderRef, totalNGN })}
+
+<tr>
+  <td class="cp" style="padding:24px 32px 0;">
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;text-align:center;">Keep an eye on your inbox &mdash; dispatch update coming soon.</p>
+  </td>
+</tr>`;
+
+  return {
+    subject: `We're prepping your Chunkz order 🧢`,
+    html: transactionalWrapper({ preheader: `Your order is being packed right now.`, bodyRows }),
+  };
+}
+
+// ── Dispatched ────────────────────────────────────────────────────────────────
+function buildDispatched({ customerName, orderRef, items, totalNGN, trackingNumber }) {
+  const name = htmlFirst(customerName);
+  const item = primaryItem(items);
+  const productName = escHtml(item.name || item.collection || 'your order');
+
+  const trackingBlock = trackingNumber ? `
+<tr>
+  <td class="cp" style="padding:16px 32px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#0f1a18;border-radius:8px;border:1px solid #1a3a33;">
+      <tr>
+        <td align="center" style="padding:18px 20px;">
+          <p style="margin:0 0 4px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2a9d8f;">TRACKING NUMBER</p>
+          <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:900;letter-spacing:4px;color:#ffffff;">${escHtml(trackingNumber)}</p>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>` : '';
+
+  const bodyRows = `
+<tr>
+  <td class="cp" style="padding:36px 32px 0;">
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">ON ITS WAY.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your <span style="color:#e63946;">${productName}</span> has been dispatched.</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Your order is on its way. Expect delivery within the next few days.</p>
+  </td>
+</tr>
+
+${orderSummaryBlock({ items, orderRef, totalNGN })}
+
+${trackingBlock}
+
+<tr>
+  <td class="cp" style="padding:24px 32px 0;">
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Once it lands, wear it with pride. Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> 🔥</p>
+  </td>
+</tr>`;
+
+  return {
+    subject: `Your Chunkz is on its way 🚚`,
+    html: transactionalWrapper({ preheader: `Your order has been dispatched. It's almost time.`, bodyRows }),
+  };
+}
+
+module.exports = { buildDay0, buildDay3, buildDay6, buildDay8, buildAwaitingPaymentReminder, buildConfirmed, buildProcessing, buildDispatched };
