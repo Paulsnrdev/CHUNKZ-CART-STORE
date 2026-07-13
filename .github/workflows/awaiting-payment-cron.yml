@@ -1,4 +1,4 @@
-name: Awaiting Payment Reminders
+name: Hourly Cron Jobs
 
 on:
   schedule:
@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  send-reminders:
+  run-cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger awaiting payment cron
+      - name: Run cron (awaiting-payment reminders + follow-up emails)
         run: |
           curl -f -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            https://chunkz-store.vercel.app/api/cron-awaiting-payment
+            https://chunkzthebrand.com/api/cron
