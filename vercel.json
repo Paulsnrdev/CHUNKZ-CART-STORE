@@ -1,11 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron-followups",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron-payment",
+      "path": "/api/cron",
       "schedule": "0 * * * *"
     }
   ],
@@ -24,8 +20,6 @@
     { "source": "/about.html",           "destination": "/about",             "permanent": true }
   ],
   "rewrites": [
-    { "source": "/api/cron-followups",   "destination": "/api/cron?action=send-followups" },
-    { "source": "/api/cron-payment",     "destination": "/api/cron?action=awaiting-payment" },
     { "source": "/follow-up/:token",     "destination": "/follow-up.html" },
     { "source": "/bestsite",             "destination": "/admin.html" },
     { "source": "/about",               "destination": "/about.html" },
