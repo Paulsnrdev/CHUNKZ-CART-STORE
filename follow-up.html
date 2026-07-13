@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chunkz — Your Order</title>
+  <style>
+    :root {
+      --black:#0a0a0a;--white:#fff;--surface:#141414;--surface2:#1e1e1e;
+      --border:#2a2a2a;--gray:#888;--accent:#e63946;--success:#2a9d8f;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--black);color:var(--white);min-height:100vh}
+
+    /* Header */
+    .hdr{padding:18px 20px;text-align:center;border-bottom:1px solid var(--border)}
+    .hdr-logo{font-size:22px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:var(--white);text-decoration:none;display:inline-block}
+
+    /* Container */
+    .main{max-width:480px;margin:0 auto;padding:28px 20px 60px}
+
+    /* Loading */
+    .loading-wrap{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:16px}
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Error */
+    .error-wrap{text-align:center;padding:48px 20px}
+    .error-icon{font-size:48px;margin-bottom:16px}
+    .error-title{font-size:22px;font-weight:900;letter-spacing:1px;margin-bottom:8px}
+    .error-sub{color:var(--gray);font-size:14px;line-height:1.6}
+
+    /* Section */
+    .section-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .section-title{font-size:26px;font-weight:900;letter-spacing:1px;margin-bottom:20px;line-height:1.2}
+
+    /* Card */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+    .card-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:12px}
+
+    /* Items */
+    .item-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+    .item-row:last-child{border-bottom:none}
+    .item-name{font-weight:700;font-size:14px}
+    .item-meta{font-size:12px;color:var(--gray);margin-top:2px}
+    .item-price{font-weight:700;font-size:14px;white-space:nowrap;padding-left:12px}
+
+    /* Divider */
+    .divider{height:1px;background:var(--border);margin:24px 0}
+
+    /* Care */
+    .care-list{list-style:none}
+    .care-list li{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:14px;border-bottom:1px solid var(--border)}
+    .care-list li:last-child{border-bottom:none}
+    .care-icon{font-size:20px;flex-shrink:0}
+
+    /* Instagram */
+    .ig-block{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+    .ig-block p{font-size:14px;margin-bottom:4px;opacity:.85}
+    .ig-handle{font-size:20px;font-weight:900;letter-spacing:1px}
+
+    /* Check-in buttons */
+    .checkin-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+    .checkin-btn{background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:20px 12px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;font-size:22px;display:flex;flex-direction:column;align-items:center;gap:6px;width:100%}
+    .checkin-btn span{font-size:13px;font-weight:700;color:var(--gray)}
+    .checkin-btn.sel-pos{border-color:var(--success);background:rgba(42,157,143,.1)}
+    .checkin-btn.sel-neg{border-color:var(--accent);background:rgba(230,57,70,.1)}
+
+    /* Review stars */
+    .stars{display:flex;gap:8px;margin-bottom:20px}
+    .star{font-size:36px;cursor:pointer;transition:transform .15s;color:var(--border);line-height:1;background:none;border:none;padding:0}
+    .star.lit{color:#f4c430}
+    .star:hover{transform:scale(1.15)}
+
+    /* Inputs */
+    textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--white);padding:12px;font-size:14px;font-family:inherit;resize:none;margin-bottom:16px}
+    textarea:focus{outline:none;border-color:var(--accent)}
+    textarea::placeholder{color:var(--gray)}
+
+    /* Buttons */
+    .btn-primary{width:100%;background:var(--accent);color:var(--white);border:none;border-radius:30px;padding:15px;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s}
+    .btn-primary:hover{background:#c1121f;transform:translateY(-1px)}
+    .btn-primary:disabled{background:var(--surface2);color:var(--gray);cursor:default;transform:none}
+
+    /* Success */
+    .success-wrap{text-align:center;padding:32px 0}
+    .success-icon{font-size:52px;margin-bottom:16px}
+    .success-title{font-size:22px;font-weight:900;margin-bottom:8px}
+    .success-sub{color:var(--gray);font-size:14px;line-height:1.6}
+
+    /* Upsell placeholder */
+    .upsell-ph{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:48px 24px;text-align:center;color:var(--gray)}
+    .upsell-ph-icon{font-size:40px;margin-bottom:12px}
+
+    /* Order ref */
+    .order-ref-tag{font-size:11px;color:var(--gray);letter-spacing:1px;margin-bottom:20px}
+
+    /* Footer */
+    .footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);margin-top:16px}
+    .unsub-btn{font-size:12px;color:var(--gray);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit}
+    .unsub-btn:hover{color:var(--white)}
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <a href="/" class="hdr-logo">Chunkz</a>
+</header>
+
+<div id="root">
+  <div class="main">
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p style="color:var(--gray);font-size:13px">Loading your order…</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var token      = window.location.pathname.split('/').filter(Boolean).pop();
+  var preselect  = new URLSearchParams(window.location.search).get('r');
+  var selRating  = 0;
+  var selCheckin = preselect; // 'positive' | 'negative' | null
+
+  /* ── Helpers ─────────────────────────────────────────── */
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function fmtPrice(amount, currency) {
+    if (!amount) return '';
+    var n = Number(amount).toLocaleString();
+    return (currency === 'NGN' || !currency) ? '₦' + n : currency + ' ' + n;
+  }
+  function setRoot(html) { document.getElementById('root').innerHTML = html; }
+
+  /* ── Error renderer ──────────────────────────────────── */
+  var ERROR_COPY = {
+    invalid_token: { icon: '🔗', title: 'Link not found',       sub: 'This follow-up link isn\'t valid. Check the link in your email.' },
+    expired_token: { icon: '⏳', title: 'Link expired',          sub: 'This link is more than 30 days old. Your follow-up period has ended.' },
+    opted_out:     { icon: '✅', title: 'You\'re unsubscribed',  sub: 'You won\'t receive any more follow-up emails from us.' },
+    server_error:  { icon: '⚡', title: 'Something went wrong',  sub: 'We couldn\'t load your order. Try again in a moment.' },
+  };
+
+  function renderError(code) {
+    var e = ERROR_COPY[code] || ERROR_COPY.server_error;
+    setRoot(
+      '<div class="main"><div class="error-wrap">' +
+      '<div class="error-icon">' + e.icon + '</div>' +
+      '<h1 class="error-title">' + e.title + '</h1>' +
+      '<p class="error-sub">' + e.sub + '</p>' +
+      '</div></div>'
+    );
+  }
+
+  /* ── Footer ──────────────────────────────────────────── */
+  function footer() {
+    return '<footer class="footer"><button class="unsub-btn" onclick="optOut()">Unsubscribe from follow-up emails</button></footer>';
+  }
+
+  /* ── Stage renderers ─────────────────────────────────── */
+  function renderDay0(data) {
+    var o = data.order;
+    var items = (o.items || []).map(function(it) {
+      var meta = [it.size, it.qty > 1 ? 'Qty: ' + it.qty : ''].filter(Boolean).join(' · ');
+      return '<div class="item-row">' +
+        '<div><div class="item-name">' + esc(it.name) + '</div>' +
+        (meta ? '<div class="item-meta">' + esc(meta) + '</div>' : '') +
+        '</div><div class="item-price">' + fmtPrice(it.price * (it.qty || 1), it.currency) + '</div></div>';
+    }).join('');
+
+    var colour = o.colourPreference
+      ? '<div class="card"><div class="card-label">Colour Preference</div><div style="font-weight:700">' + esc(o.colourPreference) + '</div></div>'
+      : '';
+
+    setRoot(
+      '<div class="main">' +
+      '<div class="section-tag">Order Update</div>' +
+      '<h1 class="section-title">Your order has arrived 📦</h1>' +
+      '<p class="order-ref-tag">Ref: ' + esc(o.orderRef || data.followUp.orderId) + '</p>' +
+      '<div class="card"><div class="card-label">What you ordered</div>' + items + '</div>' +
+      colour +
+      '<div class="divider"></div>' +
+      '<div class="section-tag">Garment Care</div>' +
+      '<h2 style="font-size:18px;font-weight:900;margin-bottom:16px">Keep it fresh</h2>' +
+      '<div class="card"><ul class="care-list">' +
+      '<li><span class="care-icon">🌊</span><span>Cold wash <strong>inside out</strong> — protects the print</span></li>' +
+      '<li><span class="care-icon">💨</span><span><strong>Air dry only</strong> — never tumble dry</span></li>' +
+      '<li><span class="care-icon">👕</span><span>Iron on <strong>reverse</strong> — keeps the design sharp</span></li>' +
+      '</ul></div>' +
+      '<div class="divider"></div>' +
+      '<a href="https://www.instagram.com/chunkz_thebrand" target="_blank" rel="noopener" style="text-decoration:none">' +
+      '<div class="ig-block"><p>Show off the fit 📸</p><div class="ig-handle">@chunkz_thebrand</div></div></a>' +
+      '</div>' + footer()
+    );
+  }
+
+  function renderDay3(data) {
+    if (data.followUp.day3 === 'completed') {
+      setRoot(
+        '<div class="main"><div class="success-wrap">' +
+        '<div class="success-icon">🙌</div>' +
+        '<h1 class="success-title">Thanks for your feedback!</h1>' +
+        '<p class="success-sub">We got your check-in. We appreciate you.</p>' +
+        '</div></div>' + footer()
+      );
+      return;
+    }
+
+    var posClass = selCheckin === 'positive' ? ' sel-pos' : '';
+    var negClass = selCheckin === 'negative' ? ' sel-neg' : '';
+
+    setRoot(
+      '<div class="main">' +
+      '<div class="section-tag">3-Day Check-In</div>' +
+      '<h1 class="section-title">How\'s your order?</h1>' +
+      '<p class="order-ref-tag">Ref: ' + esc(data.order.orderRef || data.followUp.orderId) + '</p>' +
+      '<div class="checkin-btns">' +
+      '<button class="checkin-btn' + posClass + '" id="btnPos" onclick="selectCheckin(\'positive\')">🔥<span>Loving it</span></button>' +
+      '<button class="checkin-btn' + negClass + '" id="btnNeg" onclick="selectCheckin(\'negative\')">😕<span>Not quite</span></button>' +
+      '</div>' +
+      '<div id="checkinForm" style="display:' + (selCheckin ? 'block' : 'none') + '">' +
+      '<textarea id="checkinComment" rows="3" placeholder="Any comments? (optional)"></textarea>' +
+      '<button class="btn-primary" id="checkinSubmitBtn" onclick="submitCheckin()">Submit</button>' +
+      '</div>' +
+      '<div id="checkinDone" style="display:none">' +
+      '<div class="success-wrap"><div class="success-icon">🙌</div>' +
+      '<h1 class="success-title">Thanks for your feedback!</h1>' +
+      '<p class="success-sub">We appreciate you taking the time.</p></div></div>' +
+      '</div>' + footer()
+    );
+  }
+
+  function renderDay6(data) {
+    if (data.followUp.day6 === 'completed') {
+      setRoot(
+        '<div class="main"><div class="success-wrap">' +
+        '<div class="success-icon">⭐</div>' +
+        '<h1 class="success-title">Review received!</h1>' +
+        '<p class="success-sub">Thank you for leaving us a review. It means the world.</p>' +
+        '</div></div>' + footer()
+      );
+      return;
+    }
+
+    var starBtns = [1,2,3,4,5].map(function(n) {
+      return '<button class="star" data-val="' + n + '" onclick="setRating(' + n + ')" ' +
+        'onmouseenter="hoverStars(' + n + ')" onmouseleave="resetStars()">★</button>';
+    }).join('');
+
+    setRoot(
+      '<div class="main">' +
+      '<div class="section-tag">Leave a Review</div>' +
+      '<h1 class="section-title">How would you rate your Chunkz?</h1>' +
+      '<p class="order-ref-tag">Ref: ' + esc(data.order.orderRef || data.followUp.orderId) + '</p>' +
+      '<div id="reviewForm">' +
+      '<div class="stars" id="starsRow">' + starBtns + '</div>' +
+      '<textarea id="reviewComment" rows="4" placeholder="Tell us about your experience…"></textarea>' +
+      '<button class="btn-primary" id="reviewSubmitBtn" onclick="submitReview()" disabled>Submit Review</button>' +
+      '</div>' +
+      '<div id="reviewDone" style="display:none">' +
+      '<div class="success-wrap"><div class="success-icon">⭐</div>' +
+      '<h1 class="success-title">Thank you!</h1>' +
+      '<p class="success-sub">Your review has been submitted. We really appreciate it.</p></div></div>' +
+      '</div>' + footer()
+    );
+  }
+
+  function renderDay8() {
+    setRoot(
+      '<div class="main">' +
+      '<div class="section-tag">Just For You</div>' +
+      '<h1 class="section-title">We picked something special 🎁</h1>' +
+      '<div class="upsell-ph">' +
+      '<div class="upsell-ph-icon">🛍️</div>' +
+      '<p style="font-size:14px;font-weight:700">Your personalised recommendation is on its way.</p>' +
+      '</div>' +
+      '</div>' + footer()
+    );
+  }
+
+  /* ── Stage router ────────────────────────────────────── */
+  function render(data) {
+    if (data.error) { renderError(data.error); return; }
+    switch (data.stage) {
+      case 'day0': renderDay0(data); break;
+      case 'day3': renderDay3(data); break;
+      case 'day6': renderDay6(data); break;
+      case 'day8': renderDay8(data); break;
+      default:     renderError('server_error');
+    }
+  }
+
+  /* ── Global event handlers ───────────────────────────── */
+  window.selectCheckin = function(val) {
+    selCheckin = val;
+    var bp = document.getElementById('btnPos');
+    var bn = document.getElementById('btnNeg');
+    if (bp) bp.className = 'checkin-btn' + (val === 'positive' ? ' sel-pos' : '');
+    if (bn) bn.className = 'checkin-btn' + (val === 'negative' ? ' sel-neg' : '');
+    var form = document.getElementById('checkinForm');
+    if (form) form.style.display = 'block';
+  };
+
+  window.submitCheckin = async function() {
+    if (!selCheckin) return;
+    var comment = (document.getElementById('checkinComment') || {}).value || '';
+    var btn = document.getElementById('checkinSubmitBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      var r = await fetch('/api/submit-checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, response: selCheckin, comment: comment }),
+      });
+      if (!r.ok) throw new Error();
+      var form = document.getElementById('checkinForm');
+      var done = document.getElementById('checkinDone');
+      if (form) form.style.display = 'none';
+      if (done) done.style.display = 'block';
+    } catch(e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
+    }
+  };
+
+  window.setRating = function(val) {
+    selRating = val;
+    paintStars(val);
+    var btn = document.getElementById('reviewSubmitBtn');
+    if (btn) btn.disabled = false;
+  };
+  window.hoverStars  = function(val) { paintStars(val); };
+  window.resetStars  = function()    { paintStars(selRating); };
+
+  function paintStars(lit) {
+    document.querySelectorAll('.star').forEach(function(s) {
+      s.className = 'star' + (parseInt(s.dataset.val, 10) <= lit ? ' lit' : '');
+    });
+  }
+
+  window.submitReview = async function() {
+    if (!selRating) return;
+    var comment = (document.getElementById('reviewComment') || {}).value || '';
+    var btn = document.getElementById('reviewSubmitBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      var r = await fetch('/api/submit-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, rating: selRating, comment: comment }),
+      });
+      if (!r.ok) throw new Error();
+      var form = document.getElementById('reviewForm');
+      var done = document.getElementById('reviewDone');
+      if (form) form.style.display = 'none';
+      if (done) done.style.display = 'block';
+    } catch(e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Submit Review'; }
+    }
+  };
+
+  window.optOut = async function() {
+    if (!confirm('Unsubscribe from all Chunkz follow-up emails?')) return;
+    try {
+      await fetch('/api/opt-out', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token }),
+      });
+    } catch(e) {}
+    renderError('opted_out');
+  };
+
+  /* ── Bootstrap ───────────────────────────────────────── */
+  if (!token || token === 'follow-up') {
+    renderError('invalid_token');
+  } else {
+    fetch('/api/resolve-token?token=' + encodeURIComponent(token))
+      .then(function(r) { return r.json(); })
+      .then(render)
+      .catch(function() { renderError('server_error'); });
+  }
+})();
+</script>
+
+</body>
+</html>
