@@ -78,6 +78,10 @@ module.exports = async function handler(req, res) {
         pitch:     followUp.recommendedPitch       || null,
         source:    followUp.recommendationSource   || null,
       } : null,
+      promo: (stage === 'day8' && followUp.promoCode) ? {
+        code:      followUp.promoCode,
+        expiresAt: followUp.promoExpiresAt || null,
+      } : null,
     });
   } catch (err) {
     console.error('[resolve-token]', err);

@@ -299,7 +299,21 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const rec     = upsell || {};
   const recName = escHtml(rec.name || 'New Chunkz Drop');
   const pitch   = escHtml(rec.pitch || 'Something new just dropped in the store. Built with the same quality. Made to match.');
-  const promoCode = escHtml((promo && promo.code) || 'CHUNKZ15');
+  const promoCode = escHtml((promo && promo.code) || '');
+
+  // CTA links to store with code pre-filled; fallback to follow-up page
+  const buyNowUrl = (promo && promo.code)
+    ? SITE_URL + '/?promo=' + encodeURIComponent(promo.code)
+    : followUpUrl;
+
+  // Expiry line: human-readable WAT time if available, else generic
+  const expiryLine = (promo && promo.expiresAt)
+    ? escHtml(new Date(promo.expiresAt).toLocaleString('en-GB', {
+        weekday: 'short', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: false,
+        timeZone: 'Africa/Lagos',
+      }) + ' WAT')
+    : '72 hours from now';
 
   const priceRow = (promo && promo.originalPrice && promo.discountedPrice)
     ? `<p style="margin:4px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;"><s style="color:#555555;">${fmtNGN(promo.originalPrice)}</s>&nbsp;<span style="color:#2a9d8f;font-weight:700;">${fmtNGN(promo.discountedPrice)}</span></p>`
@@ -337,6 +351,7 @@ ${productImageRow}
   </td>
 </tr>
 
+${promoCode ? `
 <tr>
   <td class="cp" style="padding:16px 32px 0;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#0f1a18;border-radius:8px;border:1px solid #1a3a33;">
@@ -344,14 +359,14 @@ ${productImageRow}
         <td align="center" style="padding:22px 20px;">
           <p style="margin:0 0 8px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2a9d8f;">YOUR CODE</p>
           <p style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:30px;font-weight:900;letter-spacing:8px;color:#ffffff;">${promoCode}</p>
-          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#555555;">15% off &middot; Expires in 72 hours &middot; One use</p>
+          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#555555;">15% off &middot; One use &middot; Expires ${expiryLine}</p>
         </td>
       </tr>
     </table>
   </td>
 </tr>
 
-${ctaButton('CLAIM 15% OFF &rarr;', followUpUrl)}
+${ctaButton('CLAIM 15% OFF &rarr;', buyNowUrl)}
 
 <tr>
   <td class="cp" style="padding:24px 32px 0;">
@@ -372,7 +387,9 @@ ${ctaButton('SHARE THE CODE &rarr;', followUpUrl, '#1a1a1a')}
   <td class="cp" style="padding:16px 32px 0;">
     <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;font-style:italic;">Once it&rsquo;s gone, it&rsquo;s gone.</p>
   </td>
-</tr>`;
+</tr>` : `
+${ctaButton('SHOP NOW &rarr;', followUpUrl)}
+`}`;
 
   const rawItem = item.name || item.collection || 'your order';
   return {

@@ -252,6 +252,7 @@
     .os-title{font-weight:700;margin-bottom:8px;font-size:14px}
     .os-item{display:flex;justify-content:space-between;padding:3px 0;color:#555}
     .os-delivery{display:flex;justify-content:space-between;padding:3px 0;color:#555;font-size:13px}
+    .os-discount{display:flex;justify-content:space-between;padding:3px 0;color:#059669;font-size:13px;font-weight:700}
     .os-delivery-note{font-size:12px;color:#7c5a00;margin-top:6px;line-height:1.5;padding:8px 10px;background:#fef3c7;border-radius:6px;border-left:3px solid #f59e0b}
     .zone-select{width:100%;padding:10px 13px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;outline:none;transition:border-color .2s;font-family:inherit;background:#fff;cursor:pointer}
     .zone-select:focus{border-color:var(--black)}
@@ -683,6 +684,10 @@
           <span id="osDeliveryFee"></span>
         </div>
         <div id="osDeliveryNote" style="display:none"></div>
+        <div class="os-discount" id="osDiscountRow" style="display:none">
+          <span>Promo (<span id="osPromoCode"></span>)</span>
+          <span id="osDiscountAmt"></span>
+        </div>
         <div class="os-total">
           <span>Total</span>
           <span id="osSummaryTotal"></span>
@@ -744,6 +749,14 @@
               </span>
             </label>
           </div>
+        </div>
+        <div class="fg" id="promoFg">
+          <label>Promo Code</label>
+          <div style="display:flex;gap:8px;align-items:stretch">
+            <input type="text" id="cPromo" placeholder="e.g. CHUNKZ-7F2A9K" style="text-transform:uppercase;flex:1">
+            <button type="button" id="promoApplyBtn" onclick="applyPromoCode()" style="background:var(--black);color:#fff;border:none;padding:0 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;white-space:nowrap">Apply</button>
+          </div>
+          <div id="promoMsg" style="display:none;font-size:12px;margin-top:6px;font-weight:600"></div>
         </div>
         <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY →</button>
       </form>
@@ -881,12 +894,14 @@ async function saveOrderToFirestore(name, email, phone, address, colour, desc, o
     colourPreference: colour || '',
     descriptionNote:  desc   || '',
     items: orderCart.map(function(i) {
-      return { name: i.name, collection: i.pid, size: i.size || '', qty: i.qty, price: i.price, currency: i.currency };
+      return { name: i.name, collection: i.pid, src: i.src || null, size: i.size || '', qty: i.qty, price: i.price, currency: i.currency };
     }),
-    total:      total,
-    currency:   currency,
-    totalNGN:   Math.round(total * (rates[currency] || 1)),
-    timestamp:  new Date().toISOString()
+    total:            total,
+    currency:         currency,
+    totalNGN:         Math.round(total * (rates[currency] || 1)),
+    promoCode:        appliedPromo ? appliedPromo.code : null,
+    promoDiscountNGN: appliedPromo ? appliedPromo.discountAmountNGN : 0,
+    timestamp:        new Date().toISOString()
   };
 
   if (FIREBASE_READY) {
@@ -1357,6 +1372,8 @@ let checkoutCurrency = 'NGN';
 let customer = {};
 let pendingOrder = null;
 let ipCountry    = null; // cached IP-based country for delivery zone filtering
+let appliedPromo = null; // { code, discountPct, discountAmountNGN, productId, expiresAt }
+const prefilledPromoCode = new URLSearchParams(window.location.search).get('promo') || '';
 
 async function detectDeliveryCountry() {
   if (ipCountry) return ipCountry;
@@ -1718,11 +1735,11 @@ function _doAddToCart(catKey, imgIndex, size) {
   const cat = catalog[catKey];
   if (!cat) return;
 
-  let itemKey, itemName, pr;
+  let itemKey, itemName, pr, itemSrc = null;
   if (imgIndex !== undefined && imgIndex !== null && cat.images[imgIndex] !== undefined) {
     const entry      = cat.images[imgIndex];
-    const src        = imgSrc(entry);
-    const designName = cleanImageName(src);
+    itemSrc          = imgSrc(entry);
+    const designName = cleanImageName(itemSrc);
     itemKey  = catKey + '_' + imgIndex + '_' + size;
     itemName = cat.title + ' — ' + designName;
     pr       = getPrice({ prices: imgPrices(cat, entry) });
@@ -1739,6 +1756,7 @@ function _doAddToCart(catKey, imgIndex, size) {
     cart.push({
       key:      itemKey,
       pid:      catKey,
+      src:      itemSrc,
       name:     itemName,
       size:     size,
       price:    pr.amount,
@@ -1888,6 +1906,21 @@ function openCheckout() {
   document.getElementById('cAddress').placeholder = '123 Main Street, Ikeja, Lagos, Nigeria';
   detectDeliveryCountry().then(filterDeliveryZones);
 
+  // Reset promo state for a fresh checkout session
+  appliedPromo = null;
+  var discRow = document.getElementById('osDiscountRow');
+  if (discRow) discRow.style.display = 'none';
+  var promoMsgEl = document.getElementById('promoMsg');
+  if (promoMsgEl) promoMsgEl.style.display = 'none';
+
+  // Pre-fill promo code from URL param (deep-link from follow-up page)
+  var promoInput = document.getElementById('cPromo');
+  if (promoInput && prefilledPromoCode && !promoInput.value) {
+    promoInput.value = prefilledPromoCode.toUpperCase();
+    // Auto-apply after the modal has rendered
+    setTimeout(applyPromoCode, 100);
+  }
+
   document.getElementById('checkoutModal').classList.add('on');
   document.body.style.overflow = 'hidden';
   var fab = document.querySelector('.chat-fab'); if (fab) fab.style.display = 'none';
@@ -1926,7 +1959,9 @@ function updateDeliveryFee() {
   if (!zone) {
     deliveryRow.style.display  = 'none';
     deliveryNote.style.display = 'none';
-    document.getElementById('osSummaryTotal').textContent = sym + subtotal.toLocaleString();
+    var discNoZone = getPromoDiscountInCartCurrency();
+    document.getElementById('osSummaryTotal').textContent = sym + Math.max(0, subtotal - discNoZone).toLocaleString();
+    refreshDiscountRow(sym);
     return;
   }
 
@@ -1935,14 +1970,17 @@ function updateDeliveryFee() {
   document.getElementById('osDeliveryZoneLabel').textContent = zoneData.label;
 
   if (zoneData.fee !== null) {
-    var fee = getDeliveryFeeInCartCurrency();
-    document.getElementById('osDeliveryFee').textContent    = fee === 0 ? 'Free' : sym + fee.toLocaleString();
-    document.getElementById('osSummaryTotal').textContent   = sym + (subtotal + fee).toLocaleString();
+    var fee  = getDeliveryFeeInCartCurrency();
+    var disc = getPromoDiscountInCartCurrency();
+    document.getElementById('osDeliveryFee').textContent  = fee === 0 ? 'Free' : sym + fee.toLocaleString();
+    document.getElementById('osSummaryTotal').textContent = sym + Math.max(0, subtotal + fee - disc).toLocaleString();
+    refreshDiscountRow(sym);
     deliveryNote.style.display = 'none';
     deliveryNote.innerHTML     = '';
   } else {
     document.getElementById('osDeliveryFee').textContent  = 'TBD';
     document.getElementById('osSummaryTotal').textContent = sym + subtotal.toLocaleString() + ' + delivery';
+    refreshDiscountRow(sym);
     deliveryNote.innerHTML     = '<div class="os-delivery-note">&#9432; ' + zoneData.note + '</div>';
     deliveryNote.style.display = 'block';
   }
@@ -1952,6 +1990,85 @@ function closeCheckout() {
   document.getElementById('checkoutModal').classList.remove('on');
   document.body.style.overflow = '';
   var fab = document.querySelector('.chat-fab'); if (fab) fab.style.display = '';
+}
+
+/* ═══════════════════════════════════════════════════
+   PROMO CODE
+═══════════════════════════════════════════════════ */
+const PROMO_RATES = { NGN: 1, USD: 1375, GBP: 1820, CAD: 975 };
+
+function getPromoDiscountInCartCurrency() {
+  if (!appliedPromo || !appliedPromo.discountAmountNGN) return 0;
+  const curr = cartCurrencyCode();
+  return Math.round(appliedPromo.discountAmountNGN / (PROMO_RATES[curr] || 1));
+}
+
+function refreshDiscountRow(sym) {
+  const row    = document.getElementById('osDiscountRow');
+  const amtEl  = document.getElementById('osDiscountAmt');
+  const codeEl = document.getElementById('osPromoCode');
+  if (!row) return;
+  const disc = getPromoDiscountInCartCurrency();
+  if (appliedPromo && disc > 0) {
+    if (codeEl) codeEl.textContent = appliedPromo.code;
+    if (amtEl)  amtEl.textContent  = '-' + (sym || cartSymbol()) + disc.toLocaleString();
+    row.style.display = 'flex';
+  } else {
+    row.style.display = 'none';
+  }
+}
+
+async function applyPromoCode() {
+  const codeEl  = document.getElementById('cPromo');
+  const msgEl   = document.getElementById('promoMsg');
+  const applyBtn = document.getElementById('promoApplyBtn');
+  if (!codeEl || !msgEl) return;
+
+  const code = codeEl.value.trim().toUpperCase();
+  if (!code) return;
+
+  const cartItems = cart.map(function(i) {
+    return { name: i.name, src: i.src || null, price: i.price, currency: i.currency, qty: i.qty };
+  });
+
+  if (applyBtn) { applyBtn.disabled = true; applyBtn.textContent = '…'; }
+  try {
+    const res  = await fetch('/api/promo/validate', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ code, cartItems }),
+    });
+    const data = await res.json();
+
+    msgEl.style.display = 'block';
+    if (data.valid) {
+      appliedPromo           = data;
+      msgEl.style.color      = '#059669';
+      msgEl.textContent      = data.message;
+    } else {
+      appliedPromo           = null;
+      msgEl.style.color      = '#b91c1c';
+      msgEl.textContent      = data.message;
+    }
+  } catch (e) {
+    msgEl.style.display = 'block';
+    msgEl.style.color   = '#b91c1c';
+    msgEl.textContent   = 'Could not check the code right now. Try again.';
+    appliedPromo = null;
+  } finally {
+    if (applyBtn) { applyBtn.disabled = false; applyBtn.textContent = 'Apply'; }
+  }
+
+  // Recompute displayed total
+  updateDeliveryFee();
+}
+
+function redeemPromo(code, orderId, email) {
+  fetch('/api/promo/redeem', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ code: code, orderId: orderId, email: email || '' }),
+  }).catch(function() {});
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1986,6 +2103,8 @@ async function submitOrder(e) {
   const zoneData   = DELIVERY_ZONES[zone];
   const deliveryFee = getDeliveryFeeInCartCurrency();
   const grandTotal  = subtotal + deliveryFee;
+  const promoDiscount = getPromoDiscountInCartCurrency();
+  const finalTotal    = Math.max(0, grandTotal - promoDiscount);
   const deliveryFeeLabel = zoneData.fee === null ? 'TBD (negotiated)'
     : (zoneData.fee === 0 ? 'Free' : '₦' + zoneData.fee.toLocaleString());
 
@@ -2008,7 +2127,9 @@ async function submitOrder(e) {
     delivery_address:  address || 'Self Pickup',
     order_items:       itemLines,
     order_subtotal:    sym + subtotal.toLocaleString() + ' ' + currCode,
-    order_total:       sym + grandTotal.toLocaleString() + ' ' + currCode,
+    order_total:       sym + finalTotal.toLocaleString() + ' ' + currCode,
+    promo_code:        appliedPromo ? appliedPromo.code : '',
+    promo_discount:    appliedPromo ? (sym + promoDiscount.toLocaleString()) : '',
     currency:          currCode,
     order_date:        new Date().toLocaleString('en-NG')
   };
@@ -2027,9 +2148,9 @@ async function submitOrder(e) {
     if (res.ok) {
       const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'flutterwave';
       customer         = { name, email, phone, address };
-      checkoutAmount   = grandTotal;
+      checkoutAmount   = finalTotal;
       checkoutCurrency = currCode;
-      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: grandTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef };
+      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
       document.getElementById('payRetryMsg').style.display = 'none';
       if (payMethod === 'opay') {
         proceedOPayTransfer();
@@ -2083,6 +2204,7 @@ function proceedToPayment() {
         confirmedRef = o.orderRef;
         saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef);
         sendWhatsAppNotification(o, 'paid');
+        if (o.promoCode) redeemPromo(o.promoCode, o.orderRef, o.email);
         pendingOrder = null;
       }
       cart = [];
@@ -2119,6 +2241,7 @@ function proceedOPayTransfer() {
 
   saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef, 'opay');
   sendWhatsAppNotification(o, 'opay');
+  if (o.promoCode) redeemPromo(o.promoCode, o.orderRef, o.email);
   pendingOrder = null;
 
   cart = [];

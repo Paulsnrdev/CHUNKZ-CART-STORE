@@ -93,7 +93,14 @@
     .rec-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
     .rec-info{padding:14px 16px}
     .rec-name{font-size:16px;font-weight:800;margin-bottom:4px}
-    .rec-price{font-size:14px;font-weight:700;color:#e8c96c}
+    .rec-price{font-size:14px;font-weight:700;color:var(--success)}
+    .rec-price-orig{font-size:13px;color:var(--gray);text-decoration:line-through;margin-right:6px}
+    .promo-box{background:#0f1a18;border:1px solid #1a3a33;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center}
+    .promo-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--success);margin-bottom:8px}
+    .promo-code{font-family:'Courier New',monospace;font-size:26px;font-weight:900;letter-spacing:6px;color:var(--white);margin-bottom:8px}
+    .promo-meta{font-size:12px;color:var(--gray)}
+    .promo-countdown{color:var(--success);font-weight:700}
+    .share-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 
     /* Order ref */
     .order-ref-tag{font-size:11px;color:var(--gray);letter-spacing:1px;margin-bottom:20px}
@@ -271,8 +278,69 @@
     );
   }
 
+  /* ── Countdown timer ────────────────────────────────── */
+  var _cdTimer = null;
+  function startCountdown(expiresAt, elId) {
+    clearInterval(_cdTimer);
+    var el = document.getElementById(elId);
+    if (!el || !expiresAt) return;
+    function tick() {
+      var ms = new Date(expiresAt) - Date.now();
+      if (ms <= 0) { el.textContent = 'Expired'; clearInterval(_cdTimer); return; }
+      var h = Math.floor(ms / 3600000);
+      var m = Math.floor((ms % 3600000) / 60000);
+      var s = Math.floor((ms % 60000) / 1000);
+      el.textContent = h + 'h ' + (m < 10 ? '0' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+    }
+    tick();
+    _cdTimer = setInterval(tick, 1000);
+  }
+
+  /* ── Copy code to clipboard ──────────────────────────── */
+  window.copyCode = function(code) {
+    function done() {
+      var t = document.createElement('div');
+      t.textContent = 'Code copied!';
+      t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;pointer-events:none';
+      document.body.appendChild(t);
+      setTimeout(function() { document.body.removeChild(t); }, 2200);
+    }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(done).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = code; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta); done();
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = code; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta); done();
+    }
+  };
+
+  /* ── Client-side event logger ────────────────────────── */
+  function logEvent(type, metadata) {
+    if (!token) return;
+    fetch('/api/log-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, type: type, metadata: metadata || {} }),
+    }).catch(function() {});
+  }
+
+  /* ── WhatsApp share handler ──────────────────────────── */
+  window.shareWhatsApp = function(url) {
+    logEvent('upsell_referred', { method: 'whatsapp' });
+    window.open(url, '_blank', 'noopener');
+  };
+  window.shareCopy = function(code) {
+    logEvent('upsell_referred', { method: 'copy' });
+    copyCode(code);
+  };
+
   function renderDay8(data) {
-    var rec = (data && data.recommendation) || {};
+    var rec   = (data && data.recommendation) || {};
+    var promo = (data && data.promo) || null;
     var source = rec.source;
 
     // No recommendation resolved — show a friendly store link instead
@@ -288,29 +356,83 @@
       return;
     }
 
+    // Log upsell_shown
+    logEvent('upsell_shown', { stage: 'day8' });
+
     var imgBlock = rec.imageUrl
       ? '<img class="rec-img" src="' + esc(rec.imageUrl) + '" alt="' + esc(rec.name || 'Chunkz product') + '" loading="lazy">'
       : '';
-    var priceBlock = rec.priceNGN
-      ? '<div class="rec-price">&#8358;' + Number(rec.priceNGN).toLocaleString() + '</div>'
-      : '';
+
+    // Price: strikethrough original + green discounted if promo, plain green otherwise
+    var priceBlock = '';
+    if (rec.priceNGN) {
+      if (promo && promo.code) {
+        var discounted = Math.round(rec.priceNGN * 0.85);
+        priceBlock =
+          '<div style="margin-top:6px">' +
+          '<span class="rec-price-orig">&#8358;' + Number(rec.priceNGN).toLocaleString() + '</span>' +
+          '<span class="rec-price">&#8358;' + Number(discounted).toLocaleString() + '</span>' +
+          '</div>';
+      } else {
+        priceBlock = '<div class="rec-price" style="margin-top:6px">&#8358;' + Number(rec.priceNGN).toLocaleString() + '</div>';
+      }
+    }
+
+    // Buy Now deep-links to store with code pre-filled
+    var buyUrl = (promo && promo.code)
+      ? '/?promo=' + encodeURIComponent(promo.code)
+      : '/';
+
+    // Promo box (only if code exists)
+    var promoBlock = '';
+    if (promo && promo.code) {
+      promoBlock =
+        '<div class="promo-box">' +
+        '<div class="promo-label">Your Code</div>' +
+        '<div class="promo-code">' + esc(promo.code) + '</div>' +
+        '<div class="promo-meta">15% off &middot; One use &middot; Expires in <span class="promo-countdown" id="promoCountdown">…</span></div>' +
+        '</div>';
+    }
+
+    // Share section
+    var shareBlock = '';
+    if (promo && promo.code) {
+      var shareText = 'Hey! Got you a promo code for Chunkz 🔥\n\nUse *' + promo.code + '* at checkout for 15% off ' + (rec.name || 'the new drop') + '.\n\nShop: https://chunkzthebrand.com/?promo=' + promo.code + '\n\nExpires soon — first come first served!';
+      var waUrl     = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+      shareBlock =
+        '<div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">' +
+        '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);margin-bottom:6px">Not for you?</div>' +
+        '<p style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px">Pass it to a friend — they get 15% off, you look like the plug. One use, first come first served.</p>' +
+        '<div class="share-grid">' +
+        '<button onclick="shareWhatsApp(\'' + esc(waUrl) + '\')" style="background:#25d366;color:#fff;border:none;padding:12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px">WhatsApp</button>' +
+        '<button onclick="shareCopy(\'' + esc(promo.code) + '\')" style="background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer">Copy Code</button>' +
+        '</div>' +
+        '</div>';
+    }
 
     setRoot(
       '<div class="main">' +
       '<div class="section-tag">Just For You</div>' +
       '<h1 class="section-title">We think you\'ll want this next.</h1>' +
       '<p style="color:var(--gray);font-size:14px;line-height:1.6;margin-bottom:20px">' + esc(rec.pitch || 'Built to match. Made for you.') + '</p>' +
-      '<div class="rec-card">' +
-      imgBlock +
-      '<div class="rec-info">' +
-      '<div class="rec-name">' + esc(rec.name || 'New Drop') + '</div>' +
-      priceBlock +
+      '<div class="rec-card">' + imgBlock +
+      '<div class="rec-info"><div class="rec-name">' + esc(rec.name || 'New Drop') + '</div>' + priceBlock + '</div>' +
       '</div>' +
-      '</div>' +
-      '<a href="/" style="display:block;text-align:center;text-decoration:none;background:var(--accent);color:#fff;padding:15px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Shop Now &rarr;</a>' +
+      promoBlock +
+      '<a href="' + esc(buyUrl) + '" onclick="logUpsellClick()" style="display:block;text-align:center;text-decoration:none;background:var(--accent);color:#fff;padding:15px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Buy Now &rarr;</a>' +
+      shareBlock +
       '</div>' + footer()
     );
+
+    // Start countdown after DOM is rendered
+    if (promo && promo.expiresAt) {
+      startCountdown(promo.expiresAt, 'promoCountdown');
+    }
   }
+
+  window.logUpsellClick = function() {
+    logEvent('upsell_clicked', { stage: 'day8' });
+  };
 
   /* ── Stage router ────────────────────────────────────── */
   function render(data) {

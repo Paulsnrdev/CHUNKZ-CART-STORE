@@ -4,6 +4,7 @@ const { db }                          = require('./_lib/firebase-admin');
 const { sendEmail }                   = require('./_lib/resend');
 const { buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
 const { resolveRecommendation }       = require('./_lib/recommend');
+const { createPromo }                 = require('./_lib/promo');
 
 const THREE_DAYS   = 3 * 24 * 60 * 60 * 1000;
 const SIX_DAYS     = 6 * 24 * 60 * 60 * 1000;
@@ -75,7 +76,7 @@ module.exports = async function handler(req, res) {
           const fuRef    = db.collection('followUps').doc(fu.orderId);
           const eventRef = db.collection('events').doc();
 
-          // Day 8: resolve recommendation before building email
+          // Day 8: resolve recommendation + generate promo code before building email
           let stageEmailData = emailData;
           let recSource      = null;
           if (stage === 'day8') {
@@ -96,6 +97,20 @@ module.exports = async function handler(req, res) {
               recommendedPitch:       rec.pitch,
               recommendationSource:   rec.source,
             });
+
+            // Generate a unique promo code for this follow-up
+            let promoDoc = null;
+            try {
+              promoDoc = await createPromo({
+                followUpId:  fu.orderId,
+                productId:   rec.productId,
+                productName: rec.name,
+              });
+              await fuRef.update({ promoCode: promoDoc.code, promoExpiresAt: promoDoc.expiresAt });
+            } catch (e) {
+              console.error('[cron] promo creation failed', fu.orderId, e.message);
+            }
+
             stageEmailData = {
               ...emailData,
               upsell: {
@@ -104,6 +119,13 @@ module.exports = async function handler(req, res) {
                 priceNGN: rec.priceNGN,
                 pitch:    rec.pitch,
               },
+              promo: promoDoc ? {
+                code:            promoDoc.code,
+                discountPct:     promoDoc.discountPct,
+                originalPrice:   rec.priceNGN,
+                discountedPrice: Math.round(rec.priceNGN * (100 - promoDoc.discountPct) / 100),
+                expiresAt:       promoDoc.expiresAt,
+              } : null,
             };
           }
 
