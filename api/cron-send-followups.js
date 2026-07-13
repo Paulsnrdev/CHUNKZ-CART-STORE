@@ -2,9 +2,8 @@
 
 const { db }                          = require('./_lib/firebase-admin');
 const { sendEmail }                   = require('./_lib/resend');
-const { buildDay3, buildDay6, buildDay8, buildAwaitingPaymentReminder } = require('./_lib/emails');
+const { buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
 
-const TWELVE_HOURS = 12 * 60 * 60 * 1000;
 const THREE_DAYS   = 3 * 24 * 60 * 60 * 1000;
 const SIX_DAYS     = 6 * 24 * 60 * 60 * 1000;
 const EIGHT_DAYS   = 8 * 24 * 60 * 60 * 1000;
@@ -95,41 +94,6 @@ module.exports = async function handler(req, res) {
           errors.push({ orderId: fu.orderId, stage, error: e.message });
         }
       }
-    }
-
-    // --- Awaiting payment reminders (12 hours after order placed) ---
-    try {
-      const awaitingSnap = await db.collection('orders')
-        .where('orderStatus', '==', 'awaiting_payment')
-        .get();
-
-      for (const doc of awaitingSnap.docs) {
-        const order = doc.data();
-        if (!order.customerEmail) continue;
-        if (order.awaitingReminderSent) continue;
-
-        const createdAt = order.createdAt ? new Date(order.createdAt).getTime() : null;
-        if (!createdAt || now - createdAt < TWELVE_HOURS) continue;
-
-        try {
-          const email = buildAwaitingPaymentReminder({
-            customerName: order.customerName || '',
-            orderRef:     order.orderRef     || doc.id,
-            items:        order.items        || [],
-            totalNGN:     order.totalNGN     || order.total || 0,
-          });
-          await sendEmail({ to: order.customerEmail, subject: email.subject, html: email.html });
-          await db.collection('orders').doc(doc.id).update({ awaitingReminderSent: true });
-          sent.push({ orderId: doc.id, stage: 'awaiting_reminder' });
-          console.log('[cron] sent awaiting_reminder', doc.id);
-        } catch (e) {
-          console.error('[cron] failed awaiting_reminder', doc.id, e.message);
-          errors.push({ orderId: doc.id, stage: 'awaiting_reminder', error: e.message });
-        }
-      }
-    } catch (e) {
-      console.error('[cron] awaiting_payment query failed:', e.message);
-      errors.push({ stage: 'awaiting_payment_query', error: e.message });
     }
 
     const summary = { ok: true, sent: sent.length, skipped: skipped.length, errors: errors.length, detail: { sent, errors } };

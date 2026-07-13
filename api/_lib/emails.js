@@ -482,18 +482,41 @@ function orderSummaryBlock({ items, orderRef, totalNGN, label }) {
 </tr>`;
 }
 
-// ── Awaiting Payment — 12-hour reminder (cron-triggered) ──────────────────────
-function buildAwaitingPaymentReminder({ customerName, orderRef, items, totalNGN }) {
-  const name = htmlFirst(customerName);
-  const item = primaryItem(items);
-  const productName = item.name || item.collection || 'your order';
+// ── Awaiting Payment reminders — 1hr / 12hr / 24hr (cron-triggered) ──────────
+const AWAITING_STAGE = {
+  h1: {
+    label:    'YOU LEFT SOMETHING.',
+    headline: (name) => `${name}, you left an order behind.`,
+    body:     'You started a Chunkz order but didn&rsquo;t complete payment. Your items are still here &mdash; grab them before they&rsquo;re gone.',
+    subject:  (first) => `${first}, you left something behind 👋`,
+    preheader: 'Your items are still waiting for you.',
+  },
+  h12: {
+    label:    'STILL WAITING.',
+    headline: (name) => `${name}, your order is waiting for payment.`,
+    body:     'We received your order but haven&rsquo;t been able to confirm payment yet. Head back to complete your checkout.',
+    subject:  (first) => `${first}, your order is waiting for payment 👀`,
+    preheader: 'Complete your Chunkz order — we&rsquo;re holding your items.',
+  },
+  h24: {
+    label:    'LAST CHANCE.',
+    headline: (name) => `${name}, this is your final reminder.`,
+    body:     'We&rsquo;ve been holding your order for 24 hours. Complete your payment today or your order will be cancelled.',
+    subject:  (first) => `Last chance — complete your Chunkz order today 🔥`,
+    preheader: 'Final reminder — your order expires today.',
+  },
+};
+
+function buildAwaitingPaymentReminder({ customerName, orderRef, items, totalNGN, stage }) {
+  const name  = htmlFirst(customerName);
+  const cfg   = AWAITING_STAGE[stage] || AWAITING_STAGE.h12;
 
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">STILL WAITING.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your order is waiting for payment.</p>
-    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">We received your order but haven&rsquo;t been able to confirm payment yet. Head back to the store to complete your checkout.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">${cfg.label}</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${cfg.headline(name)}</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${cfg.body}</p>
   </td>
 </tr>
 
@@ -508,8 +531,8 @@ ${ctaButton('COMPLETE YOUR ORDER &rarr;', SITE_URL)}
 </tr>`;
 
   return {
-    subject: `${rawFirst(customerName)}, your order is waiting for payment 👀`,
-    html: transactionalWrapper({ preheader: `Complete your Chunkz order — we're holding your items.`, bodyRows }),
+    subject: cfg.subject(rawFirst(customerName)),
+    html: transactionalWrapper({ preheader: cfg.preheader, bodyRows }),
   };
 }
 
