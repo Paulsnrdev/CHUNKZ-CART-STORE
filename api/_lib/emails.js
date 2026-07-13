@@ -501,9 +501,9 @@ const AWAITING_STAGE = {
   h24: {
     label:    'LAST CHANCE.',
     headline: (name) => `${name}, this is your final reminder.`,
-    body:     'We&rsquo;ve been holding your order for 24 hours. Complete your payment today or your order will be cancelled.',
-    subject:  (first) => `Last chance — complete your Chunkz order today 🔥`,
-    preheader: 'Final reminder — your order expires today.',
+    body:     'We&rsquo;ve been holding your order for 24 hours. Please complete your payment today, we dont want to lose your items.',
+    subject:  (first) => `Hey Buddy — complete your Chunkz order today 🔥`,
+    preheader: 'Reminder — Please complete your order today.',
   },
 };
 
