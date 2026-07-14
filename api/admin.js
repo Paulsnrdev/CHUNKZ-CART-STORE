@@ -117,7 +117,7 @@ module.exports = async function handler(req, res) {
 
           let promoDoc = null;
           if (fu.promoCode) {
-            promoDoc = { code: fu.promoCode, discountPct: 15, expiresAt: fu.promoExpiresAt };
+            promoDoc = { code: fu.promoCode, discountPct: 10, expiresAt: fu.promoExpiresAt };
           } else {
             try {
               promoDoc = await createPromo({ followUpId: orderId, productId: rec.productId, productName: rec.name });
@@ -186,7 +186,7 @@ module.exports = async function handler(req, res) {
       }
 
       const priceNGN    = fu.recommendedPriceNGN || 0;
-      const discountPct = fu.promoCode ? 15 : 0;
+      const discountPct = fu.promoCode ? 10 : 0;
 
       const email = buildDay8({
         token:            fu.token,
@@ -263,7 +263,7 @@ module.exports = async function handler(req, res) {
           const src = fu.recommendationSource || 'unknown';
           if (!bySource[src]) bySource[src] = { offered: 0, purchased: 0 };
           bySource[src].purchased++;
-          upsellRevenueNGN += (fu.recommendedPriceNGN || 0) * (1 - (p.discountPct || 15) / 100);
+          upsellRevenueNGN += (fu.recommendedPriceNGN || 0) * (1 - (p.discountPct || 10) / 100);
         }
       }
 
@@ -298,7 +298,7 @@ module.exports = async function handler(req, res) {
         const data = snap.exists ? snap.data() : {};
         return res.status(200).json({
           ok:               true,
-          promoDiscountPct: data.promoDiscountPct != null ? data.promoDiscountPct : 15,
+          promoDiscountPct: data.promoDiscountPct != null ? data.promoDiscountPct : 10,
           promoExpiryHrs:   data.promoExpiryHrs   != null ? data.promoExpiryHrs   : 72,
         });
       } catch (err) {

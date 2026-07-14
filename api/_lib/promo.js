@@ -4,7 +4,7 @@ const { db } = require('./firebase-admin');
 
 const CHARS      = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no ambiguous 0/O/1/I/l
 const CODE_LEN   = 6;
-const DISC_PCT   = 15;
+const DISC_PCT   = 10;
 const EXPIRY_HRS = 72;
 const RL_WINDOW  = 10 * 60 * 1000; // 10 minutes
 const RL_MAX     = 5;
@@ -31,7 +31,7 @@ async function getPromoSettings() {
   return { discPct: DISC_PCT, expiryHrs: EXPIRY_HRS };
 }
 
-async function createPromo({ followUpId, productId, productName }) {
+async function createPromo({ followUpId }) {
   const { discPct, expiryHrs } = await getPromoSettings();
   const code      = generateCode();
   const now       = new Date();
@@ -41,8 +41,6 @@ async function createPromo({ followUpId, productId, productName }) {
     code,
     followUpId,
     referredBy:      followUpId,
-    productId:       productId   || null,
-    productName:     productName || null,
     discountPct:     discPct,
     expiresAt,
     createdAt:       now.toISOString(),
