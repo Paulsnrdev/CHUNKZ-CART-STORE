@@ -40,9 +40,10 @@ module.exports = async function handler(req, res) {
 
     for (const doc of snap.docs) {
       const order = doc.data();
-      if (!order.customerEmail || !order.createdAt) continue;
+      const orderTime = order.createdAt || order.timestamp;
+      if (!order.customerEmail || !orderTime) continue;
 
-      const age       = now - new Date(order.createdAt).getTime();
+      const age       = now - new Date(orderTime).getTime();
       const reminders = order.awaitingReminders || {};
 
       for (const stage of AWAITING_STAGES) {
