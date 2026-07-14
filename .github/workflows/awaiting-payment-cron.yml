@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Run cron (awaiting-payment reminders + follow-up emails)
         run: |
-          curl -fL -X GET \
+          curl -fL --location-trusted -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             https://chunkzthebrand.com/api/cron
