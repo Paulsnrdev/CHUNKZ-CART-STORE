@@ -1511,6 +1511,14 @@ async function ensureAdminCatalog(docId) {
   } catch(e) { console.error('Catalog load failed', e); }
 }
 
+function cleanPickerName(src) {
+  if (!src) return '';
+  return decodeURIComponent(src.split('/').pop().split('?')[0])
+    .replace(/\.[^.]+$/, '').replace(/[_\-()]+/g, ' ')
+    .replace(/\s+/g, ' ').trim()
+    .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+}
+
 function renderCatalogPicker(docId) {
   var el = document.getElementById('fu-cat-select-' + docId);
   if (!el || !adminCatalogData) return;
@@ -1520,7 +1528,7 @@ function renderCatalogPicker(docId) {
     (cat.images || []).forEach(function(img) {
       if (!img || img.hidden) return;
       var src  = typeof img === 'string' ? img : img.src;
-      var name = img.name || catKey;
+      var name = img.name || cleanPickerName(src) || catKey;
       if (src) opts.push('<option value="' + esc(src) + '">' + esc(cat.title || catKey) + ' — ' + esc(name) + '</option>');
     });
   });
