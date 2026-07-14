@@ -1998,9 +1998,8 @@ function closeCheckout() {
 const PROMO_RATES = { NGN: 1, USD: 1375, GBP: 1820, CAD: 975 };
 
 function getPromoDiscountInCartCurrency() {
-  if (!appliedPromo || !appliedPromo.discountAmountNGN) return 0;
-  const curr = cartCurrencyCode();
-  return Math.round(appliedPromo.discountAmountNGN / (PROMO_RATES[curr] || 1));
+  if (!appliedPromo || !appliedPromo.discountPct) return 0;
+  return Math.round(cartTotal() * appliedPromo.discountPct / 100);
 }
 
 function refreshDiscountRow(sym) {
