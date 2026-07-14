@@ -328,14 +328,24 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   </td>
 </tr>` : '';
 
+  const notFeelingRow = promoCode ? `
+<tr>
+  <td class="cp" style="padding:0 32px 20px;">
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#888888;">NOT FEELING THIS ONE?</p>
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#cccccc;line-height:1.6;">No stress &mdash; your code works on <strong>anything</strong> in the store. Pick something you actually want and still bag 15% off.</p>
+  </td>
+</tr>` : '';
+
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
     <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">BUILT TO MATCH.</p>
     <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">Since you copped the <span style="color:#e63946;">${productName}</span>, we think this is your next move.</p>
-    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${pitch}</p>
+    <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${pitch}</p>
   </td>
 </tr>
+
+${notFeelingRow}
 
 ${productImageRow}
 <tr>
@@ -373,9 +383,7 @@ ${ctaButton('CLAIM 15% OFF &rarr;', buyNowUrl)}
     <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-top:1px solid #1e1e1e;">
       <tr>
         <td style="padding:20px 0 0;">
-          <p style="margin:0 0 8px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#888888;">NOT FEELING THIS ONE?</p>
-          <p style="margin:0 0 12px;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#cccccc;line-height:1.6;">No stress &mdash; your code works on <strong>anything</strong> in the store. Browse, pick something you actually want, and still bag 15% off.</p>
-          <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#555555;line-height:1.6;">Or pass the code to a friend before it expires &mdash; they get 15% off, you look like the plug. One use, first come first served.</p>
+          <p style="margin:0 0 12px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#555555;line-height:1.6;">Or pass the code to a friend before it expires &mdash; they get 15% off, you look like the plug. One use, first come first served.</p>
         </td>
       </tr>
     </table>
