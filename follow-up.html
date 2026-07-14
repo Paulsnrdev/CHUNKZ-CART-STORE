@@ -390,19 +390,19 @@
         '<div class="promo-box">' +
         '<div class="promo-label">Your Code</div>' +
         '<div class="promo-code">' + esc(promo.code) + '</div>' +
-        '<div class="promo-meta">15% off &middot; One use &middot; Expires in <span class="promo-countdown" id="promoCountdown">…</span></div>' +
+        '<div class="promo-meta">10% off &middot; One use &middot; Expires in <span class="promo-countdown" id="promoCountdown">…</span></div>' +
         '</div>';
     }
 
     // Share section
     var shareBlock = '';
     if (promo && promo.code) {
-      var shareText = 'Hey! Got you a promo code for Chunkz 🔥\n\nUse *' + promo.code + '* at checkout for 15% off ' + (rec.name || 'the new drop') + '.\n\nShop: https://chunkzthebrand.com/?promo=' + promo.code + '\n\nExpires soon — first come first served!';
+      var shareText = 'Hey! Got you a promo code for Chunkz 🔥\n\nUse *' + promo.code + '* at checkout for 10% off ' + (rec.name || 'the new drop') + '.\n\nShop: https://chunkzthebrand.com/?promo=' + promo.code + '\n\nExpires soon — first come first served!';
       var waUrl     = 'https://wa.me/?text=' + encodeURIComponent(shareText);
       shareBlock =
         '<div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">' +
         '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);margin-bottom:6px">Not for you?</div>' +
-        '<p style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px">Pass it to a friend — they get 15% off, you look like the plug. One use, first come first served.</p>' +
+        '<p style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px">Pass it to a friend — they get 10% off, you look like the plug. One use, first come first served.</p>' +
         '<div class="share-grid">' +
         '<button onclick="shareWhatsApp(\'' + esc(waUrl) + '\')" style="background:#25d366;color:#fff;border:none;padding:12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px">WhatsApp</button>' +
         '<button onclick="shareCopy(\'' + esc(promo.code) + '\')" style="background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer">Copy Code</button>' +

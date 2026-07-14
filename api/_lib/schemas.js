@@ -110,7 +110,7 @@
 /**
  * /promoCodes/{code}
  *
- * Document ID IS the code string (e.g. 'CHUNKZ-7F2A9K') for direct lookup.
+ * Document ID IS the code string (e.g. 'CHUNKZ-XXXXXX') for direct lookup.
  * Transferable — a friend can redeem it. Not bound to the original customer's email.
  *
  * @typedef {Object} PromoCode

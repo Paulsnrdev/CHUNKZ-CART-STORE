@@ -6,7 +6,7 @@
     'animation:hpFloat var(--d,9s) ease-in-out var(--dl,0s) infinite}' +
     '@keyframes hpFloat{' +
     '0%{transform:translateY(110%) translateX(0) scale(.85);opacity:0}' +
-    '15%{opacity:1}' +
+    '10%{opacity:1}' +
     '50%{transform:translateY(40%) translateX(var(--sx,12px)) scale(1)}' +
     '85%{opacity:.55}' +
     '100%{transform:translateY(-120%) translateX(0) scale(1.1);opacity:0}}';

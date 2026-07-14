@@ -228,7 +228,7 @@ Codes are **NOT** bound to the original customer's email. A friend can redeem it
 ### Default Settings
 
 Configure via **Admin → Settings** tab:
-- **Discount %** — default 15%
+- **Discount %** — default 10%
 - **Expiry** — default 72 hours
 
 Settings are stored in `settings/promoConfig` and read by `createPromo()` on each invocation.
