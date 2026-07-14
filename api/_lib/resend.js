@@ -1,7 +1,26 @@
 'use strict';
 
 const FROM_ADDRESS = process.env.EMAIL_FROM || 'Chunkz <orders@chunkzthebrand.com>';
-const DRY_RUN = process.env.DRY_RUN === 'true';
+const REPLY_TO     = process.env.EMAIL_REPLY_TO || 'orders@chunkzthebrand.com';
+const DRY_RUN      = process.env.DRY_RUN === 'true';
+
+function htmlToText(html) {
+  return (html || '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/tr>/gi, '\n')
+    .replace(/<\/td>/gi, ' ')
+    .replace(/<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, '$2 ($1)')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/&#8358;/g, '₦').replace(/&middot;/g, '·').replace(/&mdash;/g, '—')
+    .replace(/&rsquo;/g, "'").replace(/&lsquo;/g, "'").replace(/&ndash;/g, '–')
+    .replace(/&zwnj;/g, '').replace(/&nbsp;/g, ' ').replace(/&#x[0-9a-f]+;/gi, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
 
 async function sendEmail({ to, subject, html }) {
   if (DRY_RUN) {
@@ -19,10 +38,12 @@ async function sendEmail({ to, subject, html }) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: FROM_ADDRESS,
-      to: Array.isArray(to) ? to : [to],
+      from:     FROM_ADDRESS,
+      reply_to: REPLY_TO,
+      to:       Array.isArray(to) ? to : [to],
       subject,
       html,
+      text:     htmlToText(html),
     }),
   });
 

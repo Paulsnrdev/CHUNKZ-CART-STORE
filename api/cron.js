@@ -131,7 +131,7 @@ module.exports = async function handler(req, res) {
             });
             let promoDoc = null;
             try {
-              promoDoc = await createPromo({ followUpId: fu.orderId, productId: rec.productId, productName: rec.name });
+              promoDoc = await createPromo({ followUpId: fu.orderId });
               await fuRef.update({ promoCode: promoDoc.code, promoExpiresAt: promoDoc.expiresAt });
             } catch (e) { console.error('[cron] promo creation failed', fu.orderId, e.message); }
 

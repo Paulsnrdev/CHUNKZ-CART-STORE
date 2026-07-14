@@ -46,22 +46,9 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ valid: false, message: 'This code has expired.' });
       }
 
-      if (promo.productId && Array.isArray(cartItems) && cartItems.length > 0) {
-        const hasProduct = cartItems.some(function(i) { return i.src === promo.productId; });
-        if (!hasProduct) {
-          return res.status(200).json({
-            valid:   false,
-            message: 'This code is for "' + (promo.productName || 'a specific item') + '". Add that item to your cart first.',
-          });
-        }
-      }
-
       let applicableNGN = 0;
       if (Array.isArray(cartItems) && cartItems.length > 0) {
-        const items = promo.productId
-          ? cartItems.filter(function(i) { return i.src === promo.productId; })
-          : cartItems;
-        applicableNGN = items.reduce(function(sum, i) {
+        applicableNGN = cartItems.reduce(function(sum, i) {
           const rate = RATES[String(i.currency || 'NGN').toUpperCase()] || 1;
           return sum + (Number(i.price) * Number(i.qty || 1) * rate);
         }, 0);
@@ -74,8 +61,6 @@ module.exports = async function handler(req, res) {
         code:             normalised,
         discountPct:      promo.discountPct,
         discountAmountNGN,
-        productId:        promo.productId   || null,
-        productName:      promo.productName || null,
         expiresAt:        promo.expiresAt,
         message:          promo.discountPct + '% off applied!',
       });
