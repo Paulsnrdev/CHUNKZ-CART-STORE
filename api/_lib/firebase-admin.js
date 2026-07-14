@@ -23,8 +23,10 @@ const db = admin.firestore();
 function storageSrcToUrl(src) {
   if (!src) return null;
   if (src.startsWith('http')) return src;
-  const bucket = (process.env.FIREBASE_PROJECT_ID || 'chunkz-store') + '.appspot.com';
-  return 'https://firebasestorage.googleapis.com/v0/b/' + bucket + '/o/' + encodeURIComponent(src) + '?alt=media';
+  const siteUrl = process.env.SITE_URL || 'https://chunkzthebrand.com';
+  // src is a relative file path served as a Vercel static asset — encode each segment separately
+  const encoded = src.split('/').map(encodeURIComponent).join('/');
+  return siteUrl + '/' + encoded;
 }
 
 module.exports = { admin, db, storageSrcToUrl };
