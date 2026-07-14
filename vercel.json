@@ -1,4 +1,7 @@
 {
+  "crons": [
+    { "path": "/api/cron", "schedule": "0 8 * * *" }
+  ],
   "redirects": [
     { "source": "/admin.html",             "destination": "/bestsite",             "permanent": true },
     { "source": "/contact.html",           "destination": "/contact",           "permanent": true },
