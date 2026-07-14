@@ -24,11 +24,14 @@ module.exports = async function handler(req, res) {
     const daysSince = (Date.now() - new Date(followUp.deliveredAt).getTime()) / 86400000;
     if (daysSince > 30) return res.status(200).json({ error: 'expired_token' });
 
-    let stage;
-    if (daysSince < 3)      stage = 'day0';
-    else if (daysSince < 6) stage = 'day3';
-    else if (daysSince < 8) stage = 'day6';
-    else                    stage = 'day8';
+    const VALID_STAGES = ['day0', 'day3', 'day6', 'day8'];
+    let stage = VALID_STAGES.includes(req.query.stage) ? req.query.stage : null;
+    if (!stage) {
+      if (daysSince < 3)      stage = 'day0';
+      else if (daysSince < 6) stage = 'day3';
+      else if (daysSince < 8) stage = 'day6';
+      else                    stage = 'day8';
+    }
 
     const orderSnap = await db.collection('orders').doc(followUp.orderId).get();
     const order = orderSnap.exists ? orderSnap.data() : {};

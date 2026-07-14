@@ -530,7 +530,9 @@
   if (!token || token === 'follow-up') {
     renderError('invalid_token');
   } else {
-    fetch('/api/resolve-token?token=' + encodeURIComponent(token))
+    var stageOverride = new URLSearchParams(window.location.search).get('stage');
+    var stageParam    = stageOverride ? '&stage=' + encodeURIComponent(stageOverride) : '';
+    fetch('/api/resolve-token?token=' + encodeURIComponent(token) + stageParam)
       .then(function(r) { return r.json(); })
       .then(render)
       .catch(function() { renderError('server_error'); });

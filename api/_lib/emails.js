@@ -119,7 +119,7 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
   const size = item.size ? escHtml(item.size) : '';
   const colour = colourPreference ? escHtml(colourPreference) : '';
   const badge = [size, colour].filter(Boolean).join(' &middot; ');
-  const followUpUrl = SITE_URL + '/follow-up/' + token;
+  const followUpUrl = SITE_URL + '/follow-up/' + token + '?stage=day0';
 
   const itemRows = (Array.isArray(items) && items.length > 0)
     ? items.map(it => {
@@ -193,8 +193,8 @@ function buildDay3({ token, customerName, items, colourPreference }) {
   const name = htmlFirst(customerName);
   const item = primaryItem(items);
   const productName = escHtml(item.name || item.collection || 'your order');
-  const positiveUrl = SITE_URL + '/follow-up/' + token + '?r=positive';
-  const negativeUrl = SITE_URL + '/follow-up/' + token + '?r=negative';
+  const positiveUrl = SITE_URL + '/follow-up/' + token + '?stage=day3&r=positive';
+  const negativeUrl = SITE_URL + '/follow-up/' + token + '?stage=day3&r=negative';
 
   const bodyRows = `
 <tr>
@@ -251,7 +251,7 @@ function buildDay6({ token, customerName, items }) {
   const name = htmlFirst(customerName);
   const item = primaryItem(items);
   const productName = escHtml(item.name || item.collection || 'your order');
-  const followUpUrl = SITE_URL + '/follow-up/' + token;
+  const followUpUrl = SITE_URL + '/follow-up/' + token + '?stage=day6';
 
   const bodyRows = `
 <tr>
@@ -294,7 +294,7 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const name = htmlFirst(customerName);
   const item = primaryItem(items);
   const productName = escHtml(item.name || item.collection || 'your order');
-  const followUpUrl = SITE_URL + '/follow-up/' + token;
+  const followUpUrl = SITE_URL + '/follow-up/' + token + '?stage=day8';
 
   const rec     = upsell || {};
   const recName = escHtml(rec.name || 'New Chunkz Drop');
