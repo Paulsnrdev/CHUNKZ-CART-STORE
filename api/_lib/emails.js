@@ -523,21 +523,21 @@ const AWAITING_STAGE = {
     label:    'YOU LEFT SOMETHING.',
     headline: (name) => `${name}, you left an order behind.`,
     body:     'You started a Chunkz order but didn&rsquo;t complete payment. Your items are still here &mdash; grab them before they&rsquo;re gone.',
-    subject:  (first) => `${first}, you left something behind 👋`,
+    subject:  (first, ref) => `${first}, your order ${ref} needs payment`,
     preheader: 'Your items are still waiting for you.',
   },
   h12: {
     label:    'STILL WAITING.',
     headline: (name) => `${name}, your order is waiting for payment.`,
     body:     'We received your order but haven&rsquo;t been able to confirm payment yet. Head back to complete your checkout.',
-    subject:  (first) => `${first}, your order is waiting for payment 👀`,
+    subject:  (first, ref) => `${first}, order ${ref} is waiting for payment`,
     preheader: 'Complete your Chunkz order — we&rsquo;re holding your items.',
   },
   h24: {
     label:    'LAST CHANCE.',
     headline: (name) => `${name}, this is your final reminder.`,
     body:     'We&rsquo;ve been holding your order for 24 hours. Please complete your payment today, we dont want to lose your items.',
-    subject:  (first) => `Hey Buddy — complete your Chunkz order today 🔥`,
+    subject:  (first, ref) => `${first}, final reminder — order ${ref} payment pending`,
     preheader: 'Reminder — Please complete your order today.',
   },
 };
@@ -566,7 +566,7 @@ ${ctaButton('COMPLETE YOUR ORDER &rarr;', SITE_URL)}
 </tr>`;
 
   return {
-    subject: cfg.subject(rawFirst(customerName)),
+    subject: cfg.subject(rawFirst(customerName), orderRef),
     html: transactionalWrapper({ preheader: cfg.preheader, bodyRows }),
   };
 }
