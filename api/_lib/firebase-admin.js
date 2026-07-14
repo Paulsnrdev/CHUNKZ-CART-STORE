@@ -20,4 +20,11 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-module.exports = { admin, db };
+function storageSrcToUrl(src) {
+  if (!src) return null;
+  if (src.startsWith('http')) return src;
+  const bucket = (process.env.FIREBASE_PROJECT_ID || 'chunkz-store') + '.appspot.com';
+  return 'https://firebasestorage.googleapis.com/v0/b/' + bucket + '/o/' + encodeURIComponent(src) + '?alt=media';
+}
+
+module.exports = { admin, db, storageSrcToUrl };

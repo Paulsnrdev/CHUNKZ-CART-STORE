@@ -1,6 +1,6 @@
 'use strict';
 
-const { db }    = require('./firebase-admin');
+const { db, storageSrcToUrl } = require('./firebase-admin');
 const Anthropic = require('@anthropic-ai/sdk');
 
 // Flatten catalog into an eligible product list.
@@ -21,7 +21,7 @@ async function getEligibleProducts(boughtSrc) {
         name:      img.name    || doc.id,
         priceNGN:  img.ngn     || 0,
         category:  cat.title   || doc.id,
-        imageUrl:  img.src,
+        imageUrl:  storageSrcToUrl(img.src),
         pairsWith: img.pairsWith || [],
       });
     }

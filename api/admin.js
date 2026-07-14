@@ -1,6 +1,6 @@
 'use strict';
 
-const { db }        = require('./_lib/firebase-admin');
+const { db, storageSrcToUrl } = require('./_lib/firebase-admin');
 const { sendEmail } = require('./_lib/resend');
 const { buildDay0, buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
 const { resolveRecommendation } = require('./_lib/recommend');
@@ -95,7 +95,7 @@ module.exports = async function handler(req, res) {
               name:      fu.recommendedProductName || '',
               priceNGN:  fu.recommendedPriceNGN    || 0,
               pitch:     fu.recommendedPitch        || '',
-              imageUrl:  fu.recommendedProductId,
+              imageUrl:  storageSrcToUrl(fu.recommendedProductId),
               source:    fu.recommendationSource   || 'stored',
             };
           } else {
