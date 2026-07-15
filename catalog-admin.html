@@ -264,9 +264,9 @@
     .prod-action-bar { padding: 14px 20px; }
     .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
     .prod-card { background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
-    .prod-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+    .prod-img { width: 100%; height: 130px; object-fit: cover; display: block; }
     .prod-img-ph {
-      width: 100%; aspect-ratio: 1 / 1; background: var(--btn);
+      width: 100%; height: 130px; background: var(--btn);
       display: flex; align-items: center; justify-content: center;
       font-size: 32px; color: var(--border);
     }
@@ -291,6 +291,8 @@
     }
 
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
+    .pairs-row { display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-radius:6px; }
+    .pairs-row:hover { background:var(--btn); }
     .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
     /* ── Seed notice ── */
@@ -615,11 +617,10 @@
         </div>
       </div>
     </div>
-  </div>
     <div class="field-group" style="margin-top:4px">
       <label class="field-label" style="display:flex;align-items:center;justify-content:space-between">
         <span>Exclude from recommendations</span>
-        <input type="checkbox" id="prodExclude" style="width:18px;height:18px;cursor:pointer;accent-color:#e8c96c;flex-shrink:0">
+        <input type="checkbox" id="prodExclude" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent);flex-shrink:0">
       </label>
       <div class="field-hint">Won't be auto-recommended to other customers.</div>
     </div>
@@ -627,8 +628,8 @@
     <div class="field-group">
       <label class="field-label">Pairs With</label>
       <div class="field-hint" style="margin-bottom:8px">Products that pair well with this one (used for Day 8 recommendation).</div>
-      <div id="pairsWithList" style="max-height:200px;overflow-y:auto;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:10px;padding:8px 4px;">
-        <div style="color:#555;font-size:13px;padding:8px 12px">Loading products…</div>
+      <div id="pairsWithList" style="max-height:200px;overflow-y:auto;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 4px;">
+        <div style="color:var(--muted);font-size:13px;padding:8px 12px">Loading products…</div>
       </div>
     </div>
   </div>
@@ -1056,14 +1057,7 @@ function openProductEditor(idx) {
   document.getElementById('prodCAD').value  = entry.cad  || entry.prices?.CA?.amount || '';
 
   resetUploadBox('prodPreview', 'prodPlaceholder', 'prodChangeBtn', 'prodFileInput');
-  document.getElementById('prodCurrentSrc').textContent = src ? 'Current: ' + src.split('/').pop().split('?')[0] : '';
-  if (src) {
-    const prev = document.getElementById('prodPreview');
-    prev.src   = src;
-    prev.style.display = 'block';
-    document.getElementById('prodPlaceholder').style.display = 'none';
-    document.getElementById('prodChangeBtn').style.display   = 'block';
-  }
+  document.getElementById('prodCurrentSrc').textContent = '';
   document.getElementById('prodProgressWrap').style.display = 'none';
 
   document.getElementById('prodExclude').checked = !!(entry.excludeFromRecommendations);
@@ -1080,14 +1074,14 @@ function openProductEditor(idx) {
     });
   });
   if (allProds.length === 0) {
-    listEl.innerHTML = '<div style="color:#555;font-size:13px;padding:8px 12px">No other products in catalog.</div>';
+    listEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 12px">No other products in catalog.</div>';
   } else {
     listEl.innerHTML = allProds.map(p => {
       const checked = currentPairs.includes(p.src) ? 'checked' : '';
       const id = 'pw-' + btoa(p.src).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
-      return '<label style="display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-radius:6px;" onmouseover="this.style.background=\'#2a2a2a\'" onmouseout="this.style.background=\'\'">' +
-        '<input type="checkbox" data-src="' + esc(p.src) + '" id="' + id + '" ' + checked + ' style="width:16px;height:16px;cursor:pointer;accent-color:#e8c96c;flex-shrink:0">' +
-        '<span style="font-size:13px;line-height:1.4"><strong>' + esc(p.name) + '</strong><br><span style="color:#555;font-size:11px">' + esc(p.catTitle) + '</span></span>' +
+      return '<label class="pairs-row">' +
+        '<input type="checkbox" data-src="' + esc(p.src) + '" id="' + id + '" ' + checked + ' style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);flex-shrink:0">' +
+        '<span style="font-size:13px;line-height:1.4"><strong>' + esc(p.name) + '</strong><br><span style="color:var(--muted);font-size:11px">' + esc(p.catTitle) + '</span></span>' +
         '</label>';
     }).join('');
   }
