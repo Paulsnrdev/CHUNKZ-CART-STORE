@@ -262,29 +262,31 @@
 
     /* ── Products sheet ── */
     .prod-action-bar { padding: 14px 20px; }
-    .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
-    .prod-card { background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
-    .prod-img { width: 100%; height: 130px; object-fit: cover; display: block; }
-    .prod-img-ph {
-      width: 100%; height: 130px; background: var(--btn);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px; color: var(--border);
+    .prod-list { display: flex; flex-direction: column; padding: 0 20px 20px; gap: 8px; }
+    .prod-row {
+      background: var(--surface); border-radius: 12px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; box-shadow: var(--shadow-sm);
     }
-    .prod-info { padding: 8px 10px 10px; }
-    .prod-name { font-size: 11px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .prod-price { font-size: 12px; color: var(--accent); margin-bottom: 8px; }
-    .prod-btns { display: flex; gap: 5px; }
+    .prod-row.hidden-item { opacity: 0.45; }
+    .prod-thumb { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; display: block; }
+    .prod-thumb-ph {
+      width: 56px; height: 56px; border-radius: 8px; background: var(--btn); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--border);
+    }
+    .prod-row-info { flex: 1; min-width: 0; }
+    .prod-row-name { font-size: 13px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prod-row-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .prod-row-price { font-size: 13px; color: var(--accent); font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+    .prod-row-btns { display: flex; gap: 5px; flex-shrink: 0; }
     .btn-prod {
-      flex: 1; background: var(--btn); border: none; color: var(--muted);
-      border-radius: 6px; font-size: 11px; padding: 6px 4px;
-      cursor: pointer; text-align: center; font-family: inherit;
+      background: var(--btn); border: none; color: var(--muted);
+      border-radius: 6px; font-size: 11px; padding: 6px 10px;
+      cursor: pointer; font-family: inherit;
     }
     .btn-prod.del { color: var(--accent); }
-    .btn-prod.hide-btn { color: var(--muted); }
     .btn-prod.show-btn { color: var(--success); }
     .btn-prod:active { filter: brightness(0.92); }
-
-    .prod-card.hidden-item { opacity: 0.45; }
     .hidden-badge {
       font-size: 9px; font-weight: 800; background: var(--btn); color: var(--muted);
       padding: 2px 6px; border-radius: 4px; letter-spacing: 1px; display: inline-block; margin-bottom: 3px;
@@ -1008,33 +1010,35 @@ function renderProducts() {
     return;
   }
 
-  const grid = document.createElement('div');
-  grid.className = 'prod-grid';
+  const rows = document.createElement('div');
+  rows.className = 'prod-list';
+  const catTitle = (catalogData[activeCatKey] || {}).title || activeCatKey;
   images.forEach((entry, i) => {
     const src      = typeof entry === 'string' ? entry : entry.src;
     const name     = entry.name || cleanName(src);
     const ngn      = entry.ngn  || entry.prices?.NG?.amount || 0;
     const isHidden = !!entry.hidden;
 
-    const card = document.createElement('div');
-    card.className = 'prod-card' + (isHidden ? ' hidden-item' : '');
-    card.innerHTML = `
-      <img class="prod-img" src="${esc(src)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="prod-img-ph" style="display:none">🖼️</div>
-      <div class="prod-info">
+    const row = document.createElement('div');
+    row.className = 'prod-row' + (isHidden ? ' hidden-item' : '');
+    row.innerHTML = `
+      <img class="prod-thumb" src="${esc(src)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="prod-thumb-ph" style="display:none">🖼️</div>
+      <div class="prod-row-info">
         ${isHidden ? '<div class="hidden-badge">HIDDEN</div>' : ''}
-        <div class="prod-name">${esc(name)}</div>
-        <div class="prod-price">₦${Number(ngn).toLocaleString()}</div>
-        <div class="prod-btns">
-          <button class="btn-prod" onclick="openProductEditor(${i})">Edit</button>
-          <button class="btn-prod ${isHidden ? 'show-btn' : 'hide-btn'}" onclick="toggleProductVisibility(${i})">${isHidden ? 'Show' : 'Hide'}</button>
-          <button class="btn-prod del" onclick="deleteProduct(${i})">Delete</button>
-        </div>
+        <div class="prod-row-name">${esc(name)}</div>
+        <div class="prod-row-sub">${esc(catTitle)}</div>
+      </div>
+      <div class="prod-row-price">₦${Number(ngn).toLocaleString()}</div>
+      <div class="prod-row-btns">
+        <button class="btn-prod" onclick="openProductEditor(${i})">Edit</button>
+        <button class="btn-prod ${isHidden ? 'show-btn' : ''}" onclick="toggleProductVisibility(${i})">${isHidden ? 'Show' : 'Hide'}</button>
+        <button class="btn-prod del" onclick="deleteProduct(${i})">Del</button>
       </div>`;
-    grid.appendChild(card);
+    rows.appendChild(row);
   });
   list.innerHTML = '';
-  list.appendChild(grid);
+  list.appendChild(rows);
 }
 
 /* ═══════════════════════════════════════
@@ -1070,7 +1074,7 @@ function openProductEditor(idx) {
   Object.entries(catalogData).forEach(([catKey, cat]) => {
     (cat.images || []).forEach(img => {
       if (!img || !img.src || img.src === currentSrc) return;
-      allProds.push({ src: img.src, name: img.name || catKey, catTitle: cat.title || catKey });
+      allProds.push({ src: img.src, name: img.name || cleanName(img.src), catTitle: cat.title || catKey });
     });
   });
   if (allProds.length === 0) {
@@ -1339,7 +1343,7 @@ function openGapView() {
       if (img.excludeFromRecommendations) return;
       const pairs = Array.isArray(img.pairsWith) ? img.pairsWith : [];
       if (pairs.length === 0) {
-        gaps.push({ src: img.src, name: img.name || catKey, catTitle: cat.title || catKey, catKey });
+        gaps.push({ src: img.src, name: img.name || cleanName(img.src), catTitle: cat.title || catKey, catKey });
       }
     });
   });
