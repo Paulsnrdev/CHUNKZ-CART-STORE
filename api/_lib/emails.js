@@ -301,12 +301,10 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const pitch   = escHtml(rec.pitch || 'Something new just dropped in the store. Built with the same quality. Made to match.');
   const promoCode = escHtml((promo && promo.code) || '');
 
-  // CTA links to store with code pre-filled; fallback to follow-up page
   const buyNowUrl = (promo && promo.code)
     ? SITE_URL + '/?promo=' + encodeURIComponent(promo.code)
     : followUpUrl;
 
-  // Expiry line: human-readable WAT time if available, else generic
   const expiryLine = (promo && promo.expiresAt)
     ? escHtml(new Date(promo.expiresAt).toLocaleString('en-GB', {
         weekday: 'short', month: 'short', day: 'numeric',
@@ -328,11 +326,10 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   </td>
 </tr>` : '';
 
-  const notFeelingRow = promoCode ? `
+  const promoSection = promoCode ? `
 <tr>
-  <td class="cp" style="padding:0 32px 20px;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;color:#888888;">NOT FEELING THIS ONE?</p>
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#cccccc;line-height:1.6;">No stress &mdash; your code works on <strong>anything</strong> in the store. Pick something you actually want and still bag 10% off.</p>
+  <td class="cp" style="padding:20px 32px 0;">
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#888888;line-height:1.7;">We set aside a personal code for you &mdash; <strong style="color:#ffffff;font-family:'Courier New',Courier,monospace;letter-spacing:2px;">${promoCode}</strong> &mdash; good for anything in the store. Expires ${expiryLine}, one use.</p>
   </td>
 </tr>` : '';
 
@@ -344,8 +341,6 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
     <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${pitch}</p>
   </td>
 </tr>
-
-${notFeelingRow}
 
 ${productImageRow}
 <tr>
@@ -361,49 +356,14 @@ ${productImageRow}
   </td>
 </tr>
 
-${promoCode ? `
-<tr>
-  <td class="cp" style="padding:16px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#0f1a18;border-radius:8px;border:1px solid #1a3a33;">
-      <tr>
-        <td align="center" style="padding:22px 20px;">
-          <p style="margin:0 0 8px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2a9d8f;">YOUR CODE</p>
-          <p style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:30px;font-weight:900;letter-spacing:8px;color:#ffffff;">${promoCode}</p>
-          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#555555;">10% off anything &middot; One use &middot; Expires ${expiryLine}</p>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
+${promoSection}
 
-${ctaButton('CLAIM 10% OFF &rarr;', buyNowUrl)}
-
-<tr>
-  <td class="cp" style="padding:24px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-top:1px solid #1e1e1e;">
-      <tr>
-        <td style="padding:20px 0 0;">
-          <p style="margin:0 0 12px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#555555;line-height:1.6;">Or pass the code to a friend before it expires &mdash; they get 10% off, you look like the plug. One use, first come first served.</p>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
-
-${ctaButton('SHARE THE CODE &rarr;', followUpUrl, '#1a1a1a')}
-
-<tr>
-  <td class="cp" style="padding:16px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;font-style:italic;">Once it&rsquo;s gone, it&rsquo;s gone.</p>
-  </td>
-</tr>` : `
-${ctaButton('SHOP NOW &rarr;', followUpUrl)}
-`}`;
+${ctaButton('SHOP NOW &rarr;', buyNowUrl)}`;
 
   const rawItem = item.name || item.collection || 'your order';
   return {
-    subject: `${rawFirst(customerName)}, this pairs with your ${rawItem} 🔥 10% off`,
-    html: emailWrapper({ preheader: 'Your code expires in 72 hours.', token, bodyRows }),
+    subject: `${rawFirst(customerName)}, this pairs with your ${rawItem}`,
+    html: transactionalWrapper({ preheader: `We picked something that goes with what you got.`, bodyRows }),
   };
 }
 
