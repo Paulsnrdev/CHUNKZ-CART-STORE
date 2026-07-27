@@ -705,6 +705,13 @@ let pendingProdUrl  = null;
 let uploadInProgress = false;
 let openSheets    = [];   // stack of open sheet ids
 
+function cdnSrc(url) {
+  if (url && url.startsWith('https://res.cloudinary.com/')) {
+    return '/api/img?url=' + encodeURIComponent(url);
+  }
+  return url || '';
+}
+
 /* ═══════════════════════════════════════
    AUTH
 ═══════════════════════════════════════ */
@@ -829,7 +836,7 @@ function renderDashboard() {
 
     let thumbHtml;
     if (cat.coverImage) {
-      thumbHtml = `<img class="cat-thumb" src="${esc(cat.coverImage)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      thumbHtml = `<img class="cat-thumb" src="${esc(cdnSrc(cat.coverImage))}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                    <div class="cat-thumb-ph" style="display:none">🏷️</div>`;
     } else {
       thumbHtml = `<div class="cat-thumb-ph">🏷️</div>`;
@@ -1023,7 +1030,7 @@ function renderProducts() {
     const row = document.createElement('div');
     row.className = 'prod-row' + (isHidden ? ' hidden-item' : '');
     row.innerHTML = `
-      <img class="prod-thumb" src="${esc(src)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img class="prod-thumb" src="${esc(cdnSrc(src))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="prod-thumb-ph" style="display:none">🖼️</div>
       <div class="prod-row-info">
         ${isHidden ? '<div class="hidden-badge">HIDDEN</div>' : ''}
@@ -1383,7 +1390,7 @@ function openGapView() {
   } else {
     listEl.innerHTML = gaps.map(g => `
       <div class="cat-card" style="margin-bottom:12px">
-        <img class="cat-thumb" src="${esc(g.src)}" alt="" onerror="this.style.display='none'">
+        <img class="cat-thumb" src="${esc(cdnSrc(g.src))}" alt="" onerror="this.style.display='none'">
         <div class="cat-info">
           <div class="cat-name">${esc(g.name)}</div>
           <div class="cat-sub">${esc(g.catTitle)}</div>
