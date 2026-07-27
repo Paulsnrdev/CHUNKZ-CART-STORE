@@ -702,6 +702,7 @@ let editCatKey    = null; // category being edited (null = new)
 let editProdIdx   = null; // product index being edited (-1 = new)
 let pendingCoverUrl = null;
 let pendingProdUrl  = null;
+let uploadInProgress = false;
 let openSheets    = [];   // stack of open sheet ids
 
 /* ═══════════════════════════════════════
@@ -1107,6 +1108,7 @@ async function saveProductEditor() {
   const oldEntry = isEdit ? images[editProdIdx] : {};
   const oldSrc   = typeof oldEntry === 'string' ? oldEntry : (oldEntry.src || '');
 
+  if (uploadInProgress) { showToast('Please wait — image still uploading…', true); btn.disabled = false; btn.textContent = 'Save Product'; return; }
   const src  = pendingProdUrl || oldSrc;
   if (!src) { showToast('Please upload an image', true); btn.disabled = false; btn.textContent = 'Save Product'; return; }
 
@@ -1217,6 +1219,7 @@ function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, p
   wrap.style.display = 'block';
   bar.style.width    = '0%';
   label.textContent  = 'Uploading 0%…';
+  uploadInProgress   = true;
 
   const formData = new FormData();
   formData.append('file', file);
@@ -1234,6 +1237,7 @@ function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, p
   };
 
   xhr.onload = function() {
+    uploadInProgress = false;
     if (xhr.status === 200) {
       const res = JSON.parse(xhr.responseText);
       bar.style.width   = '100%';
@@ -1248,6 +1252,7 @@ function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, p
   };
 
   xhr.onerror = function() {
+    uploadInProgress = false;
     wrap.style.display = 'none';
     showToast('Upload failed: network error', true);
   };
