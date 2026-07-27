@@ -1,16 +1,19 @@
 module.exports = async (req, res) => {
   const { url } = req.query;
   if (!url || !url.startsWith('https://res.cloudinary.com/')) {
-    return res.status(400).end('Bad request');
+    res.status(400).end('Bad request');
+    return;
   }
   try {
     const r = await fetch(url);
-    if (!r.ok) return res.status(r.status).end();
+    if (!r.ok) { res.status(r.status).end(); return; }
     const contentType = r.headers.get('content-type') || 'image/jpeg';
-    res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     const buf = Buffer.from(await r.arrayBuffer());
-    res.send(buf);
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': buf.length,
+    });
+    res.end(buf);
   } catch (e) {
     res.status(500).end(e.message);
   }
