@@ -1695,7 +1695,8 @@ function addToCart(catKey, imgIndex) {
 
   var title = cat.title;
   if (imgIndex !== undefined && imgIndex !== null && cat.images && cat.images[imgIndex] !== undefined) {
-    title = cat.title + ' — ' + cleanImageName(imgSrc(cat.images[imgIndex]));
+    var _e = cat.images[imgIndex];
+    title = cat.title + ' — ' + (_e.name || cleanImageName(imgSrc(_e)));
   }
   document.getElementById('szTitle').textContent = title;
   document.querySelectorAll('.sz-btn,.sz-tbd').forEach(function(b){ b.classList.remove('sz-on'); });
@@ -1739,7 +1740,7 @@ function _doAddToCart(catKey, imgIndex, size) {
   if (imgIndex !== undefined && imgIndex !== null && cat.images[imgIndex] !== undefined) {
     const entry      = cat.images[imgIndex];
     itemSrc          = imgSrc(entry);
-    const designName = cleanImageName(itemSrc);
+    const designName = entry.name || cleanImageName(itemSrc);
     itemKey  = catKey + '_' + imgIndex + '_' + size;
     itemName = cat.title + ' — ' + designName;
     pr       = getPrice({ prices: imgPrices(cat, entry) });
