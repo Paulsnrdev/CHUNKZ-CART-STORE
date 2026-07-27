@@ -707,7 +707,7 @@ let openSheets    = [];   // stack of open sheet ids
 
 function cdnSrc(url) {
   if (url && url.startsWith('https://res.cloudinary.com/')) {
-    return '/api/img?url=' + encodeURIComponent(url);
+    return '/api/upload?url=' + encodeURIComponent(url);
   }
   return url || '';
 }
