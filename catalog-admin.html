@@ -1221,43 +1221,40 @@ function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, p
   label.textContent  = 'Uploading 0%…';
   uploadInProgress   = true;
 
+  bar.style.width   = '30%';
+  bar.style.transition = 'width 2s ease';
+  setTimeout(() => { bar.style.width = '80%'; }, 100);
+
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_PRESET);
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload');
-
-  xhr.upload.onprogress = function(e) {
-    if (e.lengthComputable) {
-      const pct = Math.round((e.loaded / e.total) * 100);
-      bar.style.width   = pct + '%';
-      label.textContent = 'Uploading ' + pct + '%…';
-    }
-  };
-
-  xhr.onload = function() {
+  fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, status: res.status, data: data }; }); })
+  .then(function(result) {
     uploadInProgress = false;
-    if (xhr.status === 200) {
-      const res = JSON.parse(xhr.responseText);
+    bar.style.transition = '';
+    if (result.ok) {
       bar.style.width   = '100%';
       label.textContent = 'Upload complete!';
       setTimeout(() => { wrap.style.display = 'none'; }, 1500);
-      onDone(res.secure_url);
+      onDone(result.data.secure_url);
     } else {
       wrap.style.display = 'none';
-      console.error('Cloudinary error:', xhr.responseText);
-      showToast('Upload failed: ' + xhr.status, true);
+      const msg = (result.data.error && result.data.error.message) || ('Error ' + result.status);
+      console.error('Cloudinary error:', result.data);
+      showToast('Upload failed: ' + msg, true);
     }
-  };
-
-  xhr.onerror = function() {
+  })
+  .catch(function(err) {
     uploadInProgress = false;
     wrap.style.display = 'none';
-    showToast('Upload failed: network error', true);
-  };
-
-  xhr.send(formData);
+    console.error('Upload network error:', err);
+    showToast('Upload failed — check your connection and try again', true);
+  });
 }
 
 function resetUploadBox(previewId, placeholderId, changeBtnId, fileInputId) {
