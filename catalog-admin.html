@@ -8,7 +8,6 @@
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-storage-compat.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -690,8 +689,9 @@ function syncThemeIcon() {
   const btn = document.getElementById('themeToggle');
   if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀' : '🌙';
 }
-const db       = firebase.firestore();
-const storage  = firebase.storage();
+const db = firebase.firestore();
+const CLOUDINARY_CLOUD  = 'dt7px3ltu';
+const CLOUDINARY_PRESET = 'chunkz_upload';
 
 /* ═══════════════════════════════════════
    STATE
@@ -1211,36 +1211,48 @@ function uploadImage(file, storagePath, previewId, placeholderId, changeBtnId, p
   };
   reader.readAsDataURL(file);
 
-  // Upload to Firebase Storage
-  const ext  = file.name.split('.').pop().toLowerCase();
-  const name = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const ref  = storage.ref(storagePath + '/' + name);
-  const task = ref.put(file);
-
   const wrap  = document.getElementById(progressWrapId);
   const bar   = document.getElementById(progressBarId);
   const label = document.getElementById(progressLabelId);
   wrap.style.display = 'block';
   bar.style.width    = '0%';
+  label.textContent  = 'Uploading 0%…';
 
-  task.on('state_changed',
-    snap => {
-      const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-      bar.style.width    = pct + '%';
-      label.textContent  = 'Uploading ' + pct + '%…';
-    },
-    err => {
-      wrap.style.display = 'none';
-      showToast('Upload failed: ' + err.message, true);
-    },
-    async () => {
-      const url = await task.snapshot.ref.getDownloadURL();
-      bar.style.width    = '100%';
-      label.textContent  = 'Upload complete!';
-      setTimeout(() => { wrap.style.display = 'none'; }, 1500);
-      onDone(url);
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload');
+
+  xhr.upload.onprogress = function(e) {
+    if (e.lengthComputable) {
+      const pct = Math.round((e.loaded / e.total) * 100);
+      bar.style.width   = pct + '%';
+      label.textContent = 'Uploading ' + pct + '%…';
     }
-  );
+  };
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
+      bar.style.width   = '100%';
+      label.textContent = 'Upload complete!';
+      setTimeout(() => { wrap.style.display = 'none'; }, 1500);
+      onDone(res.secure_url);
+    } else {
+      wrap.style.display = 'none';
+      console.error('Cloudinary error:', xhr.responseText);
+      showToast('Upload failed: ' + xhr.status, true);
+    }
+  };
+
+  xhr.onerror = function() {
+    wrap.style.display = 'none';
+    showToast('Upload failed: network error', true);
+  };
+
+  xhr.send(formData);
 }
 
 function resetUploadBox(previewId, placeholderId, changeBtnId, fileInputId) {
