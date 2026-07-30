@@ -2186,18 +2186,20 @@ function proceedToPayment() {
     var _o = pendingOrder;
     saveOrderToFirestore(_o.name, _o.email, _o.phone, _o.address, _o.colour, _o.desc, _o.items, _o.total, _o.currency, _o.deliveryZone, _o.deliveryFeeNGN, _o.orderRef, 'flutterwave_pending');
   }
+  var _flwOptions = checkoutCurrency === 'NGN' ? 'card,banktransfer,ussd' : 'card';
   FlutterwaveCheckout({
-    public_key:      'FLWPUBK-3068baabe1a595fda4d152e3e078e92e-X',
-    tx_ref:          'ORDER-' + Date.now(),
+    public_key:      'FLWPUBK-f6f65e5e9b2e8c69e9ff0b39aa8c3dc7-X',
+    tx_ref:          pendingOrder ? pendingOrder.orderRef : 'ORDER-' + Date.now(),
     amount:          checkoutAmount,
     currency:        checkoutCurrency,
-    payment_options: 'card, banktransfer, ussd',
+    payment_options: _flwOptions,
     customer: {
       email:        customer.email || 'customer@chunkz.com',
       phone_number: customer.phone,
       name:         customer.name
     },
-    callback: function() {
+    callback: function(response) {
+      if (!response || response.status !== 'successful') return;
       var confirmedRef = null;
       if (pendingOrder) {
         var o = pendingOrder;
