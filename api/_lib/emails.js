@@ -256,36 +256,22 @@ function buildDay6({ token, customerName, items }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">DROP US A REVIEW.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">ONE QUICK THING.</p>
     <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">You&rsquo;ve had the <span style="color:#e63946;">${productName}</span> for about a week now.</p>
-    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">If it&rsquo;s been good to you, a quick review goes a long way. Thirty seconds. Star rating, few words. That&rsquo;s it.</p>
+    <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">If it&rsquo;s been good to you, a quick word from you goes a long way for the next person deciding whether to cop. Thirty seconds, that&rsquo;s all.</p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;"><a href="${followUpUrl}" target="_blank" style="color:#e63946;font-weight:700;text-decoration:none;">Tap here to drop your feedback &rarr;</a></p>
   </td>
 </tr>
 
 <tr>
-  <td class="cp" style="padding:0 32px;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#181818;border-radius:8px;">
-      <tr>
-        <td align="center" style="padding:22px 20px;">
-          <p style="margin:0 0 8px;font-size:32px;letter-spacing:6px;line-height:1;">&#x2B50;&#x2B50;&#x2B50;&#x2B50;&#x2B50;</p>
-          <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#555555;">Tap the button below to leave your rating</p>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
-
-${ctaButton('LEAVE A REVIEW &rarr;', followUpUrl)}
-
-<tr>
-  <td class="cp" style="padding:18px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;font-style:italic;">Every review helps someone else find their fit.</p>
+  <td class="cp" style="padding:0 32px 0;">
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;font-style:italic;">Real words from real people. That&rsquo;s how we grow.</p>
   </td>
 </tr>`;
 
   return {
-    subject: `Got 30 seconds, ${rawFirst(customerName)}? ⭐`,
-    html: emailWrapper({ preheader: 'Your review helps the next person pull the trigger.', token, bodyRows }),
+    subject: `Got 30 seconds, ${rawFirst(customerName)}?`,
+    html: emailWrapper({ preheader: 'Your feedback helps the next person make their decision.', token, bodyRows }),
   };
 }
 
@@ -336,8 +322,8 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">BUILT TO MATCH.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">Since you copped the <span style="color:#e63946;">${productName}</span>, we think this is your next move.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">THOUGHT YOU&rsquo;D LIKE THIS.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">Since you got the <span style="color:#e63946;">${productName}</span>, this one caught our eye for you.</p>
     <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${pitch}</p>
   </td>
 </tr>
@@ -350,15 +336,14 @@ ${productImageRow}
         <td style="padding:18px 20px;">
           <p style="margin:0 0 2px;font-family:'Segoe UI',Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;">${recName}</p>
           ${priceRow}
+          <p style="margin:12px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;"><a href="${buyNowUrl}" target="_blank" style="color:#e63946;font-weight:700;text-decoration:none;">Take a look &rarr;</a></p>
         </td>
       </tr>
     </table>
   </td>
 </tr>
 
-${promoSection}
-
-${ctaButton('SHOP NOW &rarr;', buyNowUrl)}`;
+${promoSection}`;
 
   const rawItem = item.name || item.collection || 'your order';
   return {
