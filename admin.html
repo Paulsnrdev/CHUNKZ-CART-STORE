@@ -71,6 +71,12 @@
     .filter-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
     .refresh-btn{margin-left:auto;background:none;border:1.5px solid var(--gray-mid);color:var(--gray-dark);padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
     .refresh-btn:hover{border-color:var(--black);color:var(--black)}
+    .period-picker-row{display:none;width:100%;align-items:center;gap:8px;padding:8px 0 2px;flex-wrap:wrap}
+    .period-picker-row.open{display:flex}
+    .period-input{padding:6px 12px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:12px;font-family:inherit;color:var(--black);background:#fff;cursor:pointer;transition:border-color .2s}
+    .period-input:focus{outline:none;border-color:var(--black)}
+    .apply-btn{background:var(--black);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
+    .apply-btn:hover{background:#333}
 
     /* ── Stats grid ── */
     .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
@@ -387,7 +393,24 @@ service cloud.firestore {
       <button class="filter-btn" onclick="setFilter('month',this)">This Month</button>
       <button class="filter-btn" onclick="setFilter('week',this)">This Week</button>
       <button class="filter-btn" onclick="setFilter('today',this)">Today</button>
+      <button class="filter-btn" id="pickMonthBtn" onclick="toggleMonthPicker(this)">Month ▾</button>
+      <button class="filter-btn" id="pickRangeBtn" onclick="toggleRangePicker(this)">Range ▾</button>
       <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+
+      <!-- Month picker -->
+      <div class="period-picker-row" id="monthPickerRow">
+        <label style="font-size:12px;font-weight:600;color:var(--gray-dark);">Select month:</label>
+        <input type="month" id="monthInput" class="period-input" onchange="applyMonthFilter(this.value)">
+      </div>
+
+      <!-- Date range picker -->
+      <div class="period-picker-row" id="rangePickerRow">
+        <label style="font-size:12px;font-weight:600;color:var(--gray-dark);">From:</label>
+        <input type="date" id="rangeFrom" class="period-input">
+        <label style="font-size:12px;font-weight:600;color:var(--gray-dark);">To:</label>
+        <input type="date" id="rangeTo" class="period-input">
+        <button class="apply-btn" onclick="applyRangeFilter()">Apply</button>
+      </div>
     </div>
 
     <!-- Loading state -->
@@ -688,6 +711,9 @@ document.getElementById('adminPass') && document.getElementById('adminPass').add
 ═══════════════════════════════════════════════════ */
 let allOrders = [];
 let activeFilter = 'all';
+let customMonth = null;   // { year, month } 0-indexed
+let rangeFrom   = null;   // Date
+let rangeTo     = null;   // Date
 let revenueHidden = false;
 let lastRevenue = '₦0';
 let timeChartInst = null;
@@ -725,6 +751,61 @@ function setFilter(f, btn) {
   activeFilter = f;
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
+  document.getElementById('monthPickerRow').classList.remove('open');
+  document.getElementById('rangePickerRow').classList.remove('open');
+  renderAll();
+}
+
+function toggleMonthPicker(btn) {
+  const row = document.getElementById('monthPickerRow');
+  const isOpen = row.classList.contains('open');
+  document.getElementById('rangePickerRow').classList.remove('open');
+  document.getElementById('pickRangeBtn').classList.remove('active');
+  if (isOpen) {
+    row.classList.remove('open');
+    btn.classList.remove('active');
+    if (activeFilter === 'pick-month') { activeFilter = 'all'; document.querySelector('[onclick*="setFilter(\'all\'"]').classList.add('active'); renderAll(); }
+  } else {
+    row.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+function applyMonthFilter(value) {
+  if (!value) return;
+  var parts = value.split('-');
+  customMonth = { year: parseInt(parts[0]), month: parseInt(parts[1]) - 1 };
+  activeFilter = 'pick-month';
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('pickMonthBtn').classList.add('active');
+  renderAll();
+}
+
+function toggleRangePicker(btn) {
+  const row = document.getElementById('rangePickerRow');
+  const isOpen = row.classList.contains('open');
+  document.getElementById('monthPickerRow').classList.remove('open');
+  document.getElementById('pickMonthBtn').classList.remove('active');
+  if (isOpen) {
+    row.classList.remove('open');
+    btn.classList.remove('active');
+    if (activeFilter === 'range') { activeFilter = 'all'; document.querySelector('[onclick*="setFilter(\'all\'"]').classList.add('active'); renderAll(); }
+  } else {
+    row.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+function applyRangeFilter() {
+  var from = document.getElementById('rangeFrom').value;
+  var to   = document.getElementById('rangeTo').value;
+  if (!from || !to) { alert('Please select both a start and end date.'); return; }
+  rangeFrom = new Date(from);
+  rangeTo   = new Date(to);
+  rangeTo.setHours(23, 59, 59, 999);
+  activeFilter = 'range';
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('pickRangeBtn').classList.add('active');
   renderAll();
 }
 
@@ -748,6 +829,12 @@ function getFilteredOrders() {
     }
     if (activeFilter === 'month') {
       return ts.getFullYear() === now.getFullYear() && ts.getMonth() === now.getMonth();
+    }
+    if (activeFilter === 'pick-month' && customMonth) {
+      return ts.getFullYear() === customMonth.year && ts.getMonth() === customMonth.month;
+    }
+    if (activeFilter === 'range' && rangeFrom && rangeTo) {
+      return ts >= rangeFrom && ts <= rangeTo;
     }
     return true;
   });
