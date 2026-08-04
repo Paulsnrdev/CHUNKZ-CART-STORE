@@ -465,7 +465,10 @@
     <button class="btn-accent" onclick="openCategoryEditor()">+ Add Category</button>
     <button class="btn-outline" onclick="openGapView()">Pairing Gaps</button>
     <button class="btn-outline" onclick="confirmSeed()">Re-Import</button>
+    <button class="btn-outline" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="btn-outline" onclick="triggerImportCSV()">⬆ Import CSV</button>
   </div>
+  <input type="file" id="csvImportInput" accept=".csv" style="display:none" onchange="handleImportCSV(this)">
 
   <div class="section-label">ALL CATEGORIES</div>
   <div id="categoryList"></div>
@@ -1293,6 +1296,131 @@ function resetUploadBox(previewId, placeholderId, changeBtnId, fileInputId) {
 function confirmSeed() {
   if (!confirm('This will re-import all original products from the site. Any edits you have made to those products will be overwritten. New products you added will not be affected.\n\nContinue?')) return;
   seedCatalog();
+}
+
+/* ═══════════════════════════════════════
+   CSV EXPORT / IMPORT
+═══════════════════════════════════════ */
+function exportCSV() {
+  const header = ['category_key','category_title','product_name','image_url','price_ngn','price_usd','price_gbp','price_cad','hidden','exclude_from_recommendations'];
+  const rows = [header];
+  Object.entries(catalogData).forEach(([key, cat]) => {
+    (cat.images || []).forEach(entry => {
+      if (!entry || typeof entry === 'string') return;
+      rows.push([
+        key,
+        cat.title || '',
+        entry.name || '',
+        entry.src  || '',
+        entry.ngn  || 0,
+        entry.usd  || 0,
+        entry.gbp  || 0,
+        entry.cad  || 0,
+        entry.hidden ? 'true' : 'false',
+        entry.excludeFromRecommendations ? 'true' : 'false'
+      ]);
+    });
+  });
+  const csv = rows.map(row =>
+    row.map(cell => {
+      const s = String(cell);
+      return (s.includes(',') || s.includes('"') || s.includes('\n'))
+        ? '"' + s.replace(/"/g, '""') + '"'
+        : s;
+    }).join(',')
+  ).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'chunkz-catalog-' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function triggerImportCSV() {
+  document.getElementById('csvImportInput').value = '';
+  document.getElementById('csvImportInput').click();
+}
+
+function parseCSVRow(line) {
+  const result = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQ && line[i + 1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+async function handleImportCSV(input) {
+  if (!input.files[0]) return;
+  const text = await input.files[0].text();
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { showToast('CSV has no data rows', true); return; }
+
+  const headers = parseCSVRow(lines[0]).map(h => h.trim().toLowerCase());
+  const col = {};
+  headers.forEach((h, i) => { col[h] = i; });
+
+  const required = ['category_key', 'product_name', 'image_url', 'price_ngn'];
+  for (const r of required) {
+    if (col[r] === undefined) { showToast('Missing column: ' + r, true); return; }
+  }
+
+  const byCategory = {};
+  for (let i = 1; i < lines.length; i++) {
+    const row = parseCSVRow(lines[i]);
+    const key = (row[col['category_key']] || '').trim();
+    if (!key) continue;
+    if (!byCategory[key]) byCategory[key] = [];
+    byCategory[key].push({
+      name: (row[col['product_name']]  || '').trim(),
+      src:  (row[col['image_url']]     || '').trim(),
+      ngn:  parseFloat(row[col['price_ngn']]) || 0,
+      usd:  parseFloat(row[col['price_usd']] !== undefined ? row[col['price_usd']] : 0) || 0,
+      gbp:  parseFloat(row[col['price_gbp']] !== undefined ? row[col['price_gbp']] : 0) || 0,
+      cad:  parseFloat(row[col['price_cad']] !== undefined ? row[col['price_cad']] : 0) || 0,
+      hidden: (row[col['hidden']] || '').toLowerCase() === 'true',
+      excludeFromRecommendations: (row[col['exclude_from_recommendations']] || '').toLowerCase() === 'true',
+      pairsWith: []
+    });
+  }
+
+  const keys = Object.keys(byCategory);
+  if (!keys.length) { showToast('No valid rows found', true); return; }
+
+  const missing = keys.filter(k => !catalogData[k]);
+  if (missing.length) {
+    if (!confirm('These category keys don\'t exist and will be skipped:\n' + missing.join(', ') + '\n\nContinue with the rest?')) return;
+  }
+
+  let updated = 0;
+  for (const key of keys) {
+    if (!catalogData[key]) continue;
+    const newProds = byCategory[key].filter(p => p.src);
+    const merged   = [...(catalogData[key].images || [])];
+    for (const p of newProds) {
+      const ei = merged.findIndex(e => (typeof e === 'string' ? e : e.src) === p.src);
+      if (ei >= 0) merged[ei] = { ...merged[ei], ...p };
+      else merged.push(p);
+    }
+    try {
+      await db.collection('catalog').doc(key).update({ images: merged });
+      catalogData[key].images = merged;
+      updated++;
+    } catch (e) {
+      showToast('Failed to update ' + key + ': ' + e.message, true);
+    }
+  }
+
+  renderDashboard();
+  showToast(updated + ' categor' + (updated === 1 ? 'y' : 'ies') + ' updated from CSV');
 }
 
 async function seedCatalog() {
