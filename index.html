@@ -2190,7 +2190,7 @@ function proceedToPayment() {
   }
   var _flwOptions = checkoutCurrency === 'NGN' ? 'card,banktransfer,ussd' : 'card';
   FlutterwaveCheckout({
-    public_key:      'FLWPUBK-f6f65e5e9b2e8c69e9ff0b39aa8c3dc7-X',
+    public_key:      'FLWPUBK-577fc7dc27dd68d5dfafa77b2e4265d2-X',
     tx_ref:          pendingOrder ? pendingOrder.orderRef : 'ORDER-' + Date.now(),
     amount:          checkoutAmount,
     currency:        checkoutCurrency,
