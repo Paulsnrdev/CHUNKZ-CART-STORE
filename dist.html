@@ -254,6 +254,36 @@
     .settings-save{background:var(--black);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
     .settings-save:hover{background:#222}
     .settings-msg{font-size:12px;margin-top:10px;min-height:18px}
+    /* ── Discount Codes ── */
+    .disc-form-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:20px;max-width:640px}
+    .disc-form-title{font-size:18px;font-weight:900;margin-bottom:20px}
+    .disc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .disc-form-field{display:flex;flex-direction:column;gap:6px}
+    .disc-form-field.full{grid-column:1/-1}
+    .disc-form-field label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-dark)}
+    .disc-form-field input,.disc-form-field select{padding:9px 12px;border:1.5px solid var(--gray-mid);border-radius:8px;font-size:14px;font-family:inherit;outline:none;width:100%}
+    .disc-form-field input:focus,.disc-form-field select:focus{border-color:var(--black)}
+    .disc-check-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--gray-mid);border-radius:8px;cursor:pointer;margin-bottom:14px}
+    .disc-check-row input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--success)}
+    .disc-check-row label{font-size:14px;font-weight:600;cursor:pointer;margin:0}
+    .disc-save-btn{background:var(--success);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+    .disc-save-btn:hover{background:#1e7d6f}
+    .disc-save-btn:disabled{background:#999;cursor:not-allowed}
+    .disc-list-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .disc-table{width:100%;border-collapse:collapse;font-size:13px}
+    .disc-table th{text-align:left;padding:9px 12px;background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark)}
+    .disc-table th:first-child{border-radius:6px 0 0 6px}
+    .disc-table th:last-child{border-radius:0 6px 6px 0}
+    .disc-table td{padding:11px 12px;border-bottom:1px solid var(--gray-mid);vertical-align:middle}
+    .disc-table tr:last-child td{border-bottom:none}
+    .disc-code{font-family:monospace;font-weight:700;font-size:13px;letter-spacing:.5px;background:#f0f0f0;padding:2px 7px;border-radius:4px}
+    .d-active{background:#dcfce7;color:#166534}
+    .d-expired{background:#fee2e2;color:#991b1b}
+    .d-used{background:#f0f0f0;color:#666}
+    .d-pending{background:#fef3c7;color:#92400e}
+    .disc-del{background:none;border:1.5px solid #fca5a5;color:var(--accent);padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+    .disc-del:hover{background:var(--accent);color:#fff}
+    .disc-msg{font-size:12px;margin-top:10px;min-height:18px}
     /* ── Email preview modal ── */
     #emailPreviewModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
   </style>
@@ -386,6 +416,7 @@ service cloud.firestore {
       <button class="view-tab" id="tabMetrics" onclick="switchView('metrics',this)">Metrics</button>
       <button class="view-tab" id="tabReviews" onclick="switchView('reviews',this)">Reviews</button>
       <button class="view-tab" id="tabSettings" onclick="switchView('settings',this)">Settings</button>
+      <button class="view-tab" id="tabDiscounts" onclick="switchView('discounts',this)">Discounts</button>
     </div>
 
     <!-- Filter bar -->
@@ -609,6 +640,84 @@ service cloud.firestore {
         </div>
         <button class="settings-save" onclick="savePromoSettings()">Save Settings</button>
         <div class="settings-msg" id="settingsMsg"></div>
+      </div>
+    </div>
+
+    <!-- ═══ DISCOUNTS VIEW ═══ -->
+    <div id="discountsContent" style="display:none">
+      <div class="disc-form-card">
+        <div class="disc-form-title">New discount</div>
+        <div class="disc-form-row">
+          <div class="disc-form-field full">
+            <label>Code</label>
+            <input type="text" id="dcCode" placeholder="E.G. WELCOME10" style="text-transform:uppercase;font-family:monospace;letter-spacing:1px" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9\-_]/g,'')">
+          </div>
+        </div>
+        <div class="disc-form-row">
+          <div class="disc-form-field">
+            <label>Type</label>
+            <select id="dcType">
+              <option value="percentage">Percentage off</option>
+              <option value="fixed">Fixed amount off (₦)</option>
+            </select>
+          </div>
+          <div class="disc-form-field">
+            <label>Value</label>
+            <input type="number" id="dcValue" min="1" placeholder="">
+          </div>
+        </div>
+        <div class="disc-form-row">
+          <div class="disc-form-field">
+            <label>Minimum order (₦)</label>
+            <input type="number" id="dcMinOrder" min="0" placeholder="Optional">
+          </div>
+          <div class="disc-form-field">
+            <label>Usage limit</label>
+            <input type="number" id="dcUsageLimit" min="1" placeholder="Unlimited">
+          </div>
+        </div>
+        <div class="disc-form-row">
+          <div class="disc-form-field">
+            <label>Starts at</label>
+            <input type="date" id="dcStartsAt">
+          </div>
+          <div class="disc-form-field">
+            <label>Expires at</label>
+            <input type="date" id="dcExpiresAt">
+          </div>
+        </div>
+        <div class="disc-check-row">
+          <input type="checkbox" id="dcActive" checked>
+          <label for="dcActive">Active</label>
+        </div>
+        <button class="disc-save-btn" id="dcSaveBtn" onclick="saveDiscountCode()">Save discount</button>
+        <div class="disc-msg" id="dcMsg"></div>
+      </div>
+
+      <div class="disc-list-card">
+        <div class="orders-head">
+          <div class="section-title" style="margin-bottom:0">All Discount Codes</div>
+          <button class="refresh-btn" onclick="loadDiscountCodes()">↻ Refresh</button>
+        </div>
+        <div class="table-wrap" style="margin-top:14px">
+          <table class="disc-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Min Order</th>
+                <th>Used</th>
+                <th>Expires</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="discBody">
+              <tr><td colspan="8" class="flw-loading">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -1179,14 +1288,15 @@ function esc(s) {
 ═══════════════════════════════════════════════════ */
 var txLoaded       = false;
 var metricsLoaded  = false;
-var reviewsLoaded  = false;
-var settingsLoaded = false;
+var reviewsLoaded   = false;
+var settingsLoaded  = false;
+var discountsLoaded = false;
 
 function switchView(view, btn) {
   document.querySelectorAll('.view-tab').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
 
-  var ids = ['dataContent','txContent','metricsContent','reviewsContent','settingsContent'];
+  var ids = ['dataContent','txContent','metricsContent','reviewsContent','settingsContent','discountsContent'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = 'none';
@@ -1213,6 +1323,9 @@ function switchView(view, btn) {
   } else if (view === 'settings') {
     document.getElementById('settingsContent').style.display = 'block';
     if (!settingsLoaded) { settingsLoaded = true; loadPromoSettings(); }
+  } else if (view === 'discounts') {
+    document.getElementById('discountsContent').style.display = 'block';
+    if (!discountsLoaded) { discountsLoaded = true; loadDiscountCodes(); }
   }
 }
 
@@ -1853,7 +1966,113 @@ async function savePromoSettings() {
   setTimeout(function() { msg.textContent = ''; }, 3000);
 }
 
-  
+/* ═══════════════════════════════════════════════════
+   DISCOUNT CODES
+═══════════════════════════════════════════════════ */
+function discEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function loadDiscountCodes() {
+  var tbody = document.getElementById('discBody');
+  tbody.innerHTML = '<tr><td colspan="8" class="flw-loading">Loading…</td></tr>';
+  try {
+    var snap = await firebase.firestore().collection('promoCodes').orderBy('createdAt','desc').limit(150).get();
+    if (snap.empty) { tbody.innerHTML = '<tr><td colspan="8" class="flw-loading">No codes yet.</td></tr>'; return; }
+    var rows = [];
+    var now = new Date();
+    snap.forEach(function(doc) {
+      var d = doc.data(), code = doc.id;
+      var expires = d.expiresAt ? new Date(d.expiresAt) : null;
+      var starts  = d.startsAt  ? new Date(d.startsAt)  : null;
+      var usedCount = d.usedCount || 0;
+      var statusLabel, statusClass;
+      if (d.active === false) { statusLabel = 'Inactive'; statusClass = 'd-used'; }
+      else if (d.usageLimit && usedCount >= d.usageLimit) { statusLabel = 'Used up'; statusClass = 'd-used'; }
+      else if (d.redeemed && !d.usageLimit) { statusLabel = 'Used'; statusClass = 'd-used'; }
+      else if (expires && expires < now) { statusLabel = 'Expired'; statusClass = 'd-expired'; }
+      else if (starts && starts > now) { statusLabel = 'Pending'; statusClass = 'd-pending'; }
+      else { statusLabel = 'Active'; statusClass = 'd-active'; }
+      var typeLabel = d.type === 'fixed' ? 'Fixed ₦' : 'Percentage';
+      var valLabel  = d.type === 'fixed' ? '₦' + Number(d.fixedAmountNGN || 0).toLocaleString() : (d.discountPct || 0) + '%';
+      var minOrder  = d.minimumOrderNGN ? '₦' + Number(d.minimumOrderNGN).toLocaleString() : '—';
+      var usageStr  = d.usageLimit ? (usedCount + '/' + d.usageLimit) : (usedCount > 0 ? usedCount + '/1' : '0/1');
+      var expiryStr = expires ? expires.toLocaleDateString() : '—';
+      var src = d.manualCode ? '<span style="font-size:10px;color:#4361ee;font-weight:700">Manual</span>' : '<span style="font-size:10px;color:var(--gray-dark)">Auto</span>';
+      rows.push('<tr><td><span class="disc-code">' + discEsc(code) + '</span><br>' + src + '</td>' +
+        '<td>' + discEsc(typeLabel) + '</td>' +
+        '<td style="font-weight:700">' + discEsc(valLabel) + '</td>' +
+        '<td>' + discEsc(minOrder) + '</td>' +
+        '<td>' + discEsc(usageStr) + '</td>' +
+        '<td>' + discEsc(expiryStr) + '</td>' +
+        '<td><span class="st-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
+        '<td><button class="disc-del" onclick="deleteDiscountCode(\'' + discEsc(code) + '\',this)">Del</button></td></tr>');
+    });
+    tbody.innerHTML = rows.join('');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--accent);text-align:center;padding:20px">Failed: ' + e.message + '</td></tr>';
+  }
+}
+
+async function saveDiscountCode() {
+  var btn     = document.getElementById('dcSaveBtn');
+  var msgEl   = document.getElementById('dcMsg');
+  var code    = document.getElementById('dcCode').value.trim().toUpperCase();
+  var type    = document.getElementById('dcType').value;
+  var value   = parseFloat(document.getElementById('dcValue').value) || 0;
+  var minOrd  = parseFloat(document.getElementById('dcMinOrder').value) || 0;
+  var useLim  = parseInt(document.getElementById('dcUsageLimit').value) || 0;
+  var startsAt  = document.getElementById('dcStartsAt').value;
+  var expiresAt = document.getElementById('dcExpiresAt').value;
+  var active  = document.getElementById('dcActive').checked;
+
+  msgEl.textContent = '';
+  if (!code)          { msgEl.style.color='var(--accent)'; msgEl.textContent='Code is required.'; return; }
+  if (value <= 0)     { msgEl.style.color='var(--accent)'; msgEl.textContent='Value must be greater than 0.'; return; }
+  if (type === 'percentage' && value > 100) { msgEl.style.color='var(--accent)'; msgEl.textContent='Percentage cannot exceed 100.'; return; }
+  if (!expiresAt)     { msgEl.style.color='var(--accent)'; msgEl.textContent='Expiry date is required.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  var data = {
+    type, active, redeemed: false, usedCount: 0,
+    createdAt: new Date().toISOString(), createdBy: 'admin', manualCode: true,
+    expiresAt: new Date(expiresAt + 'T23:59:59').toISOString(),
+  };
+  if (type === 'percentage') { data.discountPct = value; }
+  else { data.fixedAmountNGN = value; data.discountPct = 0; }
+  if (minOrd > 0)  data.minimumOrderNGN = minOrd;
+  if (useLim > 0)  data.usageLimit = useLim;
+  if (startsAt)    data.startsAt = new Date(startsAt + 'T00:00:00').toISOString();
+
+  try {
+    var ref = firebase.firestore().collection('promoCodes').doc(code);
+    var existing = await ref.get();
+    if (existing.exists) {
+      msgEl.style.color='var(--accent)'; msgEl.textContent='A code "' + code + '" already exists.';
+      btn.disabled=false; btn.textContent='Save discount'; return;
+    }
+    await ref.set(data);
+    msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" created!';
+    ['dcCode','dcValue','dcMinOrder','dcUsageLimit','dcStartsAt','dcExpiresAt'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('dcActive').checked = true;
+    discountsLoaded = false;
+    loadDiscountCodes();
+  } catch(e) {
+    msgEl.style.color='var(--accent)'; msgEl.textContent='Failed: ' + e.message;
+  }
+  btn.disabled=false; btn.textContent='Save discount';
+}
+
+async function deleteDiscountCode(code, btn) {
+  if (!confirm('Delete code "' + code + '"? This cannot be undone.')) return;
+  btn.disabled = true;
+  try {
+    await firebase.firestore().collection('promoCodes').doc(code).delete();
+    discountsLoaded = false;
+    loadDiscountCodes();
+  } catch(e) { alert('Delete failed: ' + e.message); btn.disabled = false; }
+}
+
+
 </script>
 </body>
 </html>

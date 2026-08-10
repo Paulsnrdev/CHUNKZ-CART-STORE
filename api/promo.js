@@ -38,12 +38,22 @@ module.exports = async function handler(req, res) {
       }
 
       const promo = snap.data();
+      const now   = new Date();
 
-      if (promo.redeemed) {
-        return res.status(200).json({ valid: false, message: 'This code has already been used.' });
+      if (promo.active === false) {
+        return res.status(200).json({ valid: false, message: 'This code is not active.' });
       }
-      if (new Date(promo.expiresAt) < new Date()) {
+      if (promo.startsAt && new Date(promo.startsAt) > now) {
+        return res.status(200).json({ valid: false, message: 'This code is not valid yet.' });
+      }
+      if (new Date(promo.expiresAt) < now) {
         return res.status(200).json({ valid: false, message: 'This code has expired.' });
+      }
+      if (promo.usageLimit && (promo.usedCount || 0) >= promo.usageLimit) {
+        return res.status(200).json({ valid: false, message: 'This code has reached its usage limit.' });
+      }
+      if (!promo.usageLimit && promo.redeemed) {
+        return res.status(200).json({ valid: false, message: 'This code has already been used.' });
       }
 
       let applicableNGN = 0;
@@ -54,15 +64,27 @@ module.exports = async function handler(req, res) {
         }, 0);
       }
 
-      const discountAmountNGN = Math.round(applicableNGN * promo.discountPct / 100);
+      if (promo.minimumOrderNGN && applicableNGN < promo.minimumOrderNGN) {
+        return res.status(200).json({ valid: false, message: 'Minimum order of ₦' + Number(promo.minimumOrderNGN).toLocaleString() + ' required for this code.' });
+      }
+
+      let discountAmountNGN;
+      let message;
+      if (promo.type === 'fixed') {
+        discountAmountNGN = Math.min(Math.round(promo.fixedAmountNGN || 0), Math.round(applicableNGN));
+        message = '₦' + Number(discountAmountNGN).toLocaleString() + ' off applied!';
+      } else {
+        discountAmountNGN = Math.round(applicableNGN * (promo.discountPct || 0) / 100);
+        message = (promo.discountPct || 0) + '% off applied!';
+      }
 
       return res.status(200).json({
         valid:            true,
         code:             normalised,
-        discountPct:      promo.discountPct,
+        discountPct:      promo.discountPct || 0,
         discountAmountNGN,
         expiresAt:        promo.expiresAt,
-        message:          promo.discountPct + '% off applied!',
+        message,
       });
     } catch (err) {
       console.error('[promo validate]', err);
@@ -87,10 +109,13 @@ module.exports = async function handler(req, res) {
 
       const promo = snap.data();
 
-      if (promo.redeemed && promo.redeemedOrderId === orderId) {
+      const newUsedCount = (promo.usedCount || 0) + 1;
+      const limitReached = promo.usageLimit ? newUsedCount >= promo.usageLimit : true;
+
+      if (!promo.usageLimit && promo.redeemed && promo.redeemedOrderId === orderId) {
         return res.status(200).json({ ok: true });
       }
-      if (promo.redeemed) {
+      if (!promo.usageLimit && promo.redeemed) {
         return res.status(409).json({ error: 'Code already redeemed' });
       }
 
@@ -109,13 +134,15 @@ module.exports = async function handler(req, res) {
       const now   = new Date().toISOString();
       const batch = db.batch();
 
-      batch.update(promoRef, {
-        redeemed:        true,
+      const redemptionUpdate = {
+        usedCount:       newUsedCount,
         redeemedAt:      now,
         redeemedByEmail: email   || null,
         redeemedOrderId: orderId,
         isReferral,
-      });
+      };
+      if (limitReached) redemptionUpdate.redeemed = true;
+      batch.update(promoRef, redemptionUpdate);
 
       if (promo.followUpId) {
         try {
