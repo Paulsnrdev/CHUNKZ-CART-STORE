@@ -287,8 +287,8 @@
     .opay-note{font-size:11px;color:#555;text-align:center;margin-top:10px;line-height:1.5}
 
     /* ── Toast ── */
-    .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
-    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none;visibility:hidden}
+    .toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
 
     /* ── Size Picker ── */
     .sz-overlay{display:none;position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.5)}
