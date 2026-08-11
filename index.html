@@ -57,7 +57,7 @@
 
   <!-- Preconnect to speed up external resource fetches -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://checkout.flutterwave.com">
+  <link rel="preconnect" href="https://js.paystack.co">
   <link rel="dns-prefetch" href="https://ipinfo.io">
   <link rel="dns-prefetch" href="https://ipapi.co">
   <!-- Preload logo so header renders without delay -->
@@ -737,10 +737,10 @@
           <label>Payment Method <span class="req">*</span></label>
           <div class="pay-method-group">
             <label class="pay-method-card">
-              <input type="radio" name="payMethod" value="flutterwave" checked>
+              <input type="radio" name="payMethod" value="paystack" checked>
               <span>
                 <span class="pmc-title">Pay with Card / Bank Transfer</span>
-                <span class="pmc-sub">Visa, Mastercard, USSD &amp; more — powered by Flutterwave</span>
+                <span class="pmc-sub">Visa, Mastercard, USSD &amp; more — powered by Paystack</span>
               </span>
             </label>
             <label class="pay-method-card">
@@ -821,8 +821,8 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- FLUTTERWAVE -->
-<script src="https://checkout.flutterwave.com/v3.js"></script>
+<!-- PAYSTACK -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 
 <!-- FIREBASE: for saving orders to admin dashboard -->
 <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
@@ -878,10 +878,10 @@ function sendWhatsAppNotification(o, status) {
 
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
   const rates       = { NGN: 1, USD: 1375, GBP: 1820, CAD: 970 };
-  const method      = paymentMethod || 'flutterwave';
-  const isPending   = method === 'opay' || method === 'flutterwave_pending';
+  const method      = paymentMethod || 'paystack';
+  const isPending   = method === 'opay' || method === 'paystack_pending';
   const status      = isPending ? 'awaiting_payment' : 'confirmed';
-  const storedMethod = method === 'flutterwave_pending' ? 'flutterwave' : method;
+  const storedMethod = method === 'paystack_pending' ? 'paystack' : method;
   const orderData = {
     orderRef:         orderRef,
     orderStatus:      status,
@@ -2148,7 +2148,7 @@ async function submitOrder(e) {
     });
 
     if (res.ok) {
-      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'flutterwave';
+      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'paystack';
       customer         = { name, email, phone, address };
       checkoutAmount   = finalTotal;
       checkoutCurrency = currCode;
@@ -2180,28 +2180,28 @@ function showErr(msg) {
 }
 
 /* ═══════════════════════════════════════════════════
-   FLUTTERWAVE PAYMENT
-   PLACEHOLDER public key — replace before going live.
+   PAYSTACK PAYMENT
+   Replace pk_live_xxx with your Paystack public key.
 ═══════════════════════════════════════════════════ */
 function proceedToPayment() {
   if (pendingOrder) {
     var _o = pendingOrder;
-    saveOrderToFirestore(_o.name, _o.email, _o.phone, _o.address, _o.colour, _o.desc, _o.items, _o.total, _o.currency, _o.deliveryZone, _o.deliveryFeeNGN, _o.orderRef, 'flutterwave_pending');
+    saveOrderToFirestore(_o.name, _o.email, _o.phone, _o.address, _o.colour, _o.desc, _o.items, _o.total, _o.currency, _o.deliveryZone, _o.deliveryFeeNGN, _o.orderRef, 'paystack_pending');
   }
-  var _flwOptions = checkoutCurrency === 'NGN' ? 'card,banktransfer,ussd' : 'card';
-  FlutterwaveCheckout({
-    public_key:      'FLWPUBK-577fc7dc27dd68d5dfafa77b2e4265d2-X',
-    tx_ref:          pendingOrder ? pendingOrder.orderRef : 'ORDER-' + Date.now(),
-    amount:          checkoutAmount,
-    currency:        checkoutCurrency,
-    payment_options: _flwOptions,
-    customer: {
-      email:        customer.email || 'customer@chunkz.com',
-      phone_number: customer.phone,
-      name:         customer.name
+  var handler = PaystackPop.setup({
+    key:      'pk_live_c4343f7bc190cf95b22f528090eb4d2862c07bae',
+    email:    customer.email || 'customer@chunkz.com',
+    amount:   Math.round(checkoutAmount * 100),
+    currency: checkoutCurrency,
+    ref:      pendingOrder ? pendingOrder.orderRef : 'ORDER-' + Date.now(),
+    channels: checkoutCurrency === 'NGN' ? ['card', 'bank', 'ussd', 'bank_transfer'] : ['card'],
+    metadata: {
+      custom_fields: [
+        { display_name: 'Phone', variable_name: 'phone', value: customer.phone || '' },
+        { display_name: 'Name',  variable_name: 'name',  value: customer.name  || '' }
+      ]
     },
     callback: function(response) {
-      if (!response || response.status !== 'successful') return;
       var confirmedRef = null;
       if (pendingOrder) {
         var o = pendingOrder;
@@ -2222,18 +2222,14 @@ function proceedToPayment() {
       document.getElementById('formState').style.display    = 'none';
       document.getElementById('successState').style.display = 'block';
     },
-    onclose: function() {
+    onClose: function() {
       var msg = document.getElementById('payRetryMsg');
       msg.className   = 'pay-result fail';
       msg.innerHTML   = '⚠️ Payment not completed — your cart is saved. Tap <strong>PLACE ORDER &amp; PAY</strong> when you\'re ready to try again.';
       msg.style.display = 'block';
-    },
-    customizations: {
-      title:       'CHUNKZ Store',
-      description: 'Payment for Chunkz order',
-      logo:        'https://chunkzthebrand.com/CHUNKZLOGO.jpg'
     }
   });
+  handler.openIframe();
 }
 
 /* ═══════════════════════════════════════════════════
