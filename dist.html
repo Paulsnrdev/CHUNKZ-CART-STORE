@@ -2053,8 +2053,12 @@ function editDiscountCode(code) {
   document.getElementById('dcValue').value     = d.type === 'fixed' ? (d.fixedAmountNGN || '') : (d.discountPct || '');
   document.getElementById('dcMinOrder').value  = d.minimumOrderNGN || '';
   document.getElementById('dcUsageLimit').value = d.usageLimit || '';
-  document.getElementById('dcStartsAt').value  = d.startsAt  ? d.startsAt.slice(0,10)  : '';
-  document.getElementById('dcExpiresAt').value = d.expiresAt ? d.expiresAt.slice(0,10) : '';
+  var saEl = document.getElementById('dcStartsAt');
+  var exEl = document.getElementById('dcExpiresAt');
+  saEl.value = ''; saEl.defaultValue = '';
+  exEl.value = ''; exEl.defaultValue = '';
+  if (d.startsAt)  saEl.value = d.startsAt.slice(0,10);
+  if (d.expiresAt) exEl.value = d.expiresAt.slice(0,10);
   document.getElementById('dcActive').checked  = d.active !== false;
 
   document.getElementById('discFormTitle').textContent = 'Edit discount';
@@ -2106,12 +2110,9 @@ async function saveDiscountCode() {
   };
   if (type === 'percentage') { data.discountPct = value; data.fixedAmountNGN = 0; }
   else { data.fixedAmountNGN = value; data.discountPct = 0; }
-  if (minOrd > 0) data.minimumOrderNGN = minOrd;
-  else data.minimumOrderNGN = firebase.firestore.FieldValue.delete();
-  if (useLim > 0) data.usageLimit = useLim;
-  else data.usageLimit = firebase.firestore.FieldValue.delete();
-  if (startsAt) data.startsAt = new Date(startsAt + 'T00:00:00').toISOString();
-  else data.startsAt = firebase.firestore.FieldValue.delete();
+  data.minimumOrderNGN = minOrd > 0 ? minOrd : null;
+  data.usageLimit      = useLim > 0 ? useLim : null;
+  data.startsAt        = startsAt ? new Date(startsAt + 'T00:00:00').toISOString() : null;
 
   if (!isEdit) {
     data.redeemed  = false;
