@@ -283,6 +283,10 @@
     .d-pending{background:#fef3c7;color:#92400e}
     .disc-del{background:none;border:1.5px solid #fca5a5;color:var(--accent);padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
     .disc-del:hover{background:var(--accent);color:#fff}
+    .disc-edit{background:#f0f4ff;border:1.5px solid #4361ee;color:#4361ee;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;margin-right:4px}
+    .disc-edit:hover{background:#4361ee;color:#fff}
+    .disc-cancel-btn{background:none;border:1px solid #999;color:#666;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer}
+    .disc-cancel-btn:hover{border-color:#333;color:#333}
     .disc-msg{font-size:12px;margin-top:10px;min-height:18px}
     /* ── Email preview modal ── */
     #emailPreviewModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
@@ -646,7 +650,7 @@ service cloud.firestore {
     <!-- ═══ DISCOUNTS VIEW ═══ -->
     <div id="discountsContent" style="display:none">
       <div class="disc-form-card">
-        <div class="disc-form-title">New discount</div>
+        <div class="disc-form-title" id="discFormTitle">New discount</div>
         <div class="disc-form-row">
           <div class="disc-form-field full">
             <label>Code</label>
@@ -690,7 +694,10 @@ service cloud.firestore {
           <input type="checkbox" id="dcActive" checked>
           <label for="dcActive">Active</label>
         </div>
-        <button class="disc-save-btn" id="dcSaveBtn" onclick="saveDiscountCode()">Save discount</button>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="disc-save-btn" id="dcSaveBtn" onclick="saveDiscountCode()">Save discount</button>
+          <button class="disc-cancel-btn" id="dcCancelBtn" onclick="cancelDiscEdit()" style="display:none">Cancel</button>
+        </div>
         <div class="disc-msg" id="dcMsg"></div>
       </div>
 
@@ -1292,6 +1299,8 @@ var metricsLoaded  = false;
 var reviewsLoaded   = false;
 var settingsLoaded  = false;
 var discountsLoaded = false;
+var _editingCode    = null;
+var _discCache      = {};
 
 function switchView(view, btn) {
   document.querySelectorAll('.view-tab').forEach(function(b) { b.classList.remove('active'); });
@@ -1985,8 +1994,10 @@ async function loadDiscountCodes() {
     if (snap.empty) { tbody.innerHTML = '<tr><td colspan="9" class="flw-loading">No codes yet.</td></tr>'; return; }
     var rows = [];
     var now = new Date();
+    _discCache = {};
     snap.forEach(function(doc) {
       var d = doc.data(), code = doc.id;
+      _discCache[code] = d;
       var expires = d.expiresAt ? new Date(d.expiresAt) : null;
       var starts  = d.startsAt  ? new Date(d.startsAt)  : null;
       var usedCount = d.usedCount || 0;
@@ -2020,12 +2031,52 @@ async function loadDiscountCodes() {
         '<td>' + discEsc(expiryStr) + '</td>' +
         '<td><span class="st-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
         redeemedCell +
-        '<td><button class="disc-del" onclick="deleteDiscountCode(\'' + discEsc(code) + '\',this)">Del</button></td></tr>');
+        '<td style="white-space:nowrap"><button class="disc-edit" onclick="editDiscountCode(\'' + discEsc(code) + '\')">Edit</button><button class="disc-del" onclick="deleteDiscountCode(\'' + discEsc(code) + '\',this)">Del</button></td></tr>');
     });
     tbody.innerHTML = rows.join('');
   } catch(e) {
     tbody.innerHTML = '<tr><td colspan="9" style="color:var(--accent);text-align:center;padding:20px">Failed: ' + e.message + '</td></tr>';
   }
+}
+
+function editDiscountCode(code) {
+  var d = _discCache[code];
+  if (!d) return;
+  _editingCode = code;
+
+  var codeInput = document.getElementById('dcCode');
+  codeInput.value    = code;
+  codeInput.readOnly = true;
+  codeInput.style.opacity = '0.55';
+
+  document.getElementById('dcType').value      = d.type || 'percentage';
+  document.getElementById('dcValue').value     = d.type === 'fixed' ? (d.fixedAmountNGN || '') : (d.discountPct || '');
+  document.getElementById('dcMinOrder').value  = d.minimumOrderNGN || '';
+  document.getElementById('dcUsageLimit').value = d.usageLimit || '';
+  document.getElementById('dcStartsAt').value  = d.startsAt  ? d.startsAt.slice(0,10)  : '';
+  document.getElementById('dcExpiresAt').value = d.expiresAt ? d.expiresAt.slice(0,10) : '';
+  document.getElementById('dcActive').checked  = d.active !== false;
+
+  document.getElementById('discFormTitle').textContent = 'Edit discount';
+  document.getElementById('dcSaveBtn').textContent     = 'Update discount';
+  document.getElementById('dcCancelBtn').style.display = 'inline-block';
+  document.getElementById('dcMsg').textContent         = '';
+
+  document.querySelector('.disc-form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function cancelDiscEdit() {
+  _editingCode = null;
+  var codeInput = document.getElementById('dcCode');
+  codeInput.readOnly = false;
+  codeInput.style.opacity = '';
+  ['dcCode','dcValue','dcMinOrder','dcUsageLimit','dcStartsAt','dcExpiresAt'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('dcType').value          = 'percentage';
+  document.getElementById('dcActive').checked      = true;
+  document.getElementById('discFormTitle').textContent = 'New discount';
+  document.getElementById('dcSaveBtn').textContent     = 'Save discount';
+  document.getElementById('dcCancelBtn').style.display = 'none';
+  document.getElementById('dcMsg').textContent         = '';
 }
 
 async function saveDiscountCode() {
@@ -2039,6 +2090,7 @@ async function saveDiscountCode() {
   var startsAt  = document.getElementById('dcStartsAt').value;
   var expiresAt = document.getElementById('dcExpiresAt').value;
   var active  = document.getElementById('dcActive').checked;
+  var isEdit  = !!_editingCode;
 
   msgEl.textContent = '';
   if (!code)          { msgEl.style.color='var(--accent)'; msgEl.textContent='Code is required.'; return; }
@@ -2046,36 +2098,55 @@ async function saveDiscountCode() {
   if (type === 'percentage' && value > 100) { msgEl.style.color='var(--accent)'; msgEl.textContent='Percentage cannot exceed 100.'; return; }
   if (!expiresAt)     { msgEl.style.color='var(--accent)'; msgEl.textContent='Expiry date is required.'; return; }
 
-  btn.disabled = true; btn.textContent = 'Saving…';
+  btn.disabled = true; btn.textContent = isEdit ? 'Updating…' : 'Saving…';
 
   var data = {
-    type, active, redeemed: false, usedCount: 0,
-    createdAt: new Date().toISOString(), createdBy: 'admin', manualCode: true,
+    type, active,
     expiresAt: new Date(expiresAt + 'T23:59:59').toISOString(),
   };
-  if (type === 'percentage') { data.discountPct = value; }
+  if (type === 'percentage') { data.discountPct = value; data.fixedAmountNGN = 0; }
   else { data.fixedAmountNGN = value; data.discountPct = 0; }
-  if (minOrd > 0)  data.minimumOrderNGN = minOrd;
-  if (useLim > 0)  data.usageLimit = useLim;
-  if (startsAt)    data.startsAt = new Date(startsAt + 'T00:00:00').toISOString();
+  if (minOrd > 0) data.minimumOrderNGN = minOrd;
+  else data.minimumOrderNGN = firebase.firestore.FieldValue.delete();
+  if (useLim > 0) data.usageLimit = useLim;
+  else data.usageLimit = firebase.firestore.FieldValue.delete();
+  if (startsAt) data.startsAt = new Date(startsAt + 'T00:00:00').toISOString();
+  else data.startsAt = firebase.firestore.FieldValue.delete();
+
+  if (!isEdit) {
+    data.redeemed  = false;
+    data.usedCount = 0;
+    data.createdAt = new Date().toISOString();
+    data.createdBy = 'admin';
+    data.manualCode = true;
+  }
 
   try {
     var ref = firebase.firestore().collection('promoCodes').doc(code);
-    var existing = await ref.get();
-    if (existing.exists) {
-      msgEl.style.color='var(--accent)'; msgEl.textContent='A code "' + code + '" already exists.';
-      btn.disabled=false; btn.textContent='Save discount'; return;
+
+    if (!isEdit) {
+      var existing = await ref.get();
+      if (existing.exists) {
+        msgEl.style.color='var(--accent)'; msgEl.textContent='A code "' + code + '" already exists.';
+        btn.disabled=false; btn.textContent='Save discount'; return;
+      }
+      await ref.set(data);
+      msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" created!';
+    } else {
+      await ref.update(data);
+      msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" updated!';
+      cancelDiscEdit();
     }
-    await ref.set(data);
-    msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" created!';
-    ['dcCode','dcValue','dcMinOrder','dcUsageLimit','dcStartsAt','dcExpiresAt'].forEach(function(id){ document.getElementById(id).value=''; });
-    document.getElementById('dcActive').checked = true;
+    if (!isEdit) {
+      ['dcCode','dcValue','dcMinOrder','dcUsageLimit','dcStartsAt','dcExpiresAt'].forEach(function(id){ document.getElementById(id).value=''; });
+      document.getElementById('dcActive').checked = true;
+    }
     discountsLoaded = false;
     loadDiscountCodes();
   } catch(e) {
     msgEl.style.color='var(--accent)'; msgEl.textContent='Failed: ' + e.message;
   }
-  btn.disabled=false; btn.textContent='Save discount';
+  btn.disabled=false; btn.textContent= _editingCode ? 'Update discount' : 'Save discount';
 }
 
 async function deleteDiscountCode(code, btn) {

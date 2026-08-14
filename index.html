@@ -1752,7 +1752,7 @@ function _doAddToCart(catKey, imgIndex, size) {
     pr       = getPrice(cat);
   }
 
-  const XXL_SURCHARGE = { NGN: 2000, GBP: 2, USD: 2.5, CAD: 3 };
+  const XXL_SURCHARGE = { NGN: 1500, GBP: 2, USD: 2.5, CAD: 3 };
   const surcharge = size === 'XXL' ? (XXL_SURCHARGE[pr.currency] || XXL_SURCHARGE['USD']) : 0;
 
   const existing = cart.find(function(i) { return i.key === itemKey; });
@@ -1899,11 +1899,12 @@ function openCheckout() {
   document.getElementById('payRetryMsg').style.display  = 'none';
 
   const sym = cartSymbol();
+  var hasXXL = cart.some(function(i) { return i.size === 'XXL'; });
   document.getElementById('osSummaryItems').innerHTML = cart.map(function(i) {
     var sizeLabel = i.size ? ' <span style="font-size:11px;color:#888;font-weight:400">[' + i.size + ']</span>' : '';
     return '<div class="os-item"><span>' + i.name + sizeLabel + ' ×' + i.qty + '</span>' +
       '<span>' + sym + (i.price * i.qty).toLocaleString() + '</span></div>';
-  }).join('');
+  }).join('') + (hasXXL ? '<div style="font-size:11px;color:#888;margin-top:6px">* XXL size includes a size surcharge</div>' : '');
   document.getElementById('osSummaryTotal').textContent = sym + cartTotal().toLocaleString();
   // Reset delivery zone, then populate options based on detected country
   document.getElementById('osDeliveryRow').style.display  = 'none';
