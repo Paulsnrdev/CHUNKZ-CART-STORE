@@ -1516,7 +1516,7 @@ function imgSrc(entry) {
 function imgPrices(cat, entry) {
   if (typeof entry === 'string') return cat.prices;
   if (entry.prices)              return entry.prices;
-  if (entry.ngn === null)        return null;
+  if (entry.ngn === null || entry.ngn === 0) return null;
   if (entry.ngn) {
     var n = entry.ngn;
     return {

@@ -1124,10 +1124,10 @@ async function saveProductEditor() {
   if (!src) { showToast('Please upload an image', true); btn.disabled = false; btn.textContent = 'Save Product'; return; }
 
   const name = document.getElementById('prodName').value.trim() || cleanName(src);
-  const ngn  = parseFloat(document.getElementById('prodNGN').value) || 0;
-  const usd  = parseFloat(document.getElementById('prodUSD').value) || 0;
-  const gbp  = parseFloat(document.getElementById('prodGBP').value) || 0;
-  const cad  = parseFloat(document.getElementById('prodCAD').value) || 0;
+  const ngn  = parseFloat(document.getElementById('prodNGN').value) || null;
+  const usd  = parseFloat(document.getElementById('prodUSD').value) || null;
+  const gbp  = parseFloat(document.getElementById('prodGBP').value) || null;
+  const cad  = parseFloat(document.getElementById('prodCAD').value) || null;
 
   const excludeFromRecommendations = document.getElementById('prodExclude').checked;
   const pairsWith = Array.from(
@@ -1382,10 +1382,10 @@ async function handleImportCSV(input) {
     byCategory[key].push({
       name: (row[col['product_name']]  || '').trim(),
       src:  (row[col['image_url']]     || '').trim(),
-      ngn:  parseFloat(row[col['price_ngn']]) || 0,
-      usd:  parseFloat(row[col['price_usd']] !== undefined ? row[col['price_usd']] : 0) || 0,
-      gbp:  parseFloat(row[col['price_gbp']] !== undefined ? row[col['price_gbp']] : 0) || 0,
-      cad:  parseFloat(row[col['price_cad']] !== undefined ? row[col['price_cad']] : 0) || 0,
+      ngn:  parseFloat(row[col['price_ngn']]) || null,
+      usd:  parseFloat(row[col['price_usd']] !== undefined ? row[col['price_usd']] : null) || null,
+      gbp:  parseFloat(row[col['price_gbp']] !== undefined ? row[col['price_gbp']] : null) || null,
+      cad:  parseFloat(row[col['price_cad']] !== undefined ? row[col['price_cad']] : null) || null,
       hidden: (row[col['hidden']] || '').toLowerCase() === 'true',
       excludeFromRecommendations: (row[col['exclude_from_recommendations']] || '').toLowerCase() === 'true',
       pairsWith: []
