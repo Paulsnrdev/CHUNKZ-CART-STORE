@@ -1091,7 +1091,7 @@ const catalog = {
     },
     images: [
       { src: 'CHUNKZ JERSEY/Black Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
-      { src: "CHUNKZ JERSEY/Jersey Back.webp",         ngn: 25000, usd: 25, gbp: 19, cad: 35 },
+      { src: "CHUNKZ JERSEY/Jersey Back.webp",         ngn: null, usd: null, gbp: null, cad: null },
       { src: 'CHUNKZ JERSEY/White Jersey.webp',          ngn: 25000, usd: 25, gbp: 19, cad: 35 },
       // { src: 'CHUNKZ JERSEY/Jersey B.webp',              ngn: 25000 },
      
@@ -2185,7 +2185,6 @@ function showErr(msg) {
 
 /* ═══════════════════════════════════════════════════
    PAYSTACK PAYMENT
-   Replace pk_live_xxx with your Paystack public key.
 ═══════════════════════════════════════════════════ */
 function proceedToPayment() {
   if (pendingOrder) {
