@@ -154,8 +154,10 @@
     .table-wrap{overflow-x:auto}
 
     /* ── View tabs ── */
-    .view-tabs{display:flex;gap:4px;margin-bottom:22px;background:#fff;padding:5px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);width:fit-content}
-    .view-tab{background:none;border:none;padding:8px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--gray-dark);letter-spacing:.3px}
+    .view-tabs-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;margin-bottom:22px;padding-bottom:4px}
+    .view-tabs-scroll::-webkit-scrollbar{height:0}
+    .view-tabs{display:flex;gap:4px;background:#fff;padding:5px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);width:max-content;min-width:100%;box-sizing:border-box}
+    .view-tab{background:none;border:none;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--gray-dark);letter-spacing:.3px;white-space:nowrap}
     .view-tab.active{background:var(--black);color:#fff}
     .view-tab:hover:not(.active){background:var(--gray-light)}
 
@@ -288,6 +290,32 @@
     .disc-cancel-btn{background:none;border:1px solid #999;color:#666;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer}
     .disc-cancel-btn:hover{border-color:#333;color:#333}
     .disc-msg{font-size:12px;margin-top:10px;min-height:18px}
+
+    /* ── Mobile responsive ── */
+    @media(max-width:600px){
+      .adm-header{padding:0 14px;height:52px}
+      .adm-header-left h1{font-size:13px;letter-spacing:2px}
+      .store-link{display:none}
+      .adm-body{padding:16px 12px}
+      .view-tab{padding:7px 12px;font-size:12px}
+      .filter-bar{gap:6px}
+      .filter-btn{padding:6px 12px;font-size:11px}
+      .refresh-btn{padding:6px 10px;font-size:11px}
+      .stat-card{padding:16px}
+      .stat-value{font-size:22px}
+      .orders-card,.chart-card,.collections-card,.flw-card,.disc-form-card,.disc-list-card,.settings-card,.metric-card,.bal-card{padding:16px}
+      .disc-form-card{max-width:100%}
+      .settings-card{max-width:100%}
+      .disc-form-row{flex-direction:column;gap:10px}
+      .disc-form-field{width:100%}
+      .expand-grid{grid-template-columns:1fr}
+      .orders-head{flex-direction:column;align-items:flex-start;gap:6px}
+      .section-title{font-size:14px}
+      .fu-stage-row{flex-direction:column;align-items:flex-start}
+      .fu-stage-actions{margin-left:0}
+      .disc-save-btn{width:100%;text-align:center}
+    }
+
     /* ── Email preview modal ── */
     #emailPreviewModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
   </style>
@@ -414,13 +442,15 @@ service cloud.firestore {
   <div class="adm-body">
 
     <!-- View switcher -->
-    <div class="view-tabs">
-      <button class="view-tab active" id="tabOrders" onclick="switchView('orders',this)">Orders &amp; Analytics</button>
-      <button class="view-tab" id="tabTx" onclick="switchView('transactions',this)">Payments</button>
-      <button class="view-tab" id="tabMetrics" onclick="switchView('metrics',this)">Metrics</button>
-      <button class="view-tab" id="tabReviews" onclick="switchView('reviews',this)">Reviews</button>
-      <button class="view-tab" id="tabSettings" onclick="switchView('settings',this)">Settings</button>
-      <button class="view-tab" id="tabDiscounts" onclick="switchView('discounts',this)">Discounts</button>
+    <div class="view-tabs-scroll">
+      <div class="view-tabs">
+        <button class="view-tab active" id="tabOrders" onclick="switchView('orders',this)">Orders &amp; Analytics</button>
+        <button class="view-tab" id="tabTx" onclick="switchView('transactions',this)">Payments</button>
+        <button class="view-tab" id="tabMetrics" onclick="switchView('metrics',this)">Metrics</button>
+        <button class="view-tab" id="tabReviews" onclick="switchView('reviews',this)">Reviews</button>
+        <button class="view-tab" id="tabSettings" onclick="switchView('settings',this)">Settings</button>
+        <button class="view-tab" id="tabDiscounts" onclick="switchView('discounts',this)">Discounts</button>
+      </div>
     </div>
 
     <!-- Filter bar -->
