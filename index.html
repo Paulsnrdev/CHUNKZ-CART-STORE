@@ -2029,6 +2029,16 @@ function refreshDiscountRow(sym) {
   }
 }
 
+function getDeviceId() {
+  var key = '_chunkz_did';
+  var id  = localStorage.getItem(key);
+  if (!id) {
+    id = 'dv_' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+    try { localStorage.setItem(key, id); } catch(e) {}
+  }
+  return id;
+}
+
 async function applyPromoCode() {
   const codeEl  = document.getElementById('cPromo');
   const msgEl   = document.getElementById('promoMsg');
@@ -2047,7 +2057,7 @@ async function applyPromoCode() {
     const res  = await fetch('/api/promo?action=validate', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ code, cartItems }),
+      body:    JSON.stringify({ code, cartItems, deviceId: getDeviceId() }),
     });
     const data = await res.json();
 

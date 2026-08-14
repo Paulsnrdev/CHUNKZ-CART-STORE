@@ -18,8 +18,10 @@ module.exports = async function handler(req, res) {
 
   // ── validate ──────────────────────────────────────────────────────────────────
   if (action === 'validate') {
-    const ip      = ((req.headers['x-forwarded-for'] || '').split(',')[0] || '').trim();
-    const limited = await checkRateLimit(ip).catch(() => false);
+    const { deviceId } = req.body || {};
+    const ip           = ((req.headers['x-forwarded-for'] || '').split(',')[0] || '').trim();
+    const identifier   = deviceId ? String(deviceId).slice(0, 100) : ip;
+    const limited = await checkRateLimit(identifier).catch(() => false);
     if (limited) {
       return res.status(429).json({ valid: false, message: 'Too many attempts — please wait a few minutes.' });
     }

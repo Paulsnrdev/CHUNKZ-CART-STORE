@@ -55,11 +55,11 @@ async function createPromo({ followUpId }) {
   return data;
 }
 
-// Rate limit: max 5 validate attempts per IP per 10-minute window
-async function checkRateLimit(ip) {
-  if (!ip) return false;
-  const safeIp = ip.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 80);
-  const ref    = db.collection('rateLimits').doc('promo_v_' + safeIp);
+// Rate limit: max 5 validate attempts per device per 10-minute window
+async function checkRateLimit(identifier) {
+  if (!identifier) return false;
+  const safeId = identifier.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 80);
+  const ref    = db.collection('rateLimits').doc('promo_v_' + safeId);
   const snap   = await ref.get();
   const now    = Date.now();
 
