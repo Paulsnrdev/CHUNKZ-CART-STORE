@@ -1479,10 +1479,12 @@ async function detectCountry() {
 }
 
 function getPrice(cat) {
+  if (!cat.prices) return null;
   return cat.prices[userCountry] || cat.prices['US'];
 }
 
 function fmt(priceObj) {
+  if (!priceObj) return '<span style="color:#999;font-size:.85em;font-weight:500">Price on request</span>';
   var base = priceObj.symbol + priceObj.amount.toLocaleString();
   if (siteDiscount.active && siteDiscount.percent > 0) {
     var discAmount = Math.round(priceObj.amount * (1 - siteDiscount.percent / 100));
@@ -1514,6 +1516,7 @@ function imgSrc(entry) {
 function imgPrices(cat, entry) {
   if (typeof entry === 'string') return cat.prices;
   if (entry.prices)              return entry.prices;
+  if (entry.ngn === null)        return null;
   if (entry.ngn) {
     var n = entry.ngn;
     return {
@@ -1613,7 +1616,7 @@ function appendGalleryItems(catKey, from, to) {
         '<div class="prod-name">' + name + '</div>' +
         '<div class="prod-sub">' + cat.subtitle + '</div>' +
         '<div class="prod-price">' + fmt(itemPr) + '</div>' +
-        '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' +
+        (itemPr ? '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' : '<button class="prod-atc" style="opacity:.4;cursor:not-allowed" disabled>Add to Cart</button>') +
       '</div>';
     const img = card.querySelector('img');
     if (img.complete) markImageReady(img);
@@ -1751,6 +1754,8 @@ function _doAddToCart(catKey, imgIndex, size) {
     itemName = cat.title;
     pr       = getPrice(cat);
   }
+
+  if (!pr) { showToast('Price not available — contact us'); return; }
 
   const XXL_SURCHARGE = { NGN: 1500, GBP: 2, USD: 2.5, CAD: 3 };
   const surcharge = size === 'XXL' ? (XXL_SURCHARGE[pr.currency] || XXL_SURCHARGE['USD']) : 0;
