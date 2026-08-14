@@ -1752,6 +1752,9 @@ function _doAddToCart(catKey, imgIndex, size) {
     pr       = getPrice(cat);
   }
 
+  const XXL_SURCHARGE = { NGN: 2000, GBP: 2, USD: 2.5, CAD: 3 };
+  const surcharge = size === 'XXL' ? (XXL_SURCHARGE[pr.currency] || XXL_SURCHARGE['USD']) : 0;
+
   const existing = cart.find(function(i) { return i.key === itemKey; });
   if (existing) {
     existing.qty++;
@@ -1762,7 +1765,7 @@ function _doAddToCart(catKey, imgIndex, size) {
       src:      itemSrc,
       name:     itemName,
       size:     size,
-      price:    pr.amount,
+      price:    pr.amount + surcharge,
       symbol:   pr.symbol,
       currency: pr.currency,
       qty:      1
