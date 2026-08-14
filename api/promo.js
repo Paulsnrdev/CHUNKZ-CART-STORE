@@ -110,7 +110,12 @@ module.exports = async function handler(req, res) {
       const promo = snap.data();
 
       const newUsedCount = (promo.usedCount || 0) + 1;
-      const limitReached = promo.usageLimit ? newUsedCount >= promo.usageLimit : true;
+      // null  = admin "unlimited" code  → never mark fully redeemed
+      // undefined = Day 8 auto code     → single-use (mark redeemed after 1st use)
+      // N > 0 = limited admin code      → mark redeemed when count hits limit
+      const limitReached = promo.usageLimit > 0
+        ? newUsedCount >= promo.usageLimit
+        : promo.usageLimit !== null;
 
       if (!promo.usageLimit && promo.redeemed && promo.redeemedOrderId === orderId) {
         return res.status(200).json({ ok: true });
