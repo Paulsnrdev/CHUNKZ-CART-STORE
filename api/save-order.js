@@ -90,12 +90,14 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: data });
     }
 
-    // Notify admin — fire and forget, don't block the order response
-    sendEmail({
-      to:      ADMIN_EMAIL,
-      subject: `New Order: ${order.orderRef} — ${order.currency || ''} ${Number(order.total || 0).toLocaleString()}`,
-      html:    orderNotificationHtml(order),
-    }).catch(e => console.error('[save-order] admin email failed:', e.message));
+    // Only notify on first placement (notify flag set by submitOrder, not payment callback)
+    if (order.notify) {
+      sendEmail({
+        to:      ADMIN_EMAIL,
+        subject: `New Order: ${order.orderRef} — ${order.currency || ''} ${Number(order.total || 0).toLocaleString()}`,
+        html:    orderNotificationHtml(order),
+      }).catch(e => console.error('[save-order] admin email failed:', e.message));
+    }
 
     return res.status(200).json({ success: true });
   } catch (e) {

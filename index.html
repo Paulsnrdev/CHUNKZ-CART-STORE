@@ -2163,6 +2163,14 @@ async function submitOrder(e) {
     checkoutAmount   = finalTotal;
     checkoutCurrency = currCode;
     pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
+
+    // Save pending order + trigger admin email immediately at placement
+    fetch('/api/save-order', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(Object.assign({}, pendingOrder, { status: 'pending', notify: true, customer: { name, email, phone, address }, orderDate: new Date().toISOString() }))
+    }).catch(function() {});
+
     document.getElementById('payRetryMsg').style.display = 'none';
     if (payMethod === 'opay') {
       proceedOPayTransfer();
