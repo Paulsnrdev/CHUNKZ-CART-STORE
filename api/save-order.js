@@ -73,6 +73,17 @@ module.exports = async (req, res) => {
   const order = req.body;
   if (!order || !order.orderRef) return res.status(400).json({ error: 'Missing orderRef' });
 
+  // Fire admin email immediately — don't wait for Firestore
+  if (order.notify) {
+    console.log('[save-order] sending admin notification for', order.orderRef);
+    sendEmail({
+      to:      ADMIN_EMAIL,
+      subject: `New Order: ${order.orderRef} — ${order.currency || ''} ${Number(order.total || 0).toLocaleString()}`,
+      html:    orderNotificationHtml(order),
+    }).then(r => console.log('[save-order] admin email sent:', r.id))
+      .catch(e => console.error('[save-order] admin email failed:', e.message));
+  }
+
   const fields = {};
   for (const [key, val] of Object.entries(order)) fields[key] = toFsValue(val);
 
@@ -89,16 +100,6 @@ module.exports = async (req, res) => {
       console.error('[save-order] Firestore error:', JSON.stringify(data));
       return res.status(500).json({ error: data });
     }
-
-    // Only notify on first placement (notify flag set by submitOrder, not payment callback)
-    if (order.notify) {
-      sendEmail({
-        to:      ADMIN_EMAIL,
-        subject: `New Order: ${order.orderRef} — ${order.currency || ''} ${Number(order.total || 0).toLocaleString()}`,
-        html:    orderNotificationHtml(order),
-      }).catch(e => console.error('[save-order] admin email failed:', e.message));
-    }
-
     return res.status(200).json({ success: true });
   } catch (e) {
     console.error('[save-order] fetch error:', e.message);
