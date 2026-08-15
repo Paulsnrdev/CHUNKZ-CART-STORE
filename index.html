@@ -2158,28 +2158,31 @@ async function submitOrder(e) {
   btn.textContent = 'Sending Order…';
 
   try {
-    const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'paystack';
-    customer         = { name, email, phone, address };
-    checkoutAmount   = finalTotal;
-    checkoutCurrency = currCode;
-    pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
-
-    // Save pending order + trigger admin email immediately at placement
-    fetch('/api/save-order', {
+    const res = await fetch('https://formspree.io/f/xvgqyrok', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(Object.assign({}, pendingOrder, { status: 'pending', notify: true, customer: { name, email, phone, address }, orderDate: new Date().toISOString() }))
-    }).catch(function() {});
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
 
-    document.getElementById('payRetryMsg').style.display = 'none';
-    if (payMethod === 'opay') {
-      proceedOPayTransfer();
+    if (res.ok) {
+      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'paystack';
+      customer         = { name, email, phone, address };
+      checkoutAmount   = finalTotal;
+      checkoutCurrency = currCode;
+      pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
+      document.getElementById('payRetryMsg').style.display = 'none';
+      if (payMethod === 'opay') {
+        proceedOPayTransfer();
+      } else {
+        sendWhatsAppNotification(pendingOrder, 'pending');
+        proceedToPayment();
+      }
     } else {
-      sendWhatsAppNotification(pendingOrder, 'pending');
-      proceedToPayment();
+      const data = await res.json().catch(function() { return {}; });
+      showErr(data.error || 'Order failed. Please try again.');
     }
   } catch(err) {
-    showErr('Something went wrong. Check your connection and try again.');
+    showErr('Network error. Check your connection and try again.');
   } finally {
     btn.disabled    = false;
     btn.textContent = 'PLACE ORDER (SEND TO MERCHANT) →';
