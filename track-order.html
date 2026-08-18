@@ -237,7 +237,7 @@ function showErr(msg) {
   errEl.style.display = 'block';
 }
 
-var STATUS_ORDER_OPAY = ['awaiting_payment', 'confirmed', 'processing', 'dispatched', 'delivered'];
+var STATUS_ORDER_MONIEPOINT = ['awaiting_payment', 'confirmed', 'processing', 'dispatched', 'delivered'];
 var STATUS_ORDER      = ['confirmed', 'processing', 'dispatched', 'delivered'];
 var STATUS_LABELS = {
   awaiting_payment: 'Awaiting Payment',
@@ -247,7 +247,7 @@ var STATUS_LABELS = {
   delivered:        'Delivered'
 };
 var STATUS_DESCS = {
-  awaiting_payment: 'Your order has been placed. Please transfer the exact amount to our OPay account using your Order ID as the narration. We will confirm your order once we verify the transfer.',
+  awaiting_payment: 'Your order has been placed. Please transfer the exact amount to our Moniepoint account using your Order ID as the narration. We will confirm your order once we verify the transfer.',
   confirmed:        'Payment received and your order has been confirmed. Our team will begin processing it shortly.',
   processing:       'We\'re packing your order and preparing it for dispatch.',
   dispatched:       'Your order has been handed to the courier and is on its way to you.',
@@ -268,8 +268,8 @@ function renderResult(ref, o) {
   document.getElementById('resZone').textContent     = o.deliveryZone ? 'Zone: ' + o.deliveryZone : '';
 
   // Build timeline
-  var isOpay    = o.paymentMethod === 'opay';
-  var steps     = isOpay ? STATUS_ORDER_OPAY : STATUS_ORDER;
+  var isMoniepoint = o.paymentMethod === 'moniepoint';
+  var steps        = isMoniepoint ? STATUS_ORDER_MONIEPOINT : STATUS_ORDER;
   var status    = o.orderStatus || 'confirmed';
   var statusIdx = steps.indexOf(status);
   if (statusIdx < 0) statusIdx = 0;
