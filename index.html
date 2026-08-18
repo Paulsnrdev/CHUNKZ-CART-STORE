@@ -744,8 +744,8 @@
             <label class="pay-method-card">
               <input type="radio" name="payMethod" value="opay">
               <span>
-                <span class="pmc-title">Direct OPay Transfer</span>
-                <span class="pmc-sub">Send directly to our OPay account  · NGN only</span>
+                <span class="pmc-title">Direct Bank Transfer</span>
+                <span class="pmc-sub">Send directly to our Moniepoint account · NGN only</span>
               </span>
             </label>
           </div>
@@ -771,9 +771,9 @@
         <div id="opayInstructions" style="display:none">
           <div class="opay-details">
             <div class="opay-head">Transfer this exact amount to:</div>
-            <div class="opay-row"><span class="opay-label">Bank</span><span class="opay-val">OPay</span></div>
-            <div class="opay-row"><span class="opay-label">Account No.</span><span class="opay-val">9110141680</span></div>
-            <div class="opay-row"><span class="opay-label">Account Name</span><span class="opay-val">Paul Oluwasegun Ajibade</span></div>
+            <div class="opay-row"><span class="opay-label">Bank</span><span class="opay-val">Moniepoint</span></div>
+            <div class="opay-row"><span class="opay-label">Account No.</span><span class="opay-val">7069094959</span></div>
+            <div class="opay-row"><span class="opay-label">Account Name</span><span class="opay-val">CHUNKZ THE BRAND</span></div>
             <div class="opay-amount" id="opayAmountDisplay"></div>
             <div class="opay-note">Use your Order ID as the transfer narration.<br>Your order will be confirmed once we verify your payment.</div>
           </div>
@@ -2270,7 +2270,7 @@ function proceedOPayTransfer() {
 
   document.getElementById('successIcon').textContent  = '📋';
   document.getElementById('successTitle').textContent = 'Order Placed!';
-  document.getElementById('successSub').innerHTML     = 'Please transfer the amount below to our OPay account.<br>Your order will be confirmed once we verify your payment.';
+  document.getElementById('successSub').innerHTML     = 'Please transfer the amount below to our Moniepoint account.<br>Your order will be confirmed once we verify your payment.';
 
   document.getElementById('successOrderRef').textContent = o.orderRef;
   document.getElementById('successRefBlock').style.display = 'block';
