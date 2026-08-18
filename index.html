@@ -2200,10 +2200,6 @@ function showErr(msg) {
    PAYSTACK PAYMENT
 ═══════════════════════════════════════════════════ */
 function proceedToPayment() {
-  if (pendingOrder) {
-    var _o = pendingOrder;
-    saveOrderToFirestore(_o.name, _o.email, _o.phone, _o.address, _o.colour, _o.desc, _o.items, _o.total, _o.currency, _o.deliveryZone, _o.deliveryFeeNGN, _o.orderRef, 'paystack_pending');
-  }
   var handler = PaystackPop.setup({
     key:      'pk_live_c4343f7bc190cf95b22f528090eb4d2862c07bae',
     email:    customer.email || 'customer@chunkz.com',
