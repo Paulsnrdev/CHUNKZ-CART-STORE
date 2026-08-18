@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -21,7 +21,7 @@
     }
     body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black);min-height:100vh}
 
-    /* â”€â”€ Setup Notice â”€â”€ */
+    /* ── Setup Notice ── */
     #setupNotice{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--black)}
     .setup-box{background:#fff;border-radius:16px;padding:40px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
     .setup-box h2{font-size:20px;font-weight:900;margin-bottom:6px;color:var(--accent)}
@@ -33,7 +33,7 @@
     code{background:#f0f0f0;padding:2px 7px;border-radius:4px;font-size:12px;font-family:monospace;color:#c00}
     .rules-box{background:#1a1a1a;color:#a8e6cf;font-family:monospace;font-size:12px;padding:14px;border-radius:8px;margin-top:8px;white-space:pre;overflow-x:auto}
 
-    /* â”€â”€ Login â”€â”€ */
+    /* ── Login ── */
     #loginScreen{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--black)}
     .login-box{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
     .login-logo{text-align:center;margin-bottom:28px}
@@ -49,7 +49,7 @@
     .login-btn:disabled{background:#999;cursor:not-allowed}
     .login-err{color:var(--accent);font-size:12px;margin-top:10px;text-align:center;display:none}
 
-    /* â”€â”€ Header â”€â”€ */
+    /* ── Header ── */
     .adm-header{background:var(--black);color:#fff;padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
     .adm-header-left{display:flex;align-items:center;gap:14px}
     .adm-header-left img{width:34px;height:34px;border-radius:50%;object-fit:cover}
@@ -61,11 +61,11 @@
     .logout-btn{background:rgba(255,255,255,.1);border:none;color:#fff;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
     .logout-btn:hover{background:rgba(255,255,255,.2)}
 
-    /* â”€â”€ Dashboard body â”€â”€ */
+    /* ── Dashboard body ── */
     #dashboard{display:none}
     .adm-body{max-width:1280px;margin:0 auto;padding:28px 24px}
 
-    /* â”€â”€ Filter bar â”€â”€ */
+    /* ── Filter bar ── */
     .filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
     .filter-label{font-size:12px;font-weight:700;color:var(--gray-dark);letter-spacing:.5px;margin-right:4px}
     .filter-btn{background:#fff;border:1.5px solid var(--gray-mid);color:var(--black);padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
@@ -80,7 +80,7 @@
     .apply-btn{background:var(--black);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
     .apply-btn:hover{background:#333}
 
-    /* â”€â”€ Stats grid â”€â”€ */
+    /* ── Stats grid ── */
     .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
     @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
@@ -94,14 +94,14 @@
     .stat-value{font-size:26px;font-weight:900;color:var(--black);line-height:1;word-break:break-all}
     .stat-sub{font-size:11px;color:var(--gray-dark);margin-top:6px}
 
-    /* â”€â”€ Charts row â”€â”€ */
+    /* ── Charts row ── */
     .charts-row{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:20px}
     @media(max-width:800px){.charts-row{grid-template-columns:1fr}}
     .chart-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
     .chart-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:16px}
     .chart-wrap{position:relative;height:220px}
 
-    /* â”€â”€ Collections table â”€â”€ */
+    /* ── Collections table ── */
     .collections-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:20px}
     .section-title{font-size:14px;font-weight:800;letter-spacing:.5px;margin-bottom:14px}
     .coll-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -117,7 +117,7 @@
     .rank-badge.silver{background:#c0c0c0;color:#555}
     .rank-badge.bronze{background:#cd7f32;color:#fff}
 
-    /* â”€â”€ Orders table â”€â”€ */
+    /* ── Orders table ── */
     .orders-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
     .orders-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
     .orders-count{font-size:12px;color:var(--gray-dark);font-weight:600}
@@ -145,15 +145,15 @@
     .empty-icon{font-size:40px;margin-bottom:10px}
     .empty-state p{font-size:13px}
 
-    /* â”€â”€ Loading â”€â”€ */
+    /* ── Loading ── */
     .loading{text-align:center;padding:50px}
     .spin{display:inline-block;width:32px;height:32px;border:3px solid var(--gray-mid);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* â”€â”€ Table wrapper scroll â”€â”€ */
+    /* ── Table wrapper scroll ── */
     .table-wrap{overflow-x:auto}
 
-    /* â”€â”€ View tabs â”€â”€ */
+    /* ── View tabs ── */
     .view-tabs-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;margin-bottom:22px;padding-bottom:4px}
     .view-tabs-scroll::-webkit-scrollbar{height:0}
     .view-tabs{display:flex;gap:4px;background:#fff;padding:5px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);width:max-content;min-width:100%;box-sizing:border-box}
@@ -161,14 +161,14 @@
     .view-tab.active{background:var(--black);color:#fff}
     .view-tab:hover:not(.active){background:var(--gray-light)}
 
-    /* â”€â”€ Balance cards â”€â”€ */
+    /* ── Balance cards ── */
     .balance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:20px}
     .bal-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);border-left:4px solid var(--success)}
     .bal-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
     .bal-amount{font-size:28px;font-weight:900;color:var(--black);line-height:1}
     .bal-sub{font-size:11px;color:var(--gray-dark);margin-top:6px}
 
-    /* â”€â”€ Paystack transaction table â”€â”€ */
+    /* ── Paystack transaction table ── */
     .flw-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
     .flw-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
     .flw-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -183,7 +183,7 @@
     .tx-ref{font-size:10px;font-family:monospace;color:var(--gray-dark);margin-top:2px}
     .flw-loading{text-align:center;padding:40px;color:var(--gray-dark);font-size:13px}
 
-    /* â”€â”€ Status badges â”€â”€ */
+    /* ── Status badges ── */
     .st-badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
     .st-awaiting_payment{background:#fef9c3;color:#854d0e}
     .st-confirmed{background:#e0f2fe;color:#0369a1}
@@ -192,7 +192,7 @@
     .st-delivered{background:#d1fae5;color:#065f46}
     .st-unknown{background:var(--gray-light);color:var(--gray-dark)}
 
-    /* â”€â”€ Status update block â”€â”€ */
+    /* ── Status update block ── */
     .su-block{margin-top:14px;padding-top:14px;border-top:1px dashed var(--gray-mid)}
     .su-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
     .su-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -207,7 +207,7 @@
     .su-delete:hover{background:var(--accent);color:#fff}
     .ref-mono{font-size:10px;font-family:monospace;color:#999;margin-top:2px;letter-spacing:.5px}
 
-    /* â”€â”€ Follow-up stages â”€â”€ */
+    /* ── Follow-up stages ── */
     .fu-stages{display:flex;flex-direction:column;gap:6px;margin-top:10px}
     .fu-stage-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fafafa;border-radius:8px;border:1px solid var(--gray-mid);flex-wrap:wrap}
     .fu-stage-lbl{font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--black);min-width:120px}
@@ -219,7 +219,7 @@
     .fu-btn.primary{border-color:var(--black);background:var(--black);color:#fff}
     .fu-btn.primary:hover{background:#333}
     .fu-loading-sm{font-size:12px;color:var(--gray-dark);padding:10px 0;font-style:italic}
-    /* â”€â”€ Recommendation card â”€â”€ */
+    /* ── Recommendation card ── */
     .rec-display{display:flex;gap:12px;align-items:flex-start;padding:12px;background:#fafafa;border-radius:8px;border:1px solid var(--gray-mid);margin-top:6px}
     .rec-img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0;background:var(--gray-mid)}
     .rec-body{flex:1;min-width:0}
@@ -227,7 +227,7 @@
     .rec-source{font-size:10px;color:#4361ee;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
     .rec-pitch{font-size:12px;color:var(--gray-dark);line-height:1.4;margin-bottom:6px}
     .rec-price{font-size:13px;font-weight:800;color:var(--accent)}
-    /* â”€â”€ Metrics â”€â”€ */
+    /* ── Metrics ── */
     .metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px}
     .metric-card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
     .metric-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:8px}
@@ -239,12 +239,12 @@
     .src-table th:last-child{border-radius:0 6px 6px 0}
     .src-table td{padding:10px 12px;border-bottom:1px solid var(--gray-mid)}
     .src-table tr:last-child td{border-bottom:none}
-    /* â”€â”€ Reviews â”€â”€ */
+    /* ── Reviews ── */
     .review-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:12px}
     .review-stars{font-size:18px;margin-bottom:4px}
     .review-meta{font-size:11px;color:var(--gray-dark);margin-bottom:8px}
     .review-comment{font-size:13px;color:var(--black);line-height:1.5}
-    /* â”€â”€ Settings â”€â”€ */
+    /* ── Settings ── */
     .settings-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);max-width:520px;margin-bottom:20px}
     .settings-title{font-size:15px;font-weight:800;margin-bottom:4px}
     .settings-sub{font-size:12px;color:var(--gray-dark);margin-bottom:18px;line-height:1.5}
@@ -256,7 +256,7 @@
     .settings-save{background:var(--black);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
     .settings-save:hover{background:#222}
     .settings-msg{font-size:12px;margin-top:10px;min-height:18px}
-    /* â”€â”€ Discount Codes â”€â”€ */
+    /* ── Discount Codes ── */
     .disc-form-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:20px;max-width:640px}
     .disc-form-title{font-size:18px;font-weight:900;margin-bottom:20px}
     .disc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -291,7 +291,7 @@
     .disc-cancel-btn:hover{border-color:#333;color:#333}
     .disc-msg{font-size:12px;margin-top:10px;min-height:18px}
 
-    /* â”€â”€ Mobile responsive â”€â”€ */
+    /* ── Mobile responsive ── */
     @media(max-width:600px){
       .adm-header{padding:0 14px;height:52px}
       .adm-header-left h1{font-size:13px;letter-spacing:2px}
@@ -316,7 +316,7 @@
       .disc-save-btn{width:100%;text-align:center}
     }
 
-    /* â”€â”€ Email preview modal â”€â”€ */
+    /* ── Email preview modal ── */
     #emailPreviewModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
   </style>
   <!-- Vercel Web Analytics -->
@@ -328,11 +328,11 @@
 </head>
 <body>
 
-<!-- â•â•â• SETUP NOTICE (shown when Firebase not configured) â•â•â• -->
+<!-- ═══ SETUP NOTICE (shown when Firebase not configured) ═══ -->
 <div id="setupNotice" style="display:flex">
   <div class="setup-box">
     <h2>Firebase Setup Required</h2>
-    <p class="subtitle">Your admin panel is built â€” you just need to connect it to Firebase. Follow these steps once.</p>
+    <p class="subtitle">Your admin panel is built — you just need to connect it to Firebase. Follow these steps once.</p>
 
     <div class="setup-step">
       <div class="step-num">1</div>
@@ -346,7 +346,7 @@
       <div class="step-num">2</div>
       <div class="step-body">
         <strong>Register your web app</strong>
-        In your Firebase project â†’ click the <code>&lt;/&gt;</code> icon â†’ name it <code>chunkz-web</code> â†’ copy the <code>firebaseConfig</code> object shown.
+        In your Firebase project → click the <code>&lt;/&gt;</code> icon → name it <code>chunkz-web</code> → copy the <code>firebaseConfig</code> object shown.
       </div>
     </div>
 
@@ -362,7 +362,7 @@
       <div class="step-num">4</div>
       <div class="step-body">
         <strong>Create an admin user</strong>
-        In Firebase Console â†’ Authentication â†’ Sign-in method â†’ enable <strong>Email/Password</strong>. Then go to Users â†’ Add user â†’ enter your email and a strong password. That's your admin login.
+        In Firebase Console → Authentication → Sign-in method → enable <strong>Email/Password</strong>. Then go to Users → Add user → enter your email and a strong password. That's your admin login.
       </div>
     </div>
 
@@ -370,7 +370,7 @@
       <div class="step-num">5</div>
       <div class="step-body">
         <strong>Enable Firestore &amp; set security rules</strong>
-        Firebase Console â†’ Firestore Database â†’ Create database (Start in production mode). Then go to Rules tab and paste:
+        Firebase Console → Firestore Database → Create database (Start in production mode). Then go to Rules tab and paste:
         <div class="rules-box">rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -402,7 +402,7 @@ service cloud.firestore {
   </div>
 </div>
 
-<!-- â•â•â• LOGIN â•â•â• -->
+<!-- ═══ LOGIN ═══ -->
 <div id="loginScreen" style="display:none">
   <div class="login-box">
     <div class="login-logo">
@@ -416,14 +416,14 @@ service cloud.firestore {
     </div>
     <div class="login-field">
       <label>Password</label>
-      <input type="password" id="adminPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password">
+      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- â•â•â• DASHBOARD â•â•â• -->
+<!-- ═══ DASHBOARD ═══ -->
 <div id="dashboard">
   <!-- Header -->
   <header class="adm-header">
@@ -433,8 +433,8 @@ service cloud.firestore {
       <span class="adm-badge">ADMIN</span>
     </div>
     <div class="hdr-right">
-      <a href="/" class="store-link">â† View Store</a>
-      <a href="/catalog-admin" class="logout-btn" style="text-decoration:none">ðŸ—‚ Catalog</a>
+      <a href="/" class="store-link">← View Store</a>
+      <a href="/catalog-admin" class="logout-btn" style="text-decoration:none">🗂 Catalog</a>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
     </div>
   </header>
@@ -460,9 +460,9 @@ service cloud.firestore {
       <button class="filter-btn" onclick="setFilter('month',this)">This Month</button>
       <button class="filter-btn" onclick="setFilter('week',this)">This Week</button>
       <button class="filter-btn" onclick="setFilter('today',this)">Today</button>
-      <button class="filter-btn" id="pickMonthBtn" onclick="toggleMonthPicker(this)">Month â–¾</button>
-      <button class="filter-btn" id="pickRangeBtn" onclick="toggleRangePicker(this)">Range â–¾</button>
-      <button class="refresh-btn" onclick="loadData()">â†» Refresh</button>
+      <button class="filter-btn" id="pickMonthBtn" onclick="toggleMonthPicker(this)">Month ▾</button>
+      <button class="filter-btn" id="pickRangeBtn" onclick="toggleRangePicker(this)">Range ▾</button>
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
 
       <!-- Month picker -->
       <div class="period-picker-row" id="monthPickerRow">
@@ -491,9 +491,9 @@ service cloud.firestore {
         <div class="stat-card revenue">
           <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between">
             Total Revenue (NGN)
-            <button id="revToggle" onclick="toggleRevenue()" style="background:none;border:none;cursor:pointer;font-size:15px;line-height:1;color:var(--gray-dark);padding:0 2px" title="Show/hide balance">ðŸ‘</button>
+            <button id="revToggle" onclick="toggleRevenue()" style="background:none;border:none;cursor:pointer;font-size:15px;line-height:1;color:var(--gray-dark);padding:0 2px" title="Show/hide balance">👁</button>
           </div>
-          <div class="stat-value" id="statRevenue">â‚¦0</div>
+          <div class="stat-value" id="statRevenue">₦0</div>
           <div class="stat-sub" id="statRevenueSub"></div>
         </div>
         <div class="stat-card orders">
@@ -508,13 +508,13 @@ service cloud.firestore {
         </div>
         <div class="stat-card top">
           <div class="stat-label">Best Collection</div>
-          <div class="stat-value" id="statTop" style="font-size:18px">â€”</div>
+          <div class="stat-value" id="statTop" style="font-size:18px">—</div>
           <div class="stat-sub" id="statTopSub"></div>
         </div>
         <div class="stat-card pending" id="pendingCard" style="display:none">
-          <div class="stat-label">â³ Awaiting Payment</div>
+          <div class="stat-label">⏳ Awaiting Payment</div>
           <div class="stat-value" id="statPending" style="color:#d97706">0</div>
-          <div class="stat-sub" id="statPendingSub">Moniepoint orders â€” verify &amp; confirm</div>
+          <div class="stat-sub" id="statPendingSub">Moniepoint orders — verify &amp; confirm</div>
         </div>
       </div>
 
@@ -575,12 +575,12 @@ service cloud.firestore {
 
     </div><!-- /dataContent -->
 
-    <!-- â•â•â• TRANSACTIONS VIEW â•â•â• -->
+    <!-- ═══ TRANSACTIONS VIEW ═══ -->
     <div id="txContent" style="display:none">
 
       <!-- Balance cards -->
       <div class="balance-grid" id="balanceGrid">
-        <div class="flw-loading">Loading balanceâ€¦</div>
+        <div class="flw-loading">Loading balance…</div>
       </div>
 
       <!-- Transactions table -->
@@ -589,7 +589,7 @@ service cloud.firestore {
           <div class="section-title">Incoming Payments</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <span class="orders-count" id="txCount"></span>
-            <button class="refresh-btn" onclick="loadPaystackData()">â†» Refresh</button>
+            <button class="refresh-btn" onclick="loadPaystackData()">↻ Refresh</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -605,7 +605,7 @@ service cloud.firestore {
               </tr>
             </thead>
             <tbody id="txBody">
-              <tr><td colspan="6"><div class="flw-loading">Loading transactionsâ€¦</div></td></tr>
+              <tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -630,7 +630,7 @@ service cloud.firestore {
               </tr>
             </thead>
             <tbody id="trBody">
-              <tr><td colspan="6"><div class="flw-loading">Loading transfersâ€¦</div></td></tr>
+              <tr><td colspan="6"><div class="flw-loading">Loading transfers…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -638,25 +638,25 @@ service cloud.firestore {
 
     </div><!-- /txContent -->
 
-    <!-- â•â•â• METRICS VIEW â•â•â• -->
+    <!-- ═══ METRICS VIEW ═══ -->
     <div id="metricsContent" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
         <div class="section-title">Follow-up &amp; Upsell Metrics</div>
-        <button class="refresh-btn" onclick="metricsLoaded=false;loadMetrics()">â†» Refresh</button>
+        <button class="refresh-btn" onclick="metricsLoaded=false;loadMetrics()">↻ Refresh</button>
       </div>
       <div id="metricsBody"><div class="loading"><div class="spin"></div></div></div>
     </div>
 
-    <!-- â•â•â• REVIEWS VIEW â•â•â• -->
+    <!-- ═══ REVIEWS VIEW ═══ -->
     <div id="reviewsContent" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
         <div class="section-title">Customer Reviews</div>
-        <button class="refresh-btn" onclick="reviewsLoaded=false;loadReviews()">â†» Refresh</button>
+        <button class="refresh-btn" onclick="reviewsLoaded=false;loadReviews()">↻ Refresh</button>
       </div>
       <div id="reviewsBody"><div class="loading"><div class="spin"></div></div></div>
     </div>
 
-    <!-- â•â•â• SETTINGS VIEW â•â•â• -->
+    <!-- ═══ SETTINGS VIEW ═══ -->
     <div id="settingsContent" style="display:none">
       <div class="section-title" style="margin-bottom:22px">System Settings</div>
       <div class="settings-card">
@@ -677,7 +677,7 @@ service cloud.firestore {
       </div>
     </div>
 
-    <!-- â•â•â• DISCOUNTS VIEW â•â•â• -->
+    <!-- ═══ DISCOUNTS VIEW ═══ -->
     <div id="discountsContent" style="display:none">
       <div class="disc-form-card">
         <div class="disc-form-title" id="discFormTitle">New discount</div>
@@ -692,7 +692,7 @@ service cloud.firestore {
             <label>Type</label>
             <select id="dcType">
               <option value="percentage">Percentage off</option>
-              <option value="fixed">Fixed amount off (â‚¦)</option>
+              <option value="fixed">Fixed amount off (₦)</option>
             </select>
           </div>
           <div class="disc-form-field">
@@ -702,7 +702,7 @@ service cloud.firestore {
         </div>
         <div class="disc-form-row">
           <div class="disc-form-field">
-            <label>Minimum order (â‚¦)</label>
+            <label>Minimum order (₦)</label>
             <input type="number" id="dcMinOrder" min="0" placeholder="Optional">
           </div>
           <div class="disc-form-field">
@@ -734,7 +734,7 @@ service cloud.firestore {
       <div class="disc-list-card">
         <div class="orders-head">
           <div class="section-title" style="margin-bottom:0">All Discount Codes</div>
-          <button class="refresh-btn" onclick="loadDiscountCodes()">â†» Refresh</button>
+          <button class="refresh-btn" onclick="loadDiscountCodes()">↻ Refresh</button>
         </div>
         <div class="table-wrap" style="margin-top:14px">
           <table class="disc-table">
@@ -752,7 +752,7 @@ service cloud.firestore {
               </tr>
             </thead>
             <tbody id="discBody">
-              <tr><td colspan="9" class="flw-loading">Loadingâ€¦</td></tr>
+              <tr><td colspan="9" class="flw-loading">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -762,7 +762,7 @@ service cloud.firestore {
   </div>
 </div>
 
-<!-- â•â•â• EMAIL PREVIEW MODAL â•â•â• -->
+<!-- ═══ EMAIL PREVIEW MODAL ═══ -->
 <div id="emailPreviewModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:12px;width:720px;max-width:95vw;height:85vh;display:flex;flex-direction:column;overflow:hidden">
     <div style="padding:14px 20px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
@@ -774,11 +774,11 @@ service cloud.firestore {
 </div>
 
 <script>
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    FIREBASE CONFIG
    Replace all values below with your Firebase project's
    config keys after completing the setup steps.
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
   authDomain:        "chunkz-store.firebaseapp.com",
@@ -789,15 +789,15 @@ const FIREBASE_CONFIG = {
   measurementId:     "G-6G1XJQT5G4"
 };
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CURRENCY â†’ NGN CONVERSION RATES
+/* ═══════════════════════════════════════════════════
+   CURRENCY → NGN CONVERSION RATES
    (same as store's conversion factors)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 const TO_NGN = { NGN: 1, USD: 1375, GBP: 1820, CAD: 975, EUR: 1500 };
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    INIT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 const FIREBASE_READY = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
 
 if (!FIREBASE_READY) {
@@ -818,9 +818,9 @@ if (!FIREBASE_READY) {
   });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    AUTH
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function doLogin() {
   const email = document.getElementById('adminEmail').value.trim();
   const pass  = document.getElementById('adminPass').value;
@@ -831,7 +831,7 @@ function doLogin() {
   if (!email || !pass) { showLoginErr('Enter your email and password.'); return; }
 
   btn.disabled    = true;
-  btn.textContent = 'Signing inâ€¦';
+  btn.textContent = 'Signing in…';
 
   firebase.auth().signInWithEmailAndPassword(email, pass)
     .catch(function(e) {
@@ -855,16 +855,16 @@ document.getElementById('adminPass') && document.getElementById('adminPass').add
   if (e.key === 'Enter') doLogin();
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    DATA LOADING
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 let allOrders = [];
 let activeFilter = 'all';
 let customMonth = null;   // { year, month } 0-indexed
 let rangeFrom   = null;   // Date
 let rangeTo     = null;   // Date
 let revenueHidden = false;
-let lastRevenue = 'â‚¦0';
+let lastRevenue = '₦0';
 let timeChartInst = null;
 let collChartInst = null;
 let _ordersUnsub = null;
@@ -893,9 +893,9 @@ function loadData() {
     });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    FILTER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function setFilter(f, btn) {
   activeFilter = f;
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -989,12 +989,12 @@ function getFilteredOrders() {
   });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    RENDER ALL
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function renderAll() {
   const orders = getFilteredOrders();
-  // Exclude unpaid MONIEPOINT orders from stats/charts â€” only count confirmed payments
+  // Exclude unpaid Moniepoint orders from stats/charts — only count confirmed payments
   const pendingOrders = orders.filter(function(o) { return o.orderStatus === 'awaiting_payment'; });
   const paidOrders    = orders.filter(function(o) { return o.orderStatus !== 'awaiting_payment'; });
   renderStats(paidOrders, pendingOrders);
@@ -1007,15 +1007,15 @@ function renderAll() {
   document.getElementById('dataContent').style.display  = 'block';
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    STATS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function toNGN(amount, currency) {
   return amount * (TO_NGN[currency] || 1);
 }
 
 function fmtNGN(n) {
-  return 'â‚¦' + Math.round(n).toLocaleString('en-NG');
+  return '₦' + Math.round(n).toLocaleString('en-NG');
 }
 
 function renderStats(orders, pendingOrders) {
@@ -1039,13 +1039,13 @@ function renderStats(orders, pendingOrders) {
   const topColl = Object.entries(collRevMap).sort(function(a,b){ return b[1]-a[1]; })[0];
 
   lastRevenue = fmtNGN(totalNGN);
-  document.getElementById('statRevenue').textContent    = revenueHidden ? 'â‚¦â€¢â€¢â€¢â€¢â€¢â€¢' : lastRevenue;
+  document.getElementById('statRevenue').textContent    = revenueHidden ? '₦••••••' : lastRevenue;
   document.getElementById('statRevenueSub').textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
   document.getElementById('statOrders').textContent     = orders.length;
   document.getElementById('statOrdersSub').textContent  = activeFilter === 'all' ? 'all time' : 'in selected period';
   document.getElementById('statItems').textContent      = itemCount;
   document.getElementById('statItemsSub').textContent   = 'units across ' + Object.keys(collOrdMap).length + ' collections';
-  document.getElementById('statTop').textContent        = topColl ? COLL_LABELS[topColl[0]] || topColl[0] : 'â€”';
+  document.getElementById('statTop').textContent        = topColl ? COLL_LABELS[topColl[0]] || topColl[0] : '—';
   document.getElementById('statTopSub').textContent     = topColl ? fmtNGN(topColl[1]) + ' revenue' : 'No data yet';
 
   const pending     = pendingOrders || [];
@@ -1053,12 +1053,12 @@ function renderStats(orders, pendingOrders) {
   const pendingCard = document.getElementById('pendingCard');
   pendingCard.style.display = pending.length > 0 ? 'block' : 'none';
   document.getElementById('statPending').textContent    = pending.length + ' order' + (pending.length !== 1 ? 's' : '');
-  document.getElementById('statPendingSub').textContent = fmtNGN(pendingNGN) + ' â€” Moniepoint orders awaiting verification';
+  document.getElementById('statPendingSub').textContent = fmtNGN(pendingNGN) + ' — Moniepoint orders awaiting verification';
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    COLLECTION LABELS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 const COLL_LABELS = {
   shirts:'Shirts', hoodie:'Hoodie', sweatshirt:'Sweatshirt',
   sweatpant:'Sweatpant', tracksuit:'Tracksuit', jersey:'Jersey',
@@ -1068,9 +1068,9 @@ const COLL_LABELS = {
   raglanshirt:'Raglan Shirt', socks:'Socks', chunkzcombo:'Chunkz Combo'
 };
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    TIME CHART
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function renderTimeChart(orders) {
   const days = 30;
   const labels = [];
@@ -1127,9 +1127,9 @@ function renderTimeChart(orders) {
   });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    COLLECTION CHART (doughnut)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 const CHART_COLORS = [
   '#e63946','#4361ee','#2a9d8f','#f8961e','#7209b7',
   '#3a86ff','#fb8500','#06d6a0','#ef476f','#118ab2',
@@ -1185,9 +1185,9 @@ function renderCollChart(orders) {
   });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    COLLECTIONS TABLE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function renderCollTable(orders) {
   const map = {};
 
@@ -1225,30 +1225,30 @@ function renderCollTable(orders) {
   }).join('');
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    ORDERS TABLE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function renderOrdersTable(orders) {
   const tbody = document.getElementById('ordersBody');
   document.getElementById('ordersCount').textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
 
   if (orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">ðŸ“¦</div><p>No orders yet for this period.</p></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📦</div><p>No orders yet for this period.</p></div></td></tr>';
     return;
   }
 
   tbody.innerHTML = orders.map(function(o, idx) {
     const ts     = o.timestamp ? new Date(o.timestamp) : null;
-    const dateStr = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'â€”';
-    const sym    = { NGN:'â‚¦', USD:'$', GBP:'Â£', CAD:'CA$' }[o.currency] || '';
+    const dateStr = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    const sym    = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[o.currency] || '';
     const items  = (o.items || []);
     const pills  = items.slice(0, 3).map(function(it) {
-      return '<span class="item-pill">' + (COLL_LABELS[it.collection] || it.collection || '?') + ' Ã—' + (it.qty || 1) + '</span>';
+      return '<span class="item-pill">' + (COLL_LABELS[it.collection] || it.collection || '?') + ' ×' + (it.qty || 1) + '</span>';
     }).join('') + (items.length > 3 ? '<span class="item-pill">+' + (items.length - 3) + ' more</span>' : '');
 
     const statusStr = o.orderStatus || '';
     const stCls     = statusStr ? ('st-' + statusStr) : 'st-unknown';
-    const stLabel   = { awaiting_payment:'Awaiting Payment', confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[statusStr] || 'â€”';
+    const stLabel   = { awaiting_payment:'Awaiting Payment', confirmed:'Confirmed', processing:'Processing', dispatched:'Dispatched', delivered:'Delivered' }[statusStr] || '—';
     const showTrack = (statusStr === 'dispatched' || statusStr === 'delivered') ? 'block' : 'none';
     const docId     = esc(o._id || '');
 
@@ -1260,27 +1260,27 @@ function renderOrdersTable(orders) {
     const rowId = 'exp-' + idx;
     return '<tr class="order-row" onclick="toggleExpand(\'' + rowId + '\',\'' + docId + '\',\'' + statusStr + '\')">' +
       '<td class="date-val">' + dateStr + '</td>' +
-      '<td><div class="cust-name">' + esc(o.customerName || 'â€”') + '</div>' +
+      '<td><div class="cust-name">' + esc(o.customerName || '—') + '</div>' +
       '<div class="cust-phone">' + esc(o.customerPhone || '') + '</div>' +
       (o.orderRef ? '<div class="ref-mono">' + esc(o.orderRef) + '</div>' : '') +
       '</td>' +
       '<td>' + pills + '</td>' +
       '<td class="total-val">' + sym + (o.total || 0).toLocaleString() + '</td>' +
-      '<td>' + (o.currency || 'â€”') + '</td>' +
+      '<td>' + (o.currency || '—') + '</td>' +
       '<td><span class="st-badge ' + stCls + '">' + stLabel + '</span></td>' +
     '</tr>' +
     '<tr id="' + rowId + '" class="expand-row" style="display:none"><td colspan="6"><div class="expand-inner">' +
       '<div class="expand-grid">' +
-        '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || 'â€”') + '</p></div>' +
-        '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || 'â€”') + '</p></div>' +
-        '<div class="expand-field"><label>Colour Preference</label><p>' + esc(o.colourPreference || 'â€”') + '</p></div>' +
+        '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || '—') + '</p></div>' +
+        '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || '—') + '</p></div>' +
+        '<div class="expand-field"><label>Colour Preference</label><p>' + esc(o.colourPreference || '—') + '</p></div>' +
         '<div class="expand-field"><label>Payment Method</label><p>' + (o.paymentMethod === 'moniepoint' ? 'Moniepoint Direct Transfer' : 'Paystack') + '</p></div>' +
         (o.descriptionNote ? '<div class="expand-field"><label>Note</label><p>' + esc(o.descriptionNote) + '</p></div>' : '') +
       '</div>' +
       '<ul class="item-detail-list">' +
         items.map(function(it) {
-          const s = { NGN:'â‚¦', USD:'$', GBP:'Â£', CAD:'CA$' }[it.currency || o.currency] || '';
-          return '<li>' + esc(it.name || it.collection || '?') + ' â€” ' + (it.qty || 1) + ' Ã— ' + s + (it.price || 0).toLocaleString() + ' = ' + s + ((it.price || 0) * (it.qty || 1)).toLocaleString() + '</li>';
+          const s = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[it.currency || o.currency] || '';
+          return '<li>' + esc(it.name || it.collection || '?') + ' — ' + (it.qty || 1) + ' × ' + s + (it.price || 0).toLocaleString() + ' = ' + s + ((it.price || 0) * (it.qty || 1)).toLocaleString() + '</li>';
         }).join('') +
       '</ul>' +
       (docId ? (
@@ -1292,12 +1292,12 @@ function renderOrdersTable(orders) {
             '<button class="su-save" onclick="updateOrderStatus(\'' + docId + '\',' + idx + ');event.stopPropagation()">Save</button>' +
           '</div>' +
           '<div class="su-msg" id="msg-' + idx + '"></div>' +
-          '<button class="su-delete" onclick="deleteOrder(\'' + docId + '\',' + idx + ');event.stopPropagation()">ðŸ—‘ Delete Order</button>' +
+          '<button class="su-delete" onclick="deleteOrder(\'' + docId + '\',' + idx + ');event.stopPropagation()">🗑 Delete Order</button>' +
         '</div>' +
         (statusStr === 'delivered' ? (
           '<div class="su-block" id="fu-sect-' + docId + '" style="border-top:1px solid var(--gray-mid);padding-top:14px;margin-top:4px">' +
             '<div class="su-title">FOLLOW-UP SEQUENCE</div>' +
-            '<div class="fu-loading-sm" id="fu-loading-' + docId + '">Loading follow-up dataâ€¦</div>' +
+            '<div class="fu-loading-sm" id="fu-loading-' + docId + '">Loading follow-up data…</div>' +
             '<div id="fu-data-' + docId + '" style="display:none"></div>' +
           '</div>'
         ) : '')
@@ -1321,9 +1321,9 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    VIEW SWITCHER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 var txLoaded       = false;
 var metricsLoaded  = false;
 var reviewsLoaded   = false;
@@ -1369,9 +1369,9 @@ function switchView(view, btn) {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    PAYSTACK DATA
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 async function getIdToken() {
   var user = firebase.auth().currentUser;
   if (!user) return null;
@@ -1379,9 +1379,9 @@ async function getIdToken() {
 }
 
 async function loadPaystackData() {
-  document.getElementById('balanceGrid').innerHTML = '<div class="flw-loading">Loading balanceâ€¦</div>';
-  document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transactionsâ€¦</div></td></tr>';
-  document.getElementById('trBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transfersâ€¦</div></td></tr>';
+  document.getElementById('balanceGrid').innerHTML = '<div class="flw-loading">Loading balance…</div>';
+  document.getElementById('txBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transactions…</div></td></tr>';
+  document.getElementById('trBody').innerHTML = '<tr><td colspan="6"><div class="flw-loading">Loading transfers…</div></td></tr>';
   document.getElementById('txCount').textContent = '';
   document.getElementById('trCount').textContent = '';
 
@@ -1422,7 +1422,7 @@ function renderBalance(data) {
   }
 
   grid.innerHTML = data.data.map(function(b) {
-    var sym    = { NGN:'â‚¦', USD:'$', GBP:'Â£', CAD:'CA$' }[b.currency] || b.currency;
+    var sym    = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[b.currency] || b.currency;
     var amount = Number((b.balance || 0) / 100).toLocaleString();
     return '<div class="bal-card">' +
       '<div class="bal-label">Available Balance</div>' +
@@ -1447,29 +1447,29 @@ function renderTransactions(data) {
   countEl.textContent = txs.length + ' transaction' + (txs.length !== 1 ? 's' : '');
 
   if (txs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">ðŸ’³</div><p>No transactions yet.</p></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💳</div><p>No transactions yet.</p></div></td></tr>';
     return;
   }
 
   tbody.innerHTML = txs.map(function(tx) {
     var ts      = tx.paid_at || tx.created_at;
-    var dateStr = ts ? new Date(ts).toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'â€”';
-    var sym     = { NGN:'â‚¦', USD:'$', GBP:'Â£', CAD:'CA$' }[tx.currency] || '';
+    var dateStr = ts ? new Date(ts).toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    var sym     = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[tx.currency] || '';
     var status  = (tx.status || '').toLowerCase();
     var stCls   = 'st-badge flw-' + (status === 'success' ? 'successful' : status || 'pending');
-    var method  = (tx.channel || 'â€”').replace(/_/g,' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+    var method  = (tx.channel || '—').replace(/_/g,' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
     var cust    = (tx.customer || {});
     var amount  = Number((tx.amount || 0) / 100).toLocaleString();
 
     return '<tr>' +
       '<td class="date-val">' + dateStr + '</td>' +
-      '<td><div class="cust-name">' + esc(cust.name || cust.email || 'â€”') + '</div>' +
+      '<td><div class="cust-name">' + esc(cust.name || cust.email || '—') + '</div>' +
       '<div class="cust-phone">' + esc(cust.phone || '') + '</div>' +
       '<div class="tx-ref">' + esc(tx.reference || '') + '</div></td>' +
       '<td class="total-val">' + sym + amount + '</td>' +
-      '<td>' + (tx.currency || 'â€”') + '</td>' +
+      '<td>' + (tx.currency || '—') + '</td>' +
       '<td>' + method + '</td>' +
-      '<td><span class="' + stCls + '">' + (status || 'â€”') + '</span></td>' +
+      '<td><span class="' + stCls + '">' + (status || '—') + '</span></td>' +
     '</tr>';
   }).join('');
 }
@@ -1489,19 +1489,19 @@ function renderTransfers(data) {
   countEl.textContent = trs.length + ' transfer' + (trs.length !== 1 ? 's' : '');
 
   if (trs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">ðŸ’¸</div><p>No outgoing transfers yet.</p></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💸</div><p>No outgoing transfers yet.</p></div></td></tr>';
     return;
   }
 
   tbody.innerHTML = trs.map(function(tr) {
     var ts        = tr.created_at ? new Date(tr.created_at) : null;
-    var dateStr   = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'â€”';
-    var sym       = { NGN:'â‚¦', USD:'$', GBP:'Â£', CAD:'CA$' }[tr.currency] || '';
+    var dateStr   = ts ? ts.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    var sym       = { NGN:'₦', USD:'$', GBP:'£', CAD:'CA$' }[tr.currency] || '';
     var status    = (tr.status || '').toLowerCase();
     var stCls     = 'st-badge flw-' + (status === 'success' ? 'successful' : status || 'pending');
     var rec       = tr.recipient || {};
     var recDetail = rec.details || {};
-    var recipient = esc(rec.name || recDetail.account_name || 'â€”');
+    var recipient = esc(rec.name || recDetail.account_name || '—');
     var bank      = esc(recDetail.bank_name || '');
     var amount    = Number((tr.amount || 0) / 100).toLocaleString();
 
@@ -1510,17 +1510,17 @@ function renderTransfers(data) {
       '<td><div class="cust-name">' + recipient + '</div>' +
       '<div class="cust-phone">' + bank + '</div>' +
       '<div class="tx-ref">' + esc(tr.reference || '') + '</div></td>' +
-      '<td class="total-val" style="color:var(--accent)">âˆ’' + sym + amount + '</td>' +
-      '<td>' + (tr.currency || 'â€”') + '</td>' +
-      '<td>' + esc(tr.reason || 'â€”') + '</td>' +
-      '<td><span class="' + stCls + '">' + (status || 'â€”') + '</span></td>' +
+      '<td class="total-val" style="color:var(--accent)">−' + sym + amount + '</td>' +
+      '<td>' + (tr.currency || '—') + '</td>' +
+      '<td>' + esc(tr.reason || '—') + '</td>' +
+      '<td><span class="' + stCls + '">' + (status || '—') + '</span></td>' +
     '</tr>';
   }).join('');
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    STATUS UPDATE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function toggleTrackInput(idx) {
   var sel = document.getElementById('sel-' + idx);
   var trackEl = document.getElementById('track-' + idx);
@@ -1537,7 +1537,7 @@ async function updateOrderStatus(docId, idx) {
   var status   = selEl.value;
   var tracking = trackEl ? trackEl.value.trim() : '';
 
-  msgEl.textContent   = 'Savingâ€¦';
+  msgEl.textContent   = 'Saving…';
   msgEl.style.color   = '#666';
   msgEl.style.display = 'block';
 
@@ -1564,7 +1564,7 @@ async function updateOrderStatus(docId, idx) {
       });
       if (!resp2.ok) throw new Error('Server error ' + resp2.status);
     } else {
-      // awaiting_payment â€” update status directly, cron handles the reminder email
+      // awaiting_payment — update status directly, cron handles the reminder email
       var update = { orderStatus: status };
       if (tracking) update.trackingNumber = tracking;
       await firebase.firestore().collection('orders').doc(docId).update(update);
@@ -1577,7 +1577,7 @@ async function updateOrderStatus(docId, idx) {
       }
     });
 
-    msgEl.textContent = 'Status updated âœ“';
+    msgEl.textContent = 'Status updated ✓';
     msgEl.style.color = '#2a9d8f';
 
   } catch(e) {
@@ -1588,8 +1588,8 @@ async function updateOrderStatus(docId, idx) {
 
 function toggleRevenue() {
   revenueHidden = !revenueHidden;
-  document.getElementById('statRevenue').textContent = revenueHidden ? 'â‚¦â€¢â€¢â€¢â€¢â€¢â€¢' : lastRevenue;
-  document.getElementById('revToggle').textContent   = revenueHidden ? 'ðŸ™ˆ' : 'ðŸ‘';
+  document.getElementById('statRevenue').textContent = revenueHidden ? '₦••••••' : lastRevenue;
+  document.getElementById('revToggle').textContent   = revenueHidden ? '🙈' : '👁';
 }
 
 async function setRecOverride(docId, idx) {
@@ -1623,9 +1623,9 @@ async function deleteOrder(docId, idx) {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    FOLLOW-UP SECTION (lazy-loaded per order)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 var adminCatalogData    = null;
 var adminCatalogLoading = false;
 var pendingPickerDocIds = [];
@@ -1652,7 +1652,7 @@ async function loadFollowUpSection(docId) {
 }
 
 function buildFollowUpHtml(fu, docId) {
-  var STAGE_LABELS  = { day0:'Day 0 â€” Delivered', day3:'Day 3', day6:'Day 6 â€” Review', day8:'Day 8 â€” Upsell' };
+  var STAGE_LABELS  = { day0:'Day 0 — Delivered', day3:'Day 3', day6:'Day 6 — Review', day8:'Day 8 — Upsell' };
   var STATUS_CLS    = { pending:'st-confirmed', sent:'st-dispatched', opened:'st-delivered', completed:'st-delivered', cancelled:'st-unknown', skipped:'st-unknown' };
 
   var stagesHtml = ['day0','day3','day6','day8'].map(function(stage) {
@@ -1675,10 +1675,10 @@ function buildFollowUpHtml(fu, docId) {
     recHtml = '<div class="rec-display">' +
       '<img class="rec-img" src="' + esc(fu.recommendedProductId) + '" onerror="this.style.background=\'#eee\'">' +
       '<div class="rec-body">' +
-        '<div class="rec-name">' + esc(fu.recommendedProductName || 'â€”') + '</div>' +
-        '<div class="rec-source">' + esc(fu.recommendationSource || 'â€”') + '</div>' +
-        '<div class="rec-pitch">' + esc(fu.recommendedPitch || 'â€”') + '</div>' +
-        (fu.recommendedPriceNGN ? '<div class="rec-price">â‚¦' + Number(fu.recommendedPriceNGN).toLocaleString() + '</div>' : '') +
+        '<div class="rec-name">' + esc(fu.recommendedProductName || '—') + '</div>' +
+        '<div class="rec-source">' + esc(fu.recommendationSource || '—') + '</div>' +
+        '<div class="rec-pitch">' + esc(fu.recommendedPitch || '—') + '</div>' +
+        (fu.recommendedPriceNGN ? '<div class="rec-price">₦' + Number(fu.recommendedPriceNGN).toLocaleString() + '</div>' : '') +
         (fu.promoCode ? '<div style="font-size:11px;margin-top:4px;color:var(--gray-dark)">Promo: <strong>' + esc(fu.promoCode) + '</strong></div>' : '') +
       '</div>' +
     '</div>';
@@ -1689,7 +1689,7 @@ function buildFollowUpHtml(fu, docId) {
   var overrideHtml =
     '<div style="margin-top:12px">' +
       '<div class="su-title" style="font-size:10px;margin-bottom:8px">OVERRIDE RECOMMENDATION</div>' +
-      '<div id="fu-cat-select-' + docId + '"><div class="fu-loading-sm">Loading product pickerâ€¦</div></div>' +
+      '<div id="fu-cat-select-' + docId + '"><div class="fu-loading-sm">Loading product picker…</div></div>' +
       '<textarea id="fu-pitch-' + docId + '" placeholder="Custom pitch (blank = Claude writes it)" rows="2" ' +
         'style="width:100%;margin-top:8px;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;font-family:inherit;resize:vertical">' +
         esc(fu.adminOverridePitch || '') +
@@ -1712,7 +1712,7 @@ function refreshFollowUpSection(docId) {
   if (dataEl && loadEl) {
     dataEl.style.display  = 'none';
     loadEl.style.display  = 'block';
-    loadEl.innerHTML      = 'Refreshingâ€¦';
+    loadEl.innerHTML      = 'Refreshing…';
     loadFollowUpSection(docId);
   }
 }
@@ -1722,7 +1722,7 @@ async function fuAction(docId, stage, action, btn) {
   var tok = await getIdToken();
   if (!tok) return;
   var origText = btn.textContent;
-  btn.disabled = true; btn.textContent = 'â€¦';
+  btn.disabled = true; btn.textContent = '…';
   try {
     var resp = await fetch('/api/admin?action=followup', {
       method:  'POST',
@@ -1731,7 +1731,7 @@ async function fuAction(docId, stage, action, btn) {
     });
     var data = await resp.json();
     if (data.ok) {
-      btn.textContent = action === 'cancel' ? 'Cancelled' : 'Sent âœ“';
+      btn.textContent = action === 'cancel' ? 'Cancelled' : 'Sent ✓';
       setTimeout(function() { refreshFollowUpSection(docId); }, 600);
     } else {
       alert((data.error || 'Server error'));
@@ -1743,7 +1743,7 @@ async function fuAction(docId, stage, action, btn) {
   }
 }
 
-/* â”€â”€ Catalog picker for override â”€â”€ */
+/* ── Catalog picker for override ── */
 async function ensureAdminCatalog(docId) {
   if (adminCatalogData) { renderCatalogPicker(docId); return; }
   pendingPickerDocIds.push(docId);
@@ -1770,14 +1770,14 @@ function cleanPickerName(src) {
 function renderCatalogPicker(docId) {
   var el = document.getElementById('fu-cat-select-' + docId);
   if (!el || !adminCatalogData) return;
-  var opts = ['<option value="">â€” Select product to override â€”</option>'];
+  var opts = ['<option value="">— Select product to override —</option>'];
   Object.keys(adminCatalogData).forEach(function(catKey) {
     var cat = adminCatalogData[catKey];
     (cat.images || []).forEach(function(img) {
       if (!img || img.hidden) return;
       var src  = typeof img === 'string' ? img : img.src;
       var name = img.name || cleanPickerName(src) || catKey;
-      if (src) opts.push('<option value="' + esc(src) + '">' + esc(cat.title || catKey) + ' â€” ' + esc(name) + '</option>');
+      if (src) opts.push('<option value="' + esc(src) + '">' + esc(cat.title || catKey) + ' — ' + esc(name) + '</option>');
     });
   });
   el.innerHTML = '<select id="fu-product-select-' + docId + '" style="width:100%;padding:8px 10px;border:1.5px solid var(--gray-mid);border-radius:6px;font-size:12px;font-family:inherit">' + opts.join('') + '</select>';
@@ -1842,7 +1842,7 @@ async function clearRecOverrideNew(docId) {
   }
 }
 
-/* â”€â”€ Email preview â”€â”€ */
+/* ── Email preview ── */
 async function openEmailPreview(docId) {
   var tok = await getIdToken();
   if (!tok) { alert('Not authenticated'); return; }
@@ -1871,9 +1871,9 @@ function closeEmailPreview() {
   if (iframe.src) { URL.revokeObjectURL(iframe.src); iframe.src = ''; }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    METRICS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 async function loadMetrics() {
   document.getElementById('metricsBody').innerHTML = '<div class="loading"><div class="spin"></div></div>';
   var tok = await getIdToken();
@@ -1908,7 +1908,7 @@ function renderMetrics(data) {
   html += mkMetric('Offers Shown',  upsell.shown || 0, '');
   html += mkMetric('Clicked',       upsell.clicked || 0, (upsell.clickRate || 0) + '% of shown');
   html += mkMetric('Purchased',     upsell.purchased || 0, (upsell.conversionRate || 0) + '% conversion');
-  html += mkMetric('â‚¦ Revenue',     'â‚¦' + Number(revenue.upsellNGN || 0).toLocaleString(), 'from upsells');
+  html += mkMetric('₦ Revenue',     '₦' + Number(revenue.upsellNGN || 0).toLocaleString(), 'from upsells');
   html += mkMetric('Shares',        referrals.shared || 0, '');
   html += mkMetric('New Customers', referrals.newCustomers || 0, (referrals.conversionRate || 0) + '% referral conv.');
   html += '</div></div>';
@@ -1917,7 +1917,7 @@ function renderMetrics(data) {
   html += '<div class="stat-card items" style="margin-bottom:20px">';
   html += '<div class="stat-label">Reviews collected</div>';
   html += '<div class="stat-value">' + (data.reviews && data.reviews.count || 0) + '</div>';
-  html += '<div class="stat-sub">Avg rating: ' + (data.reviews && data.reviews.avgRating || 'â€”') + ' / 5</div>';
+  html += '<div class="stat-sub">Avg rating: ' + (data.reviews && data.reviews.avgRating || '—') + ' / 5</div>';
   html += '</div>';
 
   // By source
@@ -1941,27 +1941,27 @@ function mkMetric(label, value, sub) {
   return '<div class="metric-card"><div class="metric-label">' + esc(String(label)) + '</div><div class="metric-value">' + esc(String(value)) + '</div>' + (sub ? '<div class="metric-sub">' + esc(String(sub)) + '</div>' : '') + '</div>';
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    REVIEWS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 async function loadReviews() {
   document.getElementById('reviewsBody').innerHTML = '<div class="loading"><div class="spin"></div></div>';
   try {
     var snap = await firebase.firestore().collection('reviews').orderBy('createdAt','desc').limit(100).get();
     var reviews = snap.docs.map(function(d) { return d.data(); });
     if (reviews.length === 0) {
-      document.getElementById('reviewsBody').innerHTML = '<div class="empty-state"><div class="empty-icon">â­</div><p>No reviews yet.</p></div>';
+      document.getElementById('reviewsBody').innerHTML = '<div class="empty-state"><div class="empty-icon">⭐</div><p>No reviews yet.</p></div>';
       return;
     }
     var html = '<div style="margin-bottom:12px;font-size:13px;color:var(--gray-dark)">' + reviews.length + ' review' + (reviews.length !== 1 ? 's' : '') + '</div>';
     html += reviews.map(function(r) {
-      var filled  = 'â˜…'.repeat(r.rating || 0);
-      var empty   = 'â˜†'.repeat(5 - (r.rating || 0));
+      var filled  = '★'.repeat(r.rating || 0);
+      var empty   = '☆'.repeat(5 - (r.rating || 0));
       var color   = r.rating >= 4 ? '#f59e0b' : r.rating >= 3 ? '#fb923c' : '#ef4444';
-      var date    = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}) : 'â€”';
+      var date    = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}) : '—';
       return '<div class="review-card">' +
         '<div class="review-stars" style="color:' + color + '">' + filled + empty + '</div>' +
-        '<div class="review-meta">Order: ' + esc(r.orderId || 'â€”') + ' &middot; ' + date + '</div>' +
+        '<div class="review-meta">Order: ' + esc(r.orderId || '—') + ' &middot; ' + date + '</div>' +
         (r.comment ? '<div class="review-comment">' + esc(r.comment) + '</div>' : '<div class="review-comment" style="color:var(--gray-dark);font-style:italic">No comment</div>') +
       '</div>';
     }).join('');
@@ -1971,9 +1971,9 @@ async function loadReviews() {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    PROMO SETTINGS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 async function loadPromoSettings() {
   var tok = await getIdToken();
   if (!tok) return;
@@ -2011,14 +2011,14 @@ async function savePromoSettings() {
   setTimeout(function() { msg.textContent = ''; }, 3000);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════
    DISCOUNT CODES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════════════════════════ */
 function discEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 async function loadDiscountCodes() {
   var tbody = document.getElementById('discBody');
-  tbody.innerHTML = '<tr><td colspan="9" class="flw-loading">Loadingâ€¦</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9" class="flw-loading">Loading…</td></tr>';
   try {
     var snap = await firebase.firestore().collection('promoCodes').orderBy('createdAt','desc').limit(150).get();
     if (snap.empty) { tbody.innerHTML = '<tr><td colspan="9" class="flw-loading">No codes yet.</td></tr>'; return; }
@@ -2038,20 +2038,20 @@ async function loadDiscountCodes() {
       else if (expires && expires < now) { statusLabel = 'Expired'; statusClass = 'd-expired'; }
       else if (starts && starts > now) { statusLabel = 'Pending'; statusClass = 'd-pending'; }
       else { statusLabel = 'Active'; statusClass = 'd-active'; }
-      var typeLabel = d.type === 'fixed' ? 'Fixed â‚¦' : 'Percentage';
-      var valLabel  = d.type === 'fixed' ? 'â‚¦' + Number(d.fixedAmountNGN || 0).toLocaleString() : (d.discountPct || 0) + '%';
-      var minOrder  = d.minimumOrderNGN ? 'â‚¦' + Number(d.minimumOrderNGN).toLocaleString() : 'â€”';
+      var typeLabel = d.type === 'fixed' ? 'Fixed ₦' : 'Percentage';
+      var valLabel  = d.type === 'fixed' ? '₦' + Number(d.fixedAmountNGN || 0).toLocaleString() : (d.discountPct || 0) + '%';
+      var minOrder  = d.minimumOrderNGN ? '₦' + Number(d.minimumOrderNGN).toLocaleString() : '—';
       var usageStr  = d.usageLimit ? (usedCount + '/' + d.usageLimit) : (usedCount > 0 ? usedCount + '/1' : '0/1');
-      var expiryStr = expires ? expires.toLocaleDateString() : 'â€”';
+      var expiryStr = expires ? expires.toLocaleDateString() : '—';
       var src = d.manualCode ? '<span style="font-size:10px;color:#4361ee;font-weight:700">Manual</span>' : '<span style="font-size:10px;color:var(--gray-dark)">Auto</span>';
       var redeemedCell;
       if (d.redeemedByEmail || d.redeemedOrderId) {
-        var emailStr = d.redeemedByEmail ? discEsc(d.redeemedByEmail) : 'â€”';
+        var emailStr = d.redeemedByEmail ? discEsc(d.redeemedByEmail) : '—';
         var orderStr = d.redeemedOrderId ? '<span style="font-size:10px;color:var(--gray-dark)">Order: ' + discEsc(d.redeemedOrderId) + '</span>' : '';
         var redeemedWhen = d.redeemedAt ? '<span style="font-size:10px;color:var(--gray-dark)">' + new Date(d.redeemedAt).toLocaleDateString() + '</span>' : '';
         redeemedCell = '<td style="font-size:12px">' + emailStr + (orderStr ? '<br>' + orderStr : '') + (redeemedWhen ? '&nbsp;&nbsp;' + redeemedWhen : '') + '</td>';
       } else {
-        redeemedCell = '<td style="color:var(--gray-dark)">â€”</td>';
+        redeemedCell = '<td style="color:var(--gray-dark)">—</td>';
       }
       rows.push('<tr><td><span class="disc-code">' + discEsc(code) + '</span><br>' + src + '</td>' +
         '<td>' + discEsc(typeLabel) + '</td>' +
@@ -2132,7 +2132,7 @@ async function saveDiscountCode() {
   if (type === 'percentage' && value > 100) { msgEl.style.color='var(--accent)'; msgEl.textContent='Percentage cannot exceed 100.'; return; }
   if (!expiresAt)     { msgEl.style.color='var(--accent)'; msgEl.textContent='Expiry date is required.'; return; }
 
-  btn.disabled = true; btn.textContent = isEdit ? 'Updatingâ€¦' : 'Savingâ€¦';
+  btn.disabled = true; btn.textContent = isEdit ? 'Updating…' : 'Saving…';
 
   var data = {
     type, active,
@@ -2162,10 +2162,10 @@ async function saveDiscountCode() {
         btn.disabled=false; btn.textContent='Save discount'; return;
       }
       await ref.set(data);
-      msgEl.style.color='var(--success)'; msgEl.textContent='âœ“ Code "' + code + '" created!';
+      msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" created!';
     } else {
       await ref.update(data);
-      msgEl.style.color='var(--success)'; msgEl.textContent='âœ“ Code "' + code + '" updated!';
+      msgEl.style.color='var(--success)'; msgEl.textContent='✓ Code "' + code + '" updated!';
       cancelDiscEdit();
     }
     if (!isEdit) {
@@ -2194,4 +2194,3 @@ async function deleteDiscountCode(code, btn) {
 </script>
 </body>
 </html>
-
