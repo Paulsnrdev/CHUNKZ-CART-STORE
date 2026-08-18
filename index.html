@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -62,7 +62,7 @@
   <link rel="dns-prefetch" href="https://ipapi.co">
   <!-- Preload logo so header renders without delay -->
   <link rel="preload" href="CHUNKZLOGO.jpg" as="image">
-  <!-- Preload first category cover — likely the LCP element on mobile -->
+  <!-- Preload first category cover â€” likely the LCP element on mobile -->
   <link rel="preload" href="JUNE 2026 SET/Chunkz City Black Tee.webp" as="image" fetchpriority="high">
   <!-- Font Awesome loaded async to avoid blocking render -->
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -76,7 +76,7 @@
     }
     body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-light);color:var(--black)}
 
-    /* ── Header ── */
+    /* â”€â”€ Header â”€â”€ */
     header{background:var(--black);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.4);transition:background .35s ease,box-shadow .35s ease}
     header.scrolled{background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.1)}
     header.scrolled .logo-name{color:var(--black)}
@@ -102,23 +102,23 @@
     .mob-menu.open .bar:nth-child(2){opacity:0;transform:scaleX(0)}
     .mob-menu.open .bar:nth-child(3){transform:translateY(-8.75px) rotate(-45deg)}
 
-    /* ── Hero ── */
+    /* â”€â”€ Hero â”€â”€ */
     .hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#16213e 100%);color:#fff;padding:40px 20px;text-align:center}
     .hero h1{font-size:clamp(36px,7vw,78px);font-weight:900;letter-spacing:5px;margin-bottom:14px}
     .hero p{font-size:17px;color:#aaa;max-width:480px;margin:0 auto 28px;min-height:44px}
     .hero-cta{background:var(--accent);color:#fff;padding:13px 34px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .2s,background .2s}
     .hero-cta:hover{transform:translateY(-2px);background:#c1121f}
-    /* ── Sale Banner ── */
+    /* â”€â”€ Sale Banner â”€â”€ */
     #saleBanner{display:none;background:var(--accent);color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
     .hero-marquee{overflow:hidden;background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:28px;padding:9px 0;width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 20s linear infinite;animation:marqueeScroll 20s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
     .hero-marquee-track span{white-space:nowrap;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;padding:0 48px;flex-shrink:0}
-    .hero-marquee-track span::before{content:'★';margin-right:14px;color:var(--accent)}
+    .hero-marquee-track span::before{content:'â˜…';margin-right:14px;color:var(--accent)}
     @-webkit-keyframes marqueeScroll{0%{-webkit-transform:translateX(0)}100%{-webkit-transform:translateX(-50%)}}
     @keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     @media(max-width:600px){.hero-marquee-track span{font-size:11px;letter-spacing:1px;padding:0 32px}}
-    /* ── Chat Button ── */
+    /* â”€â”€ Chat Button â”€â”€ */
     .chat-fab{position:fixed;bottom:24px;right:24px;z-index:150;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:12px 20px 12px 16px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:14px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s}
     .chat-fab:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
     .chat-fab i{font-size:20px}
@@ -126,19 +126,19 @@
     .tw-cursor{display:inline-block;width:2px;height:1em;background:#aaa;margin-left:2px;vertical-align:text-bottom;animation:twblink .7s step-end infinite}
     @keyframes twblink{0%,100%{opacity:1}50%{opacity:0}}
 
-    /* ── Layout ── */
+    /* â”€â”€ Layout â”€â”€ */
     .main-wrap{max-width:1400px;margin:0 auto;padding:36px 20px;display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
     .main-wrap.has-cart{grid-template-columns:1fr 340px}
     @media(max-width:1040px){.main-wrap.has-cart{grid-template-columns:1fr}}
 
-    /* ── Section title ── */
+    /* â”€â”€ Section title â”€â”€ */
     .sec-title{font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:8px}
     .sec-intro{color:var(--gray-dark);font-size:13px;letter-spacing:.3px;margin-bottom:26px}
 
-    /* ── Category Grid ── */
+    /* â”€â”€ Category Grid â”€â”€ */
     .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
 
-    /* ── Category Card ── */
+    /* â”€â”€ Category Card â”€â”€ */
     .cat-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.1);transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;display:flex;flex-direction:column}
     .cat-card:hover{transform:translateY(-6px);box-shadow:0 18px 42px rgba(0,0,0,.16)}
     .cat-img-wrap{overflow:hidden;aspect-ratio:3/2;background:#f0f0f0;flex-shrink:0}
@@ -151,7 +151,7 @@
     .cat-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1a1a}
     .cat-img-placeholder span{font-size:48px;font-weight:900;color:rgba(255,255,255,.15);letter-spacing:2px}
 
-    /* ── Desktop Cart Panel ── */
+    /* â”€â”€ Desktop Cart Panel â”€â”€ */
     .cart-panel{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);position:sticky;top:98px;display:none}
     .has-cart .cart-panel{display:block}
     .cp-head{background:var(--black);color:#fff;padding:15px 18px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center}
@@ -171,7 +171,7 @@
     .checkout-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:13px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s}
     .checkout-btn:hover{background:#c1121f}
 
-    /* ── Mobile Cart Drawer ── */
+    /* â”€â”€ Mobile Cart Drawer â”€â”€ */
     .cart-drawer{display:none;position:fixed;top:0;right:0;width:100%;max-width:380px;height:100vh;background:#fff;z-index:220;transform:translateX(100%);transition:transform .3s ease;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,.2)}
     .cart-drawer.open{transform:translateX(0)}
     .drw-head{background:var(--black);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center}
@@ -181,7 +181,7 @@
     .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200}
     .overlay.on{display:block}
 
-    /* ── Mobile Nav Dropdown ── */
+    /* â”€â”€ Mobile Nav Dropdown â”€â”€ */
     .mob-nav{position:fixed;top:62px;left:0;right:0;background:#fff;z-index:99;border-top:1px solid var(--gray-mid);box-shadow:0 4px 12px rgba(0,0,0,.15);transform:translateY(-8px);opacity:0;visibility:hidden;transition:transform .35s ease,opacity .35s ease,visibility .35s ease}
     .mob-nav.open{transform:translateY(0);opacity:1;visibility:visible}
     .mob-nav ul{list-style:none;display:flex;flex-direction:column;padding:8px 0}
@@ -195,7 +195,7 @@
       .nav-links{display:none}
     }
 
-    /* ── Gallery Modal ── */
+    /* â”€â”€ Gallery Modal â”€â”€ */
     .gallery-modal{display:none;position:fixed;inset:0;z-index:350;background:var(--gray-light);flex-direction:column;overflow-y:auto}
     .gallery-modal.open{display:flex}
     .gallery-header{position:sticky;top:0;background:var(--black);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:14px;z-index:10;box-shadow:0 2px 16px rgba(0,0,0,.35);flex-wrap:wrap}
@@ -222,7 +222,7 @@
     .prod-atc:hover{background:#2a2a2a}
     .prod-atc:active{transform:scale(.98)}
 
-    /* ── Lightbox ── */
+    /* â”€â”€ Lightbox â”€â”€ */
     .lightbox{display:none;position:fixed;inset:0;z-index:450;background:rgba(0,0,0,.96);align-items:center;justify-content:center}
     .lightbox.open{display:flex}
     .lb-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:70px 90px}
@@ -236,7 +236,7 @@
     .lb-next{right:20px}
     .lb-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:12px;text-align:center;white-space:nowrap;letter-spacing:.5px}
 
-    /* ── Modal ── */
+    /* â”€â”€ Modal â”€â”€ */
     .modal{display:none;position:fixed;inset:0;z-index:300;align-items:center;justify-content:center;padding:16px}
     .modal.on{display:flex}
     .modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.7)}
@@ -278,19 +278,19 @@
     .pay-method-card input[type=radio]{margin-top:3px;accent-color:#0a0a0a;flex-shrink:0}
     .pmc-title{display:block;font-weight:700;font-size:13px;color:#0a0a0a}
     .pmc-sub{display:block;font-size:11px;color:#777;margin-top:2px}
-    .opay-details{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:16px 18px;margin:14px 0;text-align:left}
-    .opay-details .opay-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#166534;margin-bottom:10px}
-    .opay-details .opay-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:13px}
-    .opay-details .opay-label{color:#555;font-weight:600}
-    .opay-details .opay-val{font-weight:800;color:#0a0a0a;font-family:monospace;font-size:14px}
-    .opay-amount{font-size:22px;font-weight:900;color:#166534;text-align:center;margin:10px 0 4px}
-    .opay-note{font-size:11px;color:#555;text-align:center;margin-top:10px;line-height:1.5}
+    .moniepoint-details{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:16px 18px;margin:14px 0;text-align:left}
+    .moniepoint-details .moniepoint-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#166534;margin-bottom:10px}
+    .moniepoint-details .moniepoint-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:13px}
+    .moniepoint-details .moniepoint-label{color:#555;font-weight:600}
+    .moniepoint-details .moniepoint-val{font-weight:800;color:#0a0a0a;font-family:monospace;font-size:14px}
+    .moniepoint-amount{font-size:22px;font-weight:900;color:#166534;text-align:center;margin:10px 0 4px}
+    .moniepoint-note{font-size:11px;color:#555;text-align:center;margin-top:10px;line-height:1.5}
 
-    /* ── Toast ── */
+    /* â”€â”€ Toast â”€â”€ */
     .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--black);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none;visibility:hidden}
     .toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
 
-    /* ── Size Picker ── */
+    /* â”€â”€ Size Picker â”€â”€ */
     .sz-overlay{display:none;position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.5)}
     .sz-overlay.on{display:block}
     .sz-sheet{position:fixed;left:0;right:0;bottom:0;z-index:360;background:#fff;border-radius:20px 20px 0 0;padding:8px 20px 32px;transform:translateY(110%);visibility:hidden;transition:transform .3s cubic-bezier(.32,.72,0,1),visibility 0s linear .3s;box-shadow:0 -6px 40px rgba(0,0,0,.18)}
@@ -317,7 +317,7 @@
     .sz-confirm:disabled{background:#ccc;cursor:not-allowed;letter-spacing:.5px}
     .c-item-size{font-size:11px;color:#888;margin-bottom:2px}
 
-    /* ── Contact Section ── */
+    /* â”€â”€ Contact Section â”€â”€ */
     .contact-section{background:var(--gray-light);padding:72px 20px}
     .contact-inner{max-width:1100px;margin:0 auto}
     .contact-heading{font-size:28px;font-weight:800;text-align:center;margin-bottom:10px;letter-spacing:.5px}
@@ -352,7 +352,7 @@
       .contact-card{padding:24px}
     }
 
-    /* ── Footer ── */
+    /* â”€â”€ Footer â”€â”€ */
     footer{background:#0d1117;color:#fff;padding:60px 20px 0;margin-top:60px}
     .ft-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px}
     .ft-brand-logo{margin-bottom:14px;display:flex;align-items:center;gap:10px}
@@ -371,7 +371,7 @@
     }
     @media(max-width:460px){.ft-inner{grid-template-columns:1fr 1fr;gap:24px}}
 
-    /* ── Responsive ── */
+    /* â”€â”€ Responsive â”€â”€ */
     @media(max-width:900px){
       .cat-grid{grid-template-columns:repeat(3,1fr);gap:14px}
     }
@@ -402,12 +402,12 @@
     @media(max-width:380px){
       .cat-grid{gap:8px}
     }
-    /* ── Shimmer skeleton + image fade-in ── */
+    /* â”€â”€ Shimmer skeleton + image fade-in â”€â”€ */
     @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
     .cat-img-wrap,.prod-img-wrap{background:linear-gradient(90deg,#f0f0f0 25%,#e4e4e4 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite linear}
     .cat-img-wrap.img-loaded,.prod-img-wrap.img-loaded{animation:none;background:#f0f0f0}
     .cat-img.img-ready,.prod-img-wrap img.img-ready{opacity:1}
-    /* ── Load More button ── */
+    /* â”€â”€ Load More button â”€â”€ */
     .load-more-btn{display:block;margin:4px auto 8px;padding:11px 36px;background:var(--black);color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background .2s}
     .load-more-btn:hover{background:#333}
   </style>
@@ -421,7 +421,7 @@
 <body>
 
 
-<!-- ══════════════ HEADER ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <header>
   <div class="hdr">
     <a href="#" class="logo"><span class="logo-img-wrap"><img src="CHUNKZLOGO.jpg" alt="Chunkz"></span><span class="logo-name">CHUNKZ</span></a>
@@ -434,7 +434,7 @@
     </ul></nav>
     <div class="hdr-right">
       <button class="cart-btn" id="cartToggle" onclick="toggleDrawer()">
-        🛒 Cart <span class="cart-badge" id="cartBadge">0</span>
+        ðŸ›’ Cart <span class="cart-badge" id="cartBadge">0</span>
       </button>
       <button class="mob-menu" id="mobMenuBtn" onclick="toggleMobileNav()">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
@@ -443,7 +443,7 @@
   </div>
 </header>
 
-<!-- ══════════════ MOBILE NAV ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• MOBILE NAV â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="mob-nav" id="mobileNav">
   <ul>
     <li><a href="#" onclick="closeMobileNav()">Home</a></li>
@@ -454,7 +454,7 @@
   </ul>
 </div>
 
-<!-- ══════════════ HERO ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <section class="hero">
   <h1>CHUNKZ</h1>
   <p>Urban Streetwear. <span id="typewriter"></span><span class="tw-cursor"></span></p>
@@ -472,7 +472,7 @@
 <!-- Sale Banner (shown when discount is active) -->
 <div id="saleBanner"></div>
 
-<!-- ══════════════ MAIN LAYOUT ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• MAIN LAYOUT â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="main-wrap" id="mainWrap">
 
   <!-- Categories column -->
@@ -508,21 +508,21 @@
         <span id="deskCount" style="font-size:12px;color:#aaa">0 items</span>
       </div>
       <div class="cp-body" id="deskCartBody">
-        <div class="cart-empty-msg">🛍️<br>Your cart is empty</div>
+        <div class="cart-empty-msg">ðŸ›ï¸<br>Your cart is empty</div>
       </div>
       <div class="cp-foot" id="deskCartFoot" style="display:none">
         <div class="cart-total-row">
           <span>Total</span>
-          <span id="deskTotal">₦0</span>
+          <span id="deskTotal">â‚¦0</span>
         </div>
-        <button class="checkout-btn" onclick="openCheckout()">CHECKOUT →</button>
+        <button class="checkout-btn" onclick="openCheckout()">CHECKOUT â†’</button>
       </div>
     </div>
   </div>
 
 </div>
 
-<!-- ══════════════ CONTACT ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• CONTACT â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <section id="contact" class="contact-section">
   <div class="contact-inner">
     <h2 class="contact-heading">Contact Us</h2>
@@ -580,7 +580,7 @@
           </div>
           <div class="cf-group">
             <label>Message</label>
-            <textarea id="ctMessage" placeholder="Write your message here…" required></textarea>
+            <textarea id="ctMessage" placeholder="Write your message hereâ€¦" required></textarea>
           </div>
           <button type="submit" class="contact-submit">Send Message</button>
         </form>
@@ -590,7 +590,7 @@
   </div>
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <footer>
   <div class="ft-inner">
     <div class="ft-col">
@@ -625,38 +625,38 @@
     </div>
   </div>
   <div class="ft-bottom">
-    <p>© 2026 Chunkz. All rights reserved.</p>
+    <p>Â© 2026 Chunkz. All rights reserved.</p>
   </div>
 </footer>
 
-<!-- ══════════════ MOBILE CART DRAWER ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• MOBILE CART DRAWER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="cart-drawer" id="cartDrawer">
   <div class="drw-head">
-    <span style="font-size:15px;font-weight:700;letter-spacing:1px">🛒 YOUR CART</span>
-    <button class="drw-close" onclick="closeDrawer()">✕</button>
+    <span style="font-size:15px;font-weight:700;letter-spacing:1px">ðŸ›’ YOUR CART</span>
+    <button class="drw-close" onclick="closeDrawer()">âœ•</button>
   </div>
   <div class="drw-body" id="mobileCartBody">
-    <div class="cart-empty-msg">🛍️<br>Your cart is empty</div>
+    <div class="cart-empty-msg">ðŸ›ï¸<br>Your cart is empty</div>
   </div>
   <div class="drw-foot" id="mobileCartFoot" style="display:none">
     <div class="cart-total-row" style="padding:14px 0 10px">
       <span>Total</span>
-      <span id="mobileTotal">₦0</span>
+      <span id="mobileTotal">â‚¦0</span>
     </div>
-    <button class="checkout-btn" onclick="openCheckout();closeDrawer()">CHECKOUT →</button>
+    <button class="checkout-btn" onclick="openCheckout();closeDrawer()">CHECKOUT â†’</button>
   </div>
 </div>
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
-<!-- ══════════════ SIZE PICKER ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• SIZE PICKER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="sz-overlay" id="szOverlay" onclick="closeSizePicker()"></div>
 <div class="sz-sheet" id="szSheet">
   <div class="sz-drag"></div>
   <div class="sz-head">
     <div class="sz-title" id="szTitle">Select Size</div>
-    <button class="sz-close" onclick="closeSizePicker()">✕</button>
+    <button class="sz-close" onclick="closeSizePicker()">âœ•</button>
   </div>
-  <div class="sz-sub">Pick your size — or choose "To be filled" if you're not sure yet</div>
+  <div class="sz-sub">Pick your size â€” or choose "To be filled" if you're not sure yet</div>
   <div class="sz-grid">
     <button class="sz-btn" onclick="pickSize(this,'XS')">XS</button>
     <button class="sz-btn" onclick="pickSize(this,'S')">S</button>
@@ -665,15 +665,15 @@
     <button class="sz-btn" onclick="pickSize(this,'XL')">XL</button>
     <button class="sz-btn" onclick="pickSize(this,'XXL')">XXL</button>
   </div>
-  <button class="sz-tbd" id="szTbd" onclick="pickSize(this,'To be filled')">I don't know my size yet — To be filled</button>
+  <button class="sz-tbd" id="szTbd" onclick="pickSize(this,'To be filled')">I don't know my size yet â€” To be filled</button>
   <button class="sz-confirm" id="szConfirm" disabled onclick="confirmSizeAdd()">ADD TO CART</button>
 </div>
 
-<!-- ══════════════ CHECKOUT MODAL ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• CHECKOUT MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="modal" id="checkoutModal">
   <div class="modal-bg" onclick="closeCheckout()"></div>
   <div class="modal-box">
-    <button class="modal-close" onclick="closeCheckout()">✕</button>
+    <button class="modal-close" onclick="closeCheckout()">âœ•</button>
     <div id="formState">
       <h2 class="modal-title">CHECKOUT</h2>
       <div class="order-summary">
@@ -713,16 +713,16 @@
         </div>
         <div class="fg">
           <label>Description / Clarity Note</label>
-          <textarea id="cDesc" placeholder="Any special requests or notes for your order…"></textarea>
+          <textarea id="cDesc" placeholder="Any special requests or notes for your orderâ€¦"></textarea>
         </div>
         <div class="fg">
           <label>Delivery Zone <span class="req">*</span></label>
           <select id="cZone" required class="zone-select" onchange="updateDeliveryFee()">
-            <option value="">— Select your delivery zone —</option>
-            <option value="pickup">Self Pickup — Free</option>
-            <option value="ibadan">Within Ibadan — ₦2,000</option>
-            <option value="lagos">Lagos State — ₦4,000</option>
-            <option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) — ₦4,500</option>
+            <option value="">â€” Select your delivery zone â€”</option>
+            <option value="pickup">Self Pickup â€” Free</option>
+            <option value="ibadan">Within Ibadan â€” â‚¦2,000</option>
+            <option value="lagos">Lagos State â€” â‚¦4,000</option>
+            <option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) â€” â‚¦4,500</option>
             <option value="other">Other Nigerian States</option>
             <option value="international">International (Outside Nigeria)</option>
           </select>
@@ -738,14 +738,14 @@
               <input type="radio" name="payMethod" value="paystack" checked>
               <span>
                 <span class="pmc-title">Pay with Card / Bank Transfer</span>
-                <span class="pmc-sub">Visa, Mastercard, USSD &amp; more — powered by Paystack</span>
+                <span class="pmc-sub">Visa, Mastercard, USSD &amp; more â€” powered by Paystack</span>
               </span>
             </label>
             <label class="pay-method-card">
-              <input type="radio" name="payMethod" value="opay">
+              <input type="radio" name="payMethod" value="moniepoint">
               <span>
                 <span class="pmc-title">Direct Bank Transfer</span>
-                <span class="pmc-sub">Send directly to our Moniepoint account · NGN only</span>
+                <span class="pmc-sub">Send directly to our Moniepoint account Â· NGN only</span>
               </span>
             </label>
           </div>
@@ -758,38 +758,38 @@
           </div>
           <div id="promoMsg" style="display:none;font-size:12px;margin-top:6px;font-weight:600"></div>
         </div>
-        <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY →</button>
+        <button type="submit" class="place-btn" id="placeBtn">PLACE ORDER & PAY â†’</button>
       </form>
       <div class="pay-result" id="payRetryMsg" style="display:none"></div>
     </div>
     <div id="successState" style="display:none">
       <div class="success-box">
-        <div class="success-icon" id="successIcon">🎉</div>
+        <div class="success-icon" id="successIcon">ðŸŽ‰</div>
         <div class="success-title" id="successTitle">Payment Confirmed!</div>
         <p class="success-sub" id="successSub">Your order has been paid and sent to our team.<br>We'll get in touch with you shortly.</p>
-        <!-- OPay transfer instructions (shown only for OPay orders) -->
-        <div id="opayInstructions" style="display:none">
-          <div class="opay-details">
-            <div class="opay-head">Transfer this exact amount to:</div>
-            <div class="opay-row"><span class="opay-label">Bank</span><span class="opay-val">Moniepoint</span></div>
-            <div class="opay-row"><span class="opay-label">Account No.</span><span class="opay-val">7069094959</span></div>
-            <div class="opay-row"><span class="opay-label">Account Name</span><span class="opay-val">CHUNKZ THE BRAND</span></div>
-            <div class="opay-amount" id="opayAmountDisplay"></div>
-            <div class="opay-note">Use your Order ID as the transfer narration.<br>Your order will be confirmed once we verify your payment.</div>
+        <!-- Moniepoint transfer instructions -->
+        <div id="moniepointInstructions" style="display:none">
+          <div class="moniepoint-details">
+            <div class="moniepoint-head">Transfer this exact amount to:</div>
+            <div class="moniepoint-row"><span class="moniepoint-label">Bank</span><span class="moniepoint-val">Moniepoint</span></div>
+            <div class="moniepoint-row"><span class="moniepoint-label">Account No.</span><span class="moniepoint-val">7069094959</span></div>
+            <div class="moniepoint-row"><span class="moniepoint-label">Account Name</span><span class="moniepoint-val">CHUNKZ THE BRAND</span></div>
+            <div class="moniepoint-amount" id="moniepointAmountDisplay"></div>
+            <div class="moniepoint-note">Use your Order ID as the transfer narration.<br>Your order will be confirmed once we verify your payment.</div>
           </div>
         </div>
         <div id="successRefBlock" style="display:none;background:#f4f4f4;border-radius:10px;padding:18px;margin-bottom:18px;text-align:center">
           <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px">Your Order ID</div>
           <div id="successOrderRef" style="font-size:20px;font-weight:900;letter-spacing:2px;color:#0a0a0a;font-family:monospace"></div>
           <div style="font-size:12px;color:#888;margin-top:5px">Screenshot or write this down to track your order</div>
-          <a id="successTrackLink" href="/track-order" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:9px 22px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:1px">TRACK MY ORDER →</a>
+          <a id="successTrackLink" href="/track-order" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:9px 22px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:1px">TRACK MY ORDER â†’</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ GALLERY MODAL ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• GALLERY MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="gallery-modal" id="galleryModal">
   <div class="gallery-header">
     <button class="gallery-back" onclick="closeGallery()">
@@ -804,10 +804,10 @@
   </div>
 </div>
 
-<!-- ══════════════ LIGHTBOX ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• LIGHTBOX â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="lightbox" id="lightbox">
   <div class="lb-inner">
-    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-close" onclick="closeLightbox()">âœ•</button>
     <div class="lb-counter" id="lbCounter">1 / 1</div>
     <button class="lb-nav lb-prev" onclick="navigateLightbox(-1)">&#8249;</button>
     <img class="lb-img" id="lbImg" src="" alt="">
@@ -826,15 +826,15 @@
 <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
 
-<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• JAVASCRIPT â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <script>
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FIREBASE CONFIG
    Replace these placeholder values with your actual
    Firebase project config keys (from admin.html setup).
-   Leave as-is until Firebase is set up — orders will
+   Leave as-is until Firebase is set up â€” orders will
    still go to Formspree normally.
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0",
   authDomain:        "chunkz-store.firebaseapp.com",
@@ -856,9 +856,9 @@ function sendWhatsAppNotification(o, status) {
   var itemList = o.items.map(function(i) {
     return i.name + (i.size ? ' (' + i.size + ')' : '') + ' x' + i.qty;
   }).join('\n');
-  var header = status === 'paid' ? '✅ PAYMENT CONFIRMED - CHUNKZ'
-             : status === 'opay' ? '💳 OPAY TRANSFER ORDER - CHUNKZ (Awaiting Transfer)'
-             : '📋 ORDER PLACED (Awaiting Payment) - CHUNKZ';
+  var header = status === 'paid' ? 'âœ… PAYMENT CONFIRMED - CHUNKZ'
+             : status === 'moniepoint' ? 'ðŸ’³ MONIEPOINT TRANSFER ORDER - CHUNKZ (Awaiting Transfer)'
+             : 'ðŸ“‹ ORDER PLACED (Awaiting Payment) - CHUNKZ';
   var msg = header + '\n'
     + 'Ref: ' + o.orderRef + '\n'
     + 'Customer: ' + o.name + '\n'
@@ -877,7 +877,7 @@ function sendWhatsAppNotification(o, status) {
 async function saveOrderToFirestore(name, email, phone, address, colour, desc, orderCart, total, currency, deliveryZone, deliveryFeeNGN, orderRef, paymentMethod) {
   const rates       = { NGN: 1, USD: 1375, GBP: 1820, CAD: 970 };
   const method      = paymentMethod || 'paystack';
-  const isPending   = method === 'opay' || method === 'paystack_pending';
+  const isPending   = method === 'moniepoint' || method === 'paystack_pending';
   const status      = isPending ? 'awaiting_payment' : 'confirmed';
   const storedMethod = method === 'paystack_pending' ? 'paystack' : method;
   const orderData = {
@@ -932,15 +932,15 @@ function generateOrderRef() {
   return 'CKZ-' + ymd + '-' + String(Math.floor(1000 + Math.random() * 9000));
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CATALOG DATA
-   — To add new images: push image path strings into
+   â€” To add new images: push image path strings into
      the relevant category's `images` array.
-   — To add a new category: copy any existing block,
+   â€” To add a new category: copy any existing block,
      give it a unique key, fill in title/images/prices.
-   — Image paths are relative to index.html.
+   â€” Image paths are relative to index.html.
      Use forward slashes even on Windows.
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const catalog = {
 
   shirts: {
@@ -949,9 +949,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz City Black Tee.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 25000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 25000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 23,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 18,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 18,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1007,9 +1007,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Zipper Hoodie.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 27500, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 27500, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 25,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 20,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 20,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1027,9 +1027,9 @@ const catalog = {
     coverImage: 'Chunkz First Set/Global Sweatshirt.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 25000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 25000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 24,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 18.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 18.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1046,9 +1046,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Sweatpant new.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 20000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 20000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 20,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 15,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 15,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 27,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1062,9 +1062,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/White Tech Tracksuit Set.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 65000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 65000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 50,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 37.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 37.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 80,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1082,9 +1082,9 @@ const catalog = {
     coverImage: 'CHUNKZ JERSEY/Black Jersey.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 25000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 25000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 25,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 19,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 19,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 35,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1109,9 +1109,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Singlet Tanktop.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 15000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 15,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 11.5,     currency: 'GBP', symbol: '£'  },
+      GB: { amount: 11.5,     currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 22,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1147,9 +1147,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Ringer Slit-Globe Crop.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 15000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 13.5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 10,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 10,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 18,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1178,9 +1178,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/New Chunkz Black Short.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 15000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 15000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 16.5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 12.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 12.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 22,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1200,9 +1200,9 @@ const catalog = {
     coverImage: 'Chunkz First Set/Cap Section.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 5000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 5000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 4,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 4,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 6,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1217,9 +1217,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Black Chunkz Crest Polo.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 27500, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 27500, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 24.5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 18.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 18.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 33,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1243,9 +1243,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Jort.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 20000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 20000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 22,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 16.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 16.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 30,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1262,9 +1262,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Chunkz Quater Zip.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 27000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 27000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 25,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 20,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 20,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 36.5,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1280,9 +1280,9 @@ const catalog = {
     coverImage: 'Chunkz First Set/Raglan Longsleeve.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 27000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 27000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 25,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 20,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 20,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 36.5,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1301,9 +1301,9 @@ const catalog = {
     coverImage: 'Chunkz First Set/Raglan Shirt.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 23000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 23000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 23,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 16.5,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 16.5,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 31.75,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1320,9 +1320,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Socks mockup 1.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 5000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 5000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 4,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 4,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 7,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1337,9 +1337,9 @@ const catalog = {
     coverImage: 'JUNE 2026 SET/Hoodie and Pant Combo.webp',
     ctaLabel:   'View Collection',
     prices: {
-      NG: { amount: 55000, currency: 'NGN', symbol: '₦' },
+      NG: { amount: 55000, currency: 'NGN', symbol: 'â‚¦' },
       US: { amount: 48.5,    currency: 'USD', symbol: '$'  },
-      GB: { amount: 37,    currency: 'GBP', symbol: '£'  },
+      GB: { amount: 37,    currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: 65,    currency: 'CAD', symbol: 'CA$'}
     },
     images: [
@@ -1362,9 +1362,9 @@ const catalog = {
 
 };
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    STATE
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 let cart = [];
 let userCountry = 'NG';
 let checkoutAmount = 0;
@@ -1385,7 +1385,7 @@ async function detectDeliveryCountry() {
     const code = (await res.text()).trim();
     ipCountry = (code && code.length === 2) ? code : 'ALL';
   } catch(e) {
-    ipCountry = 'ALL'; // detection failed — show all options
+    ipCountry = 'ALL'; // detection failed â€” show all options
   }
   return ipCountry;
 }
@@ -1395,13 +1395,13 @@ function filterDeliveryZones(countryCode) {
   var showAll   = countryCode === 'ALL'; // fallback
   var sel = document.getElementById('cZone');
   if (!sel) return;
-  sel.innerHTML = '<option value="">— Select your delivery zone —</option>';
+  sel.innerHTML = '<option value="">â€” Select your delivery zone â€”</option>';
   if (isNigeria || showAll) {
     sel.innerHTML +=
-      '<option value="pickup">Self Pickup — Free</option>' +
-      '<option value="ibadan">Within Ibadan — ₦2,000</option>' +
-      '<option value="lagos">Lagos State — ₦4,000</option>' +
-      '<option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) — ₦4,500</option>' +
+      '<option value="pickup">Self Pickup â€” Free</option>' +
+      '<option value="ibadan">Within Ibadan â€” â‚¦2,000</option>' +
+      '<option value="lagos">Lagos State â€” â‚¦4,000</option>' +
+      '<option value="southwest">South West (Abeokuta, Osun, Ekiti, Ondo) â€” â‚¦4,500</option>' +
       '<option value="other">Other Nigerian States</option>';
   }
   if (!isNigeria || showAll) {
@@ -1446,9 +1446,9 @@ function setupGalleryObserver() {
   }, { rootMargin: margin });
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    COUNTRY DETECTION
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const GEO_APIS = [
   { url: 'https://ipinfo.io/json',        extract: d => ({ code: d.country, name: d.country }) },
   { url: 'https://ipapi.co/json/',        extract: d => ({ code: d.country_code || d.country, name: d.country_name || d.country }) },
@@ -1506,7 +1506,7 @@ function cleanImageName(path) {
     .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
 }
 
-/* imgSrc / imgPrices — images can be plain strings OR {src, ngn} objects.
+/* imgSrc / imgPrices â€” images can be plain strings OR {src, ngn} objects.
    When an image has its own ngn price, other currencies are auto-derived. */
 function imgSrc(entry) {
   return typeof entry === 'string' ? entry : entry.src;
@@ -1518,18 +1518,18 @@ function imgPrices(cat, entry) {
   if (entry.ngn) {
     var n = entry.ngn;
     return {
-      NG: { amount: n,                                currency: 'NGN', symbol: '₦'  },
+      NG: { amount: n,                                currency: 'NGN', symbol: 'â‚¦'  },
       US: { amount: entry.usd || Math.round(n/1375),  currency: 'USD', symbol: '$'  },
-      GB: { amount: entry.gbp || Math.round(n/1820), currency: 'GBP', symbol: '£'  },
+      GB: { amount: entry.gbp || Math.round(n/1820), currency: 'GBP', symbol: 'Â£'  },
       CA: { amount: entry.cad || Math.round(n/970),  currency: 'CAD', symbol: 'CA$'}
     };
   }
   return cat.prices;
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    RENDER CATEGORY CARDS
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderCategories() {
   const grid = document.getElementById('categoriesGrid');
   grid.innerHTML = '';
@@ -1557,9 +1557,9 @@ function renderCategories() {
   });
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GALLERY MODAL
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function openGallery(catKey) {
   const cat = catalog[catKey];
   if (!cat) return;
@@ -1568,7 +1568,7 @@ function openGallery(catKey) {
   const pr = getPrice(cat);
   document.getElementById('galTitle').textContent = cat.title.toUpperCase();
   document.getElementById('galSubtitle').textContent =
-    cat.subtitle + '  ·  ' + cat.images.length + ' design' + (cat.images.length !== 1 ? 's' : '');
+    cat.subtitle + '  Â·  ' + cat.images.length + ' design' + (cat.images.length !== 1 ? 's' : '');
 
   const atcBtn = document.getElementById('galAtcBtn');
   atcBtn.onclick = function() { addToCart(catKey); };
@@ -1583,7 +1583,7 @@ function openGallery(catKey) {
   grid.innerHTML = '';
 
   if (cat.images.length === 0) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;font-size:14px">Coming soon — designs dropping shortly!</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;font-size:14px">Coming soon â€” designs dropping shortly!</div>';
   } else {
     appendGalleryItems(catKey, 0, cat.images.length);
   }
@@ -1622,9 +1622,9 @@ function appendGalleryItems(catKey, from, to) {
   }
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    LIGHTBOX
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function openLightbox(catKey, index) {
   const cat = catalog[catKey];
   if (!cat) return;
@@ -1653,7 +1653,7 @@ function updateLightboxImage() {
   img.src = imgSrc(cat.images[activeLightboxIndex]);
   img.alt = cat.title + ' design ' + (activeLightboxIndex + 1);
   counter.textContent = (activeLightboxIndex + 1) + ' / ' + cat.images.length;
-  caption.textContent = cat.title.toUpperCase() + '  ·  Design ' + (activeLightboxIndex + 1);
+  caption.textContent = cat.title.toUpperCase() + '  Â·  Design ' + (activeLightboxIndex + 1);
 }
 
 /* Keyboard navigation for lightbox and gallery */
@@ -1683,10 +1683,10 @@ document.addEventListener('keydown', function(e) {
   });
 })();
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CART OPERATIONS
-═══════════════════════════════════════════════════ */
-/* ─ Size picker state ─ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* â”€ Size picker state â”€ */
 var _szPending  = null;
 var _szSelected = null;
 
@@ -1699,7 +1699,7 @@ function addToCart(catKey, imgIndex) {
   var title = cat.title;
   if (imgIndex !== undefined && imgIndex !== null && cat.images && cat.images[imgIndex] !== undefined) {
     var _e = cat.images[imgIndex];
-    title = cat.title + ' — ' + (_e.name || cleanImageName(imgSrc(_e)));
+    title = cat.title + ' â€” ' + (_e.name || cleanImageName(imgSrc(_e)));
   }
   document.getElementById('szTitle').textContent = title;
   document.querySelectorAll('.sz-btn,.sz-tbd').forEach(function(b){ b.classList.remove('sz-on'); });
@@ -1745,7 +1745,7 @@ function _doAddToCart(catKey, imgIndex, size) {
     itemSrc          = imgSrc(entry);
     const designName = entry.name || cleanImageName(itemSrc);
     itemKey  = catKey + '_' + imgIndex + '_' + size;
-    itemName = cat.title + ' — ' + designName;
+    itemName = cat.title + ' â€” ' + designName;
     pr       = getPrice({ prices: imgPrices(cat, entry) });
   } else {
     itemKey  = catKey + '_' + size;
@@ -1753,7 +1753,7 @@ function _doAddToCart(catKey, imgIndex, size) {
     pr       = getPrice(cat);
   }
 
-  if (!pr) { showToast('Price not available — contact us'); return; }
+  if (!pr) { showToast('Price not available â€” contact us'); return; }
 
   const XXL_SURCHARGE = { NGN: 1500, GBP: 2, USD: 2.5, CAD: 3 };
   const surcharge = size === 'XXL' ? (XXL_SURCHARGE[pr.currency] || XXL_SURCHARGE['USD']) : 0;
@@ -1816,18 +1816,18 @@ function loadCart() {
   } catch(e) { cart = []; }
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CART HTML BUILDER
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function buildCartHTML() {
-  if (!cart.length) return '<div class="cart-empty-msg">🛍️<br>Your cart is empty</div>';
+  if (!cart.length) return '<div class="cart-empty-msg">ðŸ›ï¸<br>Your cart is empty</div>';
   const sym = cartSymbol();
   return cart.map(function(i) {
     return '<div class="c-item">' +
       '<div>' +
         '<div class="c-item-name">' + i.name + '</div>' +
         (i.size ? '<div class="c-item-size">Size: ' + i.size + '</div>' : '') +
-        '<div class="c-item-sub">' + sym + i.price.toLocaleString() + ' × ' + i.qty + '</div>' +
+        '<div class="c-item-sub">' + sym + i.price.toLocaleString() + ' Ã— ' + i.qty + '</div>' +
       '</div>' +
       '<div class="c-item-right">' +
         '<div class="c-item-price">' + sym + (i.price * i.qty).toLocaleString() + '</div>' +
@@ -1837,9 +1837,9 @@ function buildCartHTML() {
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    REFRESH ALL CART UI
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function refreshCartUI() {
   const cnt    = cartCount();
   const tot    = cartTotal();
@@ -1871,9 +1871,9 @@ function refreshCartUI() {
   if (mobTot) mobTot.textContent = totStr;
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DRAWER TOGGLE
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function toggleDrawer() {
   const d = document.getElementById('cartDrawer');
   d.classList.contains('open') ? closeDrawer() : openDrawer();
@@ -1891,9 +1891,9 @@ function closeDrawer() {
   var fab = document.querySelector('.chat-fab'); if (fab) fab.style.display = '';
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CHECKOUT MODAL
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function openCheckout() {
   if (!cart.length) { showToast('Your cart is empty!'); return; }
   document.getElementById('formState').style.display    = 'block';
@@ -1905,7 +1905,7 @@ function openCheckout() {
   var hasXXL = cart.some(function(i) { return i.size === 'XXL'; });
   document.getElementById('osSummaryItems').innerHTML = cart.map(function(i) {
     var sizeLabel = i.size ? ' <span style="font-size:11px;color:#888;font-weight:400">[' + i.size + ']</span>' : '';
-    return '<div class="os-item"><span>' + i.name + sizeLabel + ' ×' + i.qty + '</span>' +
+    return '<div class="os-item"><span>' + i.name + sizeLabel + ' Ã—' + i.qty + '</span>' +
       '<span>' + sym + (i.price * i.qty).toLocaleString() + '</span></div>';
   }).join('') + (hasXXL ? '<div style="font-size:11px;color:#888;margin-top:6px">* XXL size includes a size surcharge</div>' : '');
   document.getElementById('osSummaryTotal').textContent = sym + cartTotal().toLocaleString();
@@ -1958,7 +1958,7 @@ function updateDeliveryFee() {
 
   if (zone === 'pickup') {
     addrInput.required    = false;
-    addrInput.placeholder = 'Optional — add any pickup notes or preferred meetup details';
+    addrInput.placeholder = 'Optional â€” add any pickup notes or preferred meetup details';
     addrLabel.innerHTML   = 'Pickup Notes';
   } else {
     addrInput.required    = true;
@@ -2002,9 +2002,9 @@ function closeCheckout() {
   var fab = document.querySelector('.chat-fab'); if (fab) fab.style.display = '';
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROMO CODE
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const PROMO_RATES = { NGN: 1, USD: 1375, GBP: 1820, CAD: 975 };
 
 function getPromoDiscountInCartCurrency() {
@@ -2050,7 +2050,7 @@ async function applyPromoCode() {
     return { name: i.name, src: i.src || null, price: i.price, currency: i.currency, qty: i.qty };
   });
 
-  if (applyBtn) { applyBtn.disabled = true; applyBtn.textContent = '…'; }
+  if (applyBtn) { applyBtn.disabled = true; applyBtn.textContent = 'â€¦'; }
   try {
     const res  = await fetch('/api/promo?action=validate', {
       method:  'POST',
@@ -2090,9 +2090,9 @@ function redeemPromo(code, orderId, email) {
   }).catch(function() {});
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SUBMIT ORDER TO FORMSPREE
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 async function submitOrder(e) {
   e.preventDefault();
   const name    = document.getElementById('cName').value.trim();
@@ -2125,7 +2125,7 @@ async function submitOrder(e) {
   const promoDiscount = getPromoDiscountInCartCurrency();
   const finalTotal    = Math.max(0, grandTotal - promoDiscount);
   const deliveryFeeLabel = zoneData.fee === null ? 'TBD (negotiated)'
-    : (zoneData.fee === 0 ? 'Free' : '₦' + zoneData.fee.toLocaleString());
+    : (zoneData.fee === 0 ? 'Free' : 'â‚¦' + zoneData.fee.toLocaleString());
 
   const orderRef   = generateOrderRef();
   const itemLines = cart.map(function(i) {
@@ -2155,7 +2155,7 @@ async function submitOrder(e) {
 
   const btn = document.getElementById('placeBtn');
   btn.disabled    = true;
-  btn.textContent = 'Sending Order…';
+  btn.textContent = 'Sending Orderâ€¦';
 
   try {
     const res = await fetch('https://formspree.io/f/xvgqyrok', {
@@ -2171,8 +2171,8 @@ async function submitOrder(e) {
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
       document.getElementById('payRetryMsg').style.display = 'none';
-      if (payMethod === 'opay') {
-        proceedOPayTransfer();
+      if (payMethod === 'moniepoint') {
+        proceedMoniepointTransfer();
       } else {
         sendWhatsAppNotification(pendingOrder, 'pending');
         proceedToPayment();
@@ -2185,7 +2185,7 @@ async function submitOrder(e) {
     showErr('Network error. Check your connection and try again.');
   } finally {
     btn.disabled    = false;
-    btn.textContent = 'PLACE ORDER (SEND TO MERCHANT) →';
+    btn.textContent = 'PLACE ORDER (SEND TO MERCHANT) â†’';
   }
 }
 
@@ -2196,9 +2196,9 @@ function showErr(msg) {
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PAYSTACK PAYMENT
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function proceedToPayment() {
   if (pendingOrder) {
     var _o = pendingOrder;
@@ -2241,22 +2241,22 @@ function proceedToPayment() {
     onClose: function() {
       var msg = document.getElementById('payRetryMsg');
       msg.className   = 'pay-result fail';
-      msg.innerHTML   = '⚠️ Payment not completed — your cart is saved. Tap <strong>PLACE ORDER &amp; PAY</strong> when you\'re ready to try again.';
+      msg.innerHTML   = 'âš ï¸ Payment not completed â€” your cart is saved. Tap <strong>PLACE ORDER &amp; PAY</strong> when you\'re ready to try again.';
       msg.style.display = 'block';
     }
   });
   handler.openIframe();
 }
 
-/* ═══════════════════════════════════════════════════
-   OPAY DIRECT TRANSFER FLOW
-═══════════════════════════════════════════════════ */
-function proceedOPayTransfer() {
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   MONIEPOINT DIRECT TRANSFER FLOW
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+function proceedMoniepointTransfer() {
   if (!pendingOrder) return;
   var o = pendingOrder;
 
-  saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef, 'opay');
-  sendWhatsAppNotification(o, 'opay');
+  saveOrderToFirestore(o.name, o.email, o.phone, o.address, o.colour, o.desc, o.items, o.total, o.currency, o.deliveryZone, o.deliveryFeeNGN, o.orderRef, 'moniepoint');
+  sendWhatsAppNotification(o, 'moniepoint');
   if (o.promoCode) redeemPromo(o.promoCode, o.orderRef, o.email);
   pendingOrder = null;
 
@@ -2264,11 +2264,11 @@ function proceedOPayTransfer() {
   saveCart();
   refreshCartUI();
 
-  var sym = { NGN: '₦', USD: '$', GBP: '£', CAD: 'CA$' }[o.currency] || '';
-  document.getElementById('opayAmountDisplay').textContent = sym + Number(o.total).toLocaleString() + ' ' + o.currency;
-  document.getElementById('opayInstructions').style.display = 'block';
+  var sym = { NGN: 'â‚¦', USD: '$', GBP: 'Â£', CAD: 'CA$' }[o.currency] || '';
+  document.getElementById('moniepointAmountDisplay').textContent = sym + Number(o.total).toLocaleString() + ' ' + o.currency;
+  document.getElementById('moniepointInstructions').style.display = 'block';
 
-  document.getElementById('successIcon').textContent  = '📋';
+  document.getElementById('successIcon').textContent  = 'ðŸ“‹';
   document.getElementById('successTitle').textContent = 'Order Placed!';
   document.getElementById('successSub').innerHTML     = 'Please transfer the amount below to our Moniepoint account.<br>Your order will be confirmed once we verify your payment.';
 
@@ -2280,9 +2280,9 @@ function proceedOPayTransfer() {
   document.getElementById('successState').style.display = 'block';
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TOAST
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -2290,9 +2290,9 @@ function showToast(msg) {
   setTimeout(function() { t.classList.remove('show'); }, 2600);
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MOBILE NAV
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function toggleMobileNav() {
   document.getElementById('mobileNav').classList.toggle('open');
   document.getElementById('mobMenuBtn').classList.toggle('open');
@@ -2313,15 +2313,15 @@ window.addEventListener('resize', function() {
   }, { passive: true });
 })();
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CONTACT FORM
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 async function sendContactMessage(e) {
   e.preventDefault();
   const form = e.target;
   const btn  = form.querySelector('.contact-submit');
   btn.disabled    = true;
-  btn.textContent = 'Sending…';
+  btn.textContent = 'Sendingâ€¦';
   try {
     await fetch('https://formspree.io/f/mkgzepaq', {
       method:  'POST',
@@ -2340,9 +2340,9 @@ async function sendContactMessage(e) {
   btn.textContent = 'Send Message';
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TYPEWRITER
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 (function() {
   const phrases = ['Premium Quality.', 'Your Style.'];
   const el = document.getElementById('typewriter');
@@ -2358,9 +2358,9 @@ async function sendContactMessage(e) {
   tick();
 })();
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    INIT
-═══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 loadCart();
 renderCategories();  // render immediately with NG default so page isn't blank
 refreshCartUI();
@@ -2392,7 +2392,7 @@ if (FIREBASE_READY) {
         siteDiscount = { active: true, percent: d.discountPercent, label: d.discountLabel || '' };
         var banner = document.getElementById('saleBanner');
         var pct    = Math.round(d.discountPercent);
-        banner.textContent = '🔥 ' + (d.discountLabel || 'SPECIAL SALE') + ' — ' + pct + '% OFF ALL ITEMS';
+        banner.textContent = 'ðŸ”¥ ' + (d.discountLabel || 'SPECIAL SALE') + ' â€” ' + pct + '% OFF ALL ITEMS';
         banner.style.display = 'block';
         renderCategories();
       }
@@ -2432,7 +2432,7 @@ if (FIREBASE_READY) {
 })();
 </script>
 
-<!-- ── Chat with Chunkz (WhatsApp) ── -->
+<!-- â”€â”€ Chat with Chunkz (WhatsApp) â”€â”€ -->
 <a class="chat-fab"
    href="https://wa.me/2347069094959?text=Hello%20Chunkz!%20I%27d%20like%20to%20ask%20about%20an%20item."
    target="_blank" rel="noopener" aria-label="Chat with Chunkz on WhatsApp">
@@ -2442,3 +2442,4 @@ if (FIREBASE_READY) {
 <script src="hero-fx.js"></script>
 </body>
 </html>
+

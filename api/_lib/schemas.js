@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Firestore collection schemas for the Chunkz follow-up system.
- * These are JSDoc type definitions — they provide IDE intellisense
+ * These are JSDoc type definitions â€” they provide IDE intellisense
  * for the server-side Vercel functions.
  *
  * All reads/writes to these collections happen via the Firebase Admin SDK
@@ -9,12 +9,12 @@
  */
 
 /**
- * /orders/{orderRef}  — EXISTING, do not restructure.
+ * /orders/{orderRef}  â€” EXISTING, do not restructure.
  *
  * @typedef {Object} Order
  * @property {string}  orderRef
  * @property {string}  orderStatus     - 'awaiting_payment'|'confirmed'|'processing'|'dispatched'|'delivered'
- * @property {string}  paymentMethod   - 'flutterwave'|'opay'
+ * @property {string}  paymentMethod   - 'flutterwave'|'moniepoint'
  * @property {string}  trackingNumber
  * @property {string}  customerName
  * @property {string}  customerEmail
@@ -102,7 +102,7 @@
  *
  * @typedef {Object} Review
  * @property {string}  orderId
- * @property {number}  rating     - 1–5
+ * @property {number}  rating     - 1â€“5
  * @property {string}  comment
  * @property {string}  createdAt  - ISO 8601
  */
@@ -111,7 +111,7 @@
  * /promoCodes/{code}
  *
  * Document ID IS the code string (e.g. 'CHUNKZ-XXXXXX') for direct lookup.
- * Transferable — a friend can redeem it. Not bound to the original customer's email.
+ * Transferable â€” a friend can redeem it. Not bound to the original customer's email.
  *
  * @typedef {Object} PromoCode
  * @property {string}       code
@@ -142,3 +142,4 @@
  */
 
 module.exports = {};
+
