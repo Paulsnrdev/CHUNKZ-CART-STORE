@@ -514,7 +514,7 @@ service cloud.firestore {
         <div class="stat-card pending" id="pendingCard" style="display:none">
           <div class="stat-label">⏳ Awaiting Payment</div>
           <div class="stat-value" id="statPending" style="color:#d97706">0</div>
-          <div class="stat-sub" id="statPendingSub">OPay orders — verify &amp; confirm</div>
+          <div class="stat-sub" id="statPendingSub">Moniepoint orders — verify &amp; confirm</div>
         </div>
       </div>
 
@@ -1001,7 +1001,7 @@ function renderAll() {
   renderTimeChart(paidOrders);
   renderCollChart(paidOrders);
   renderCollTable(paidOrders);
-  renderOrdersTable(orders); // show all orders in the table so admin can verify OPay payments
+  renderOrdersTable(orders); // show all orders in the table so admin can verify Moniepoint payments
 
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dataContent').style.display  = 'block';
@@ -1053,7 +1053,7 @@ function renderStats(orders, pendingOrders) {
   const pendingCard = document.getElementById('pendingCard');
   pendingCard.style.display = pending.length > 0 ? 'block' : 'none';
   document.getElementById('statPending').textContent    = pending.length + ' order' + (pending.length !== 1 ? 's' : '');
-  document.getElementById('statPendingSub').textContent = fmtNGN(pendingNGN) + ' — OPay orders awaiting verification';
+  document.getElementById('statPendingSub').textContent = fmtNGN(pendingNGN) + ' — Moniepoint orders awaiting verification';
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1274,7 +1274,7 @@ function renderOrdersTable(orders) {
         '<div class="expand-field"><label>Delivery Address</label><p>' + esc(o.deliveryAddress || '—') + '</p></div>' +
         '<div class="expand-field"><label>Email</label><p>' + esc(o.customerEmail || '—') + '</p></div>' +
         '<div class="expand-field"><label>Colour Preference</label><p>' + esc(o.colourPreference || '—') + '</p></div>' +
-        '<div class="expand-field"><label>Payment Method</label><p>' + (o.paymentMethod === 'opay' ? 'OPay Direct Transfer' : 'Paystack') + '</p></div>' +
+        '<div class="expand-field"><label>Payment Method</label><p>' + (o.paymentMethod === 'opay' ? 'Moniepoint Direct Transfer' : 'Paystack') + '</p></div>' +
         (o.descriptionNote ? '<div class="expand-field"><label>Note</label><p>' + esc(o.descriptionNote) + '</p></div>' : '') +
       '</div>' +
       '<ul class="item-detail-list">' +
