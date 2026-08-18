@@ -2255,10 +2255,8 @@ function proceedMoniepointTransfer() {
   sendWhatsAppNotification(o, 'moniepoint');
   if (o.promoCode) redeemPromo(o.promoCode, o.orderRef, o.email);
   pendingOrder = null;
-
-  cart = [];
-  saveCart();
-  refreshCartUI();
+  // Cart intentionally NOT cleared — Moniepoint is a manual transfer,
+  // payment is unverified. Cart clears only on confirmed card payment.
 
   var sym = { NGN: '₦', USD: '$', GBP: '£', CAD: 'CA$' }[o.currency] || '';
   document.getElementById('moniepointAmountDisplay').textContent = sym + Number(o.total).toLocaleString() + ' ' + o.currency;
