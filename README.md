@@ -120,9 +120,6 @@ service cloud.firestore {
 }
 ```
 
-### Admin User
-
-Firebase Console → Authentication → Email/Password → Add user → use `brodahsegunofib@gmail.com` + a strong password. This is the only account with admin dashboard access.
 
 ---
 
@@ -267,12 +264,6 @@ The server never trusts a client-supplied discount amount.
 
 ---
 
-## Admin Dashboard
-
-| URL | Purpose |
-|---|---|
-| `/bestsite` | Orders, analytics, follow-up control, metrics, reviews, settings |
-| `/catalog-admin` | Catalogue management, promo settings, pairing gaps |
 
 ### Admin Panel Tabs
 
