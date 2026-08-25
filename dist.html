@@ -835,7 +835,20 @@ function doLogin() {
 
   firebase.auth().signInWithEmailAndPassword(email, pass)
     .catch(function(e) {
-      showLoginErr('Invalid email or password. Try again.');
+      console.error('[admin login]', e);
+
+      var msg = 'Invalid email or password. Try again.';
+      if (e && e.code === 'auth/invalid-email') {
+        msg = 'Please enter a valid email address.';
+      } else if (e && e.code === 'auth/user-not-found') {
+        msg = 'No admin account found for this email. Add or reset the user in Firebase Authentication.';
+      } else if (e && e.code === 'auth/wrong-password') {
+        msg = 'The password is incorrect. Reset it in Firebase Authentication and try again.';
+      } else if (e && e.code === 'auth/operation-not-allowed') {
+        msg = 'Email/password sign-in is disabled in Firebase Authentication. Enable it in Firebase Console.';
+      }
+
+      showLoginErr(msg);
       btn.disabled    = false;
       btn.textContent = 'Sign In';
     });

@@ -8,13 +8,19 @@ const { createPromo }           = require('./_lib/promo');
 
 const BUILDERS = { day0: buildDay0, day3: buildDay3, day6: buildDay6, day8: buildDay8 };
 
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'brodahsegunofib@gmail.com')
+  .split(',')
+  .map(email => String(email).trim().toLowerCase())
+  .filter(Boolean);
+
 function verifyAdminToken(idToken) {
   if (!idToken) return false;
   try {
     const parts   = idToken.split('.');
     if (parts.length !== 3) return false;
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
-    return payload.aud === 'chunkz-store' && payload.email === 'brodahsegunofib@gmail.com';
+    const email = String(payload.email || '').trim().toLowerCase();
+    return payload.aud === 'chunkz-store' && ADMIN_EMAILS.includes(email);
   } catch (e) { return false; }
 }
 
