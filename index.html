@@ -223,33 +223,40 @@
     .prod-atc:active{transform:scale(.98)}
 
     /* ── Product Quick-View ── */
-    .pv-overlay{display:none;position:fixed;inset:0;z-index:450;background:rgba(0,0,0,.65);align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+    .pv-overlay{display:none;position:fixed;inset:0;z-index:450;background:rgba(0,0,0,.7);align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
     .pv-overlay.open{display:flex}
-    .pv-modal{background:#fff;border-radius:18px;overflow:hidden;width:min(880px,94vw);max-height:90vh;display:flex;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.45);animation:pvIn .24s cubic-bezier(.22,.68,0,1.2)}
-    @keyframes pvIn{from{opacity:0;transform:scale(.93) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-    .pv-close{position:absolute;top:14px;right:14px;z-index:10;background:rgba(0,0,0,.45);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;backdrop-filter:blur(4px)}
-    .pv-close:hover{background:rgba(0,0,0,.7)}
-    .pv-img-panel{flex:0 0 52%;background:#111;position:relative;display:flex;align-items:center;justify-content:center;min-height:400px}
-    .pv-img{max-width:100%;max-height:460px;object-fit:contain;display:block;padding:24px;user-select:none;transition:opacity .2s}
-    .pv-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:22px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;backdrop-filter:blur(4px)}
-    .pv-nav:hover{background:rgba(255,255,255,.28)}
-    .pv-prev{left:12px}
-    .pv-next{right:12px}
-    .pv-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.45);font-size:11px;font-weight:600;letter-spacing:1.5px;white-space:nowrap}
-    .pv-detail{flex:1;padding:36px 30px 32px;overflow-y:auto;display:flex;flex-direction:column;justify-content:center}
-    .pv-collection{font-size:10px;font-weight:800;letter-spacing:2.5px;color:#aaa;text-transform:uppercase;margin-bottom:8px}
-    .pv-name{font-size:20px;font-weight:900;letter-spacing:.3px;color:#0a0a0a;margin:0 0 8px;text-transform:uppercase;line-height:1.2}
-    .pv-price{font-size:19px;font-weight:800;color:#0a0a0a;margin-bottom:5px}
-    .pv-sub{font-size:12px;color:#999;margin-bottom:22px;line-height:1.6}
-    .pv-size-label{font-size:10px;font-weight:800;letter-spacing:2px;color:#666;text-transform:uppercase;margin-bottom:9px}
-    .pv-sizes{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
-    .pv-sz{background:#f3f3f3;border:2px solid transparent;color:#0a0a0a;font-size:12px;font-weight:800;padding:10px 11px;border-radius:8px;cursor:pointer;transition:all .15s;letter-spacing:.5px;font-family:inherit;min-width:46px}
-    .pv-sz:hover{border-color:#bbb;background:#fff}
-    .pv-sz.on{background:#0a0a0a;border-color:#0a0a0a;color:#fff}
-    .pv-atc{width:100%;background:#0a0a0a;color:#fff;border:none;padding:15px;font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-radius:10px;cursor:pointer;transition:opacity .2s;font-family:inherit;margin-bottom:12px}
-    .pv-atc:disabled{opacity:.3;cursor:not-allowed}
-    .pv-atc:not(:disabled):hover{opacity:.82}
-    .pv-back{background:none;border:none;font-size:12px;font-weight:700;letter-spacing:1px;color:#bbb;cursor:pointer;font-family:inherit;text-transform:uppercase;padding:0;transition:color .2s;align-self:center}
+    .pv-modal{border-radius:20px;overflow:hidden;width:min(900px,95vw);max-height:92vh;display:flex;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.6);animation:pvIn .28s cubic-bezier(.22,.68,0,1.15)}
+    @keyframes pvIn{from{opacity:0;transform:scale(.91) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    /* close btn — sits in top-right of detail panel */
+    .pv-close{position:absolute;top:16px;right:18px;z-index:10;background:#0a0a0a;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
+    .pv-close:hover{background:#333;transform:rotate(90deg)}
+    /* image side */
+    .pv-img-panel{flex:0 0 52%;background:#EFEFED;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:420px}
+    .pv-img{width:100%;height:100%;object-fit:contain;display:block;padding:16px;user-select:none;transition:opacity .25s,transform .25s}
+    .pv-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.18);border:none;color:#fff;font-size:22px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;backdrop-filter:blur(4px);z-index:2}
+    .pv-nav:hover{background:rgba(0,0,0,.42)}
+    .pv-prev{left:10px}
+    .pv-next{right:10px}
+    .pv-counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.38);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.5px;white-space:nowrap;padding:3px 10px;border-radius:20px;backdrop-filter:blur(4px)}
+    /* detail side */
+    .pv-detail{flex:1;background:#fff;padding:0;overflow-y:auto;display:flex;flex-direction:column;border-left:1px solid #ebebeb}
+    .pv-detail-inner{padding:32px 28px 28px;display:flex;flex-direction:column;gap:0;flex:1;justify-content:center}
+    .pv-collection{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:900;letter-spacing:3px;color:#fff;text-transform:uppercase;background:#0a0a0a;padding:4px 10px;border-radius:4px;align-self:flex-start;margin-bottom:14px}
+    .pv-name{font-size:24px;font-weight:900;letter-spacing:-0.5px;color:#0a0a0a;margin:0 0 10px;text-transform:uppercase;line-height:1.15}
+    .pv-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+    .pv-price{font-size:22px;font-weight:800;color:#0a0a0a}
+    .pv-sub{font-size:11px;color:#aaa;margin-bottom:0;line-height:1.6;letter-spacing:.3px}
+    .pv-divider{border:none;border-top:1px solid #f0f0f0;margin:18px 0}
+    .pv-size-label{font-size:9px;font-weight:900;letter-spacing:2.5px;color:#888;text-transform:uppercase;margin-bottom:10px}
+    .pv-sizes{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+    .pv-sz{background:#f5f5f5;border:1.5px solid transparent;color:#0a0a0a;font-size:11px;font-weight:900;padding:10px 14px;border-radius:50px;cursor:pointer;transition:all .15s;letter-spacing:.5px;font-family:inherit}
+    .pv-sz:hover{border-color:#0a0a0a;background:#fff}
+    .pv-sz.on{background:#0a0a0a;border-color:#0a0a0a;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+    .pv-atc{width:100%;background:linear-gradient(135deg,#0a0a0a 0%,#2a2a2a 100%);color:#fff;border:none;padding:16px;font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;border-radius:50px;cursor:pointer;transition:all .2s;font-family:inherit;margin-bottom:10px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+    .pv-atc:disabled{opacity:.28;cursor:not-allowed;box-shadow:none}
+    .pv-atc:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+    .pv-atc:not(:disabled):active{transform:translateY(0);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+    .pv-back{background:none;border:none;font-size:10px;font-weight:800;letter-spacing:1.5px;color:#ccc;cursor:pointer;font-family:inherit;text-transform:uppercase;padding:0;transition:color .2s;align-self:center}
     .pv-back:hover{color:#0a0a0a}
 
     /* ── Modal ── */
@@ -405,15 +412,16 @@
       .gallery-title{font-size:14px}
       .gallery-price-tag{display:none}
       .gallery-atc{padding:9px 16px;font-size:11px}
-      .pv-modal{flex-direction:column;width:100%;max-height:96vh;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;margin:0;animation:pvSlideUp .28s cubic-bezier(.22,.68,0,1.2)}
+      .pv-modal{flex-direction:column;width:100%;max-height:95vh;border-radius:24px 24px 0 0;position:fixed;bottom:0;left:0;right:0;margin:0;animation:pvSlideUp .3s cubic-bezier(.22,.68,0,1.15)}
       @keyframes pvSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
       .pv-overlay{align-items:flex-end}
-      .pv-img-panel{flex:0 0 auto;min-height:220px;height:44vw;max-height:280px}
-      .pv-img{max-height:260px;padding:16px}
-      .pv-detail{padding:20px 18px 28px;justify-content:flex-start}
-      .pv-name{font-size:16px}
-      .pv-price{font-size:17px}
-      .pv-close{top:10px;right:12px}
+      .pv-img-panel{flex:0 0 auto;min-height:200px;height:46vw;max-height:260px}
+      .pv-detail-inner{padding:18px 18px 24px}
+      .pv-name{font-size:17px}
+      .pv-price{font-size:18px}
+      .pv-collection{margin-bottom:10px}
+      .pv-divider{margin:12px 0}
+      .pv-close{top:12px;right:14px}
       .prod-name{font-size:12px}
       .prod-price{font-size:13px}
       .prod-body{padding:10px 11px 12px}
@@ -838,21 +846,26 @@
     </div>
     <!-- Detail panel -->
     <div class="pv-detail">
-      <div class="pv-collection" id="pvCollection"></div>
-      <h2 class="pv-name" id="pvName"></h2>
-      <div class="pv-price" id="pvPrice"></div>
-      <div class="pv-sub" id="pvSub"></div>
-      <div class="pv-size-label">Select Size</div>
-      <div class="pv-sizes">
-        <button class="pv-sz" onclick="pvPickSize(this,'XS')">XS</button>
-        <button class="pv-sz" onclick="pvPickSize(this,'S')">S</button>
-        <button class="pv-sz" onclick="pvPickSize(this,'M')">M</button>
-        <button class="pv-sz" onclick="pvPickSize(this,'L')">L</button>
-        <button class="pv-sz" onclick="pvPickSize(this,'XL')">XL</button>
-        <button class="pv-sz" onclick="pvPickSize(this,'XXL')">XXL</button>
+      <div class="pv-detail-inner">
+        <div class="pv-collection" id="pvCollection"></div>
+        <h2 class="pv-name" id="pvName"></h2>
+        <div class="pv-price-row">
+          <div class="pv-price" id="pvPrice"></div>
+        </div>
+        <div class="pv-sub" id="pvSub"></div>
+        <hr class="pv-divider">
+        <div class="pv-size-label">Select Size</div>
+        <div class="pv-sizes">
+          <button class="pv-sz" onclick="pvPickSize(this,'XS')">XS</button>
+          <button class="pv-sz" onclick="pvPickSize(this,'S')">S</button>
+          <button class="pv-sz" onclick="pvPickSize(this,'M')">M</button>
+          <button class="pv-sz" onclick="pvPickSize(this,'L')">L</button>
+          <button class="pv-sz" onclick="pvPickSize(this,'XL')">XL</button>
+          <button class="pv-sz" onclick="pvPickSize(this,'XXL')">XXL</button>
+        </div>
+        <button class="pv-atc" id="pvAtcBtn" onclick="pvAddToCart()" disabled>Add to Cart</button>
+        <button class="pv-back" onclick="closeLightbox()">← Back to collection</button>
       </div>
-      <button class="pv-atc" id="pvAtcBtn" onclick="pvAddToCart()" disabled>Add to Cart</button>
-      <button class="pv-back" onclick="closeLightbox()">← Back to collection</button>
     </div>
   </div>
 </div>
