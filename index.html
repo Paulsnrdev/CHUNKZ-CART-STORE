@@ -112,12 +112,7 @@
     .hero-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-repeat:no-repeat;opacity:0;transition:opacity 1.8s ease}
     .hero-bg.is-active{opacity:1}
     .hero-bg-1{background-image:url('Hero Images/IMG_7058.jpg');background-position:center 18%}
-    /* Landscape crop by default — cover-cropping this to a narrow phone viewport would
-       zoom in on one person and clip the others, so swap to the portrait crop below. */
     .hero-bg-2{background-image:url('Hero Images/IMG_7012.jpg');background-position:center 25%}
-    @media(max-width:780px){
-      .hero-bg-2{background-image:url('Hero Images/IMG_7015.jpg');background-position:center 12%}
-    }
     .hero::before{content:'';position:absolute;inset:0;z-index:1;opacity:.05;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
     .hero-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,rgba(4,4,4,.95) 0%,rgba(4,4,4,.72) 32%,rgba(4,4,4,.28) 60%,rgba(4,4,4,.05) 82%),linear-gradient(0deg,rgba(4,4,4,.75) 0%,transparent 40%)}
     .hero-inner{position:relative;z-index:3;min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;max-width:1400px;margin:0 auto;width:100%;padding:130px 32px 64px}
