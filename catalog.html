@@ -364,6 +364,60 @@
     }
     .btn-save-discount:active { opacity: 0.85; }
     .discount-live { font-size: 12px; color: var(--success); margin-top: 10px; text-align: center; display: none; font-weight: 700; }
+
+    /* ── Mobile responsive ── */
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    @media (max-width: 480px) {
+      /* Top bar */
+      .top-bar { padding: 11px 14px; gap: 6px; flex-wrap: nowrap; }
+      .top-bar h1 { font-size: 13px; letter-spacing: 1px; }
+      .top-logo { width: 26px; height: 26px; }
+      .btn-ghost { padding: 6px 10px; font-size: 11px; white-space: nowrap; }
+
+      /* Stats */
+      .stats-row { padding: 12px 14px 6px; gap: 8px; }
+      .stat-num { font-size: 18px; }
+
+      /* Discount/promo cards */
+      .discount-card { margin: 0 14px 12px; padding: 14px; }
+
+      /* Action row — wrap into 2-column grid */
+      .action-row { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+      .action-row > .btn-accent { flex: 0 0 100%; }
+      .action-row > .btn-outline { flex: 0 0 calc(50% - 4px); font-size: 12px; padding: 11px 6px; }
+
+      /* Section label */
+      .section-label { padding: 4px 14px 10px; }
+
+      /* Category cards */
+      .cat-card { margin: 0 14px 10px; }
+      .cat-thumb, .cat-thumb-ph { width: 74px; height: 74px; }
+      .cat-thumb-ph { font-size: 24px; }
+      .cat-info { padding: 9px 10px; }
+      .cat-name { font-size: 13px; }
+
+      /* Product rows — wrap buttons below info */
+      .prod-row { flex-wrap: wrap; gap: 8px; }
+      .prod-row-info { flex: 1 1 0; min-width: 0; }
+      .prod-row-price { font-size: 12px; flex-shrink: 0; }
+      .prod-row-btns { flex: 0 0 100%; display: flex; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 0; }
+      .btn-prod { font-size: 11px; padding: 6px 10px; }
+
+      /* Form sheets */
+      .form-section { padding: 16px 16px 0; }
+      .form-footer { padding: 14px 16px; }
+      .sheet-title-bar { padding: 14px 16px; }
+      .sheet-header { padding: 11px 14px; }
+      .prod-action-bar { padding: 11px 14px; }
+      .prod-list { padding: 0 14px 20px; }
+
+      /* Seed notice */
+      .seed-notice { margin: 12px 14px; }
+
+      /* Toast */
+      #toast { max-width: calc(100vw - 28px); font-size: 13px; }
+    }
   </style>
 </head>
 <body>
