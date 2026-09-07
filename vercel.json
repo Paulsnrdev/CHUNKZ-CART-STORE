@@ -15,6 +15,7 @@
   ],
   "rewrites": [
     { "source": "/follow-up/:token",     "destination": "/follow-up.html" },
+    { "source": "/new-arrivals",         "destination": "/index.html" },
     { "source": "/bestsite",             "destination": "/dist.html" },
     { "source": "/about",               "destination": "/about.html" },
     { "source": "/catalog-admin",     "destination": "/catalog.html" },

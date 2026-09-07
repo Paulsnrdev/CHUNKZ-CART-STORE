@@ -151,10 +151,10 @@
     @keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     @media(max-width:600px){.hero-marquee-track span{font-size:11px;letter-spacing:1px;padding:8px 20px}}
     /* ── Chat Button ── */
-    .chat-fab{position:fixed;bottom:24px;right:24px;z-index:150;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:12px 20px 12px 16px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.3);font-size:14px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s}
+    .chat-fab{position:fixed;bottom:24px;right:24px;z-index:150;display:flex;align-items:center;justify-content:center;width:54px;height:54px;background:#25D366;color:#fff;border:none;border-radius:50%;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.3);text-decoration:none;transition:transform .2s,box-shadow .2s}
     .chat-fab:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
-    .chat-fab i{font-size:20px}
-    @media(max-width:500px){.chat-fab{padding:11px 15px 11px 13px;font-size:13px}.chat-fab i{font-size:18px}}
+    .chat-fab i{font-size:24px}
+    @media(max-width:500px){.chat-fab{width:48px;height:48px}.chat-fab i{font-size:21px}}
     .tw-cursor{display:inline-block;width:2px;height:1em;background:#aaa;margin-left:2px;vertical-align:text-bottom;animation:twblink .7s step-end infinite}
     @keyframes twblink{0%,100%{opacity:1}50%{opacity:0}}
 
@@ -525,8 +525,8 @@
       <h1 class="hero-headline">Built for<br>the ones<br>who <em>stand out</em></h1>
       <p class="hero-sub">Premium streetwear for those who refuse to blend in.</p>
       <div class="hero-actions">
-        <a href="#products" class="hero-cta">Shop the Collection</a>
-        <a href="#products" class="hero-cta hero-cta-ghost">Explore New Arrivals</a>
+        <!-- <a href="#products" class="hero-cta">Shop the Collection</a> -->
+        <a href="/new-arrivals" class="hero-cta hero-cta-ghost">Explore New Arrivals</a>
       </div>
     </div>
   </div>
@@ -1626,11 +1626,39 @@ function imgPrices(cat, entry) {
 /* ═══════════════════════════════════════════════════
    RENDER CATEGORY CARDS
 ═══════════════════════════════════════════════════ */
+/* Flattens every category's newArrival-flagged products into a synthetic
+   catalog['new-arrivals'] entry, reusing the existing gallery/cart/pricing
+   code paths as-is. Excluded from the category grid — see renderCategories. */
+function buildNewArrivalsCatalog() {
+  const items = [];
+  Object.keys(catalog).forEach(function(key) {
+    if (key === 'new-arrivals') return;
+    (catalog[key].images || []).forEach(function(entry) {
+      if (entry && entry.newArrival) items.push(entry);
+    });
+  });
+  catalog['new-arrivals'] = {
+    title: 'New Arrivals',
+    subtitle: 'Fresh drops, just added',
+    ctaLabel: 'Shop New Arrivals',
+    images: items
+  };
+}
+
+/* If the visitor landed on /new-arrivals, open that gallery directly so the
+   URL behaves like its own page even though it's served by index.html. */
+function maybeOpenNewArrivalsRoute() {
+  if (/\/new-arrivals\/?$/.test(location.pathname)) {
+    document.title = 'New Arrivals — Chunkz';
+    openGallery('new-arrivals');
+  }
+}
+
 function renderCategories() {
   const grid = document.getElementById('categoriesGrid');
   grid.innerHTML = '';
 
-  Object.entries(catalog).forEach(([key, cat], idx) => {
+  Object.entries(catalog).filter(([key]) => key !== 'new-arrivals').forEach(([key, cat], idx) => {
     const card = document.createElement('div');
     card.className = 'cat-card';
     const isMobile = window.innerWidth < 600;
@@ -1666,7 +1694,11 @@ function openGallery(catKey) {
   document.getElementById('galSubtitle').textContent =
     cat.subtitle + '  ·  ' + cat.images.length + ' design' + (cat.images.length !== 1 ? 's' : '');
 
+  // The header "+ Add to Cart" adds a category-level item priced from cat.prices.
+  // The virtual New Arrivals category has no single price (it aggregates many
+  // products), so hide that button there — each card's own Add to Cart still works.
   const atcBtn = document.getElementById('galAtcBtn');
+  atcBtn.style.display = catKey === 'new-arrivals' ? 'none' : '';
   atcBtn.onclick = function() { addToCart(catKey); };
 
   const modal = document.getElementById('galleryModal');
@@ -2497,10 +2529,12 @@ async function sendContactMessage(e) {
    INIT
 ═══════════════════════════════════════════════════ */
 loadCart();
+buildNewArrivalsCatalog();
 renderCategories();  // render immediately with NG default so page isn't blank
 refreshCartUI();
 detectCountry();     // re-renders with correct local currency once IP resolves
 detectDeliveryCountry(); // warm up delivery country cache before checkout opens
+maybeOpenNewArrivalsRoute();
 
 // Load catalog from Firestore (catalog-admin.html manages this).
 // Falls back silently to the hardcoded catalog above if Firestore is empty/unavailable.
@@ -2513,7 +2547,9 @@ if (FIREBASE_READY) {
       if (data.images) data.images = data.images.filter(function(img) { return !img.hidden; });
       catalog[doc.id] = data;
     });
+      buildNewArrivalsCatalog();
       renderCategories();
+      maybeOpenNewArrivalsRoute();
     }
   }).catch(function() {});
 }
@@ -2570,9 +2606,8 @@ if (FIREBASE_READY) {
 <!-- ── Chat with Chunkz (WhatsApp) ── -->
 <a class="chat-fab"
    href="https://wa.me/2347069094959?text=Hello%20Chunkz!%20I%27d%20like%20to%20ask%20about%20an%20item."
-   target="_blank" rel="noopener" aria-label="Chat">
+   target="_blank" rel="noopener" aria-label="Chat with Chunkz on WhatsApp">
   <i class="fab fa-whatsapp"></i>
-  Chat
 </a>
 <script src="hero-fx.js"></script>
 </body>

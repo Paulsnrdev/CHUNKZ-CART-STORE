@@ -294,6 +294,10 @@
       font-size: 9px; font-weight: 800; background: var(--btn); color: var(--muted);
       padding: 2px 6px; border-radius: 4px; letter-spacing: 1px; display: inline-block; margin-bottom: 3px;
     }
+    .new-badge {
+      font-size: 9px; font-weight: 800; background: var(--accent); color: #fff;
+      padding: 2px 6px; border-radius: 4px; letter-spacing: 1px; display: inline-block; margin-bottom: 3px; margin-right: 4px;
+    }
 
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
     .pairs-row { display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-radius:6px; }
@@ -678,6 +682,13 @@
           <input class="price-input" id="prodCAD" type="number" placeholder="33">
         </div>
       </div>
+    </div>
+    <div class="field-group" style="margin-top:4px">
+      <label class="field-label" style="display:flex;align-items:center;justify-content:space-between">
+        <span>New Arrival</span>
+        <input type="checkbox" id="prodNewArrival" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent);flex-shrink:0">
+      </label>
+      <div class="field-hint">Shown on the site's "New Arrivals" page.</div>
     </div>
     <div class="field-group" style="margin-top:4px">
       <label class="field-label" style="display:flex;align-items:center;justify-content:space-between">
@@ -1087,6 +1098,7 @@ function renderProducts() {
     const name     = entry.name || cleanName(src);
     const ngn      = entry.ngn  || entry.prices?.NG?.amount || 0;
     const isHidden = !!entry.hidden;
+    const isNew    = !!entry.newArrival;
 
     const row = document.createElement('div');
     row.className = 'prod-row' + (isHidden ? ' hidden-item' : '');
@@ -1094,6 +1106,7 @@ function renderProducts() {
       <img class="prod-thumb" src="${esc(cdnSrc(src))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="prod-thumb-ph" style="display:none">🖼️</div>
       <div class="prod-row-info">
+        ${isNew ? '<div class="new-badge">NEW</div>' : ''}
         ${isHidden ? '<div class="hidden-badge">HIDDEN</div>' : ''}
         <div class="prod-row-name">${esc(name)}</div>
         <div class="prod-row-sub">${esc(catTitle)}</div>
@@ -1133,7 +1146,8 @@ function openProductEditor(idx) {
   document.getElementById('prodCurrentSrc').textContent = '';
   document.getElementById('prodProgressWrap').style.display = 'none';
 
-  document.getElementById('prodExclude').checked = !!(entry.excludeFromRecommendations);
+  document.getElementById('prodExclude').checked    = !!(entry.excludeFromRecommendations);
+  document.getElementById('prodNewArrival').checked = !!(entry.newArrival);
 
   // Build pairsWith checklist from all catalog products except this one
   const currentSrc  = src;
@@ -1187,11 +1201,12 @@ async function saveProductEditor() {
   const cad  = parseFloat(document.getElementById('prodCAD').value) || null;
 
   const excludeFromRecommendations = document.getElementById('prodExclude').checked;
+  const newArrival = document.getElementById('prodNewArrival').checked;
   const pairsWith = Array.from(
     document.querySelectorAll('#pairsWithList input[type="checkbox"]:checked')
   ).map(cb => cb.dataset.src).filter(Boolean);
 
-  const newEntry = { src, name, ngn, usd, gbp, cad, excludeFromRecommendations, pairsWith };
+  const newEntry = { src, name, ngn, usd, gbp, cad, excludeFromRecommendations, newArrival, pairsWith };
 
   if (isEdit) {
     images[editProdIdx] = newEntry;
