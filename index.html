@@ -2332,6 +2332,35 @@ async function submitOrder(e) {
       checkoutAmount   = finalTotal;
       checkoutCurrency = currCode;
       pendingOrder     = { name, email, phone, address, colour, desc, items: cart.slice(), total: finalTotal, currency: currCode, deliveryZone: zoneData.label, deliveryFeeNGN: zoneData.fee || 0, orderRef: orderRef, promoCode: appliedPromo ? appliedPromo.code : null };
+
+      /* Rich admin email with product images — fire-and-forget */
+      fetch('/api/notify-admin', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderRef:          orderRef,
+          customerName:      name,
+          customerPhone:     phone,
+          customerEmail:     email     || '',
+          deliveryAddress:   address   || 'Self Pickup',
+          deliveryZone:      zoneData.label,
+          deliveryFee:       deliveryFeeLabel,
+          colourPreference:  colour    || '',
+          descriptionNote:   desc      || '',
+          items: cart.map(function(i) {
+            return { src: i.src || null, name: i.name, size: i.size || '', qty: i.qty, price: i.price };
+          }),
+          subtotal:     subtotal,
+          total:        finalTotal,
+          currency:     currCode,
+          symbol:       sym,
+          promoCode:    appliedPromo ? appliedPromo.code : null,
+          promoDiscount: appliedPromo ? (sym + promoDiscount.toLocaleString()) : null,
+          orderDate:    new Date().toLocaleString('en-NG'),
+          paymentStatus: 'awaiting_payment'
+        })
+      }).catch(function() {});
+
       document.getElementById('payRetryMsg').style.display = 'none';
       if (payMethod === 'moniepoint') {
         proceedMoniepointTransfer();
