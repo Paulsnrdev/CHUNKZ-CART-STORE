@@ -13,21 +13,16 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'ji
   .map(email => String(email).trim().toLowerCase())
   .filter(Boolean);
 
-const FIREBASE_WEB_KEY = 'AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0';
-
-async function verifyAdminToken(idToken) {
-  if (!idToken) return 'no_token';
+function verifyAdminToken(idToken) {
+  if (!idToken) return false;
   try {
-    const r = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_WEB_KEY}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) }
-    );
-    const data  = await r.json();
-    if (!r.ok) return 'firebase_api_err:' + (data.error?.message || r.status);
-    const email = String(data.users?.[0]?.email || '').trim().toLowerCase();
-    if (!ADMIN_EMAILS.includes(email)) return 'not_admin:' + email;
-    return true;
-  } catch (e) { return 'fetch_err:' + e.message; }
+    const parts   = idToken.split('.');
+    if (parts.length !== 3) return false;
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+    const email   = String(payload.email || '').trim().toLowerCase();
+    const aud     = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+    return aud.includes('chunkz-store') && ADMIN_EMAILS.includes(email);
+  } catch (e) { return false; }
 }
 
 module.exports = async function handler(req, res) {
@@ -40,8 +35,7 @@ module.exports = async function handler(req, res) {
 
   const authHeader = (req.headers.authorization || '').trim();
   const idToken    = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  const authCheck = await verifyAdminToken(idToken);
-  if (authCheck !== true) return res.status(401).json({ error: authCheck });
+  if (!verifyAdminToken(idToken)) return res.status(401).json({ error: 'Unauthorized' });
 
   const action = (req.query.action || '').toLowerCase();
 
