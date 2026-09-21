@@ -23,7 +23,7 @@ function primaryItem(items) {
 }
 
 function ctaButton(label, url, bgColor) {
-  const bg = bgColor || '#e63946';
+  const bg = bgColor || '#570303';
   const textColor = bgColor ? '#aaaaaa' : '#ffffff';
   return `
 <tr>
@@ -71,7 +71,7 @@ a[x-apple-data-detectors] { color:inherit!important; text-decoration:none!import
 
         <!-- brand header -->
         <tr>
-          <td bgcolor="#e63946" style="border-radius:10px 10px 0 0;padding:18px 32px;text-align:center;">
+          <td bgcolor="#570303" style="border-radius:10px 10px 0 0;padding:18px 32px;text-align:center;">
             <span style="font-family:'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:900;letter-spacing:7px;color:#ffffff;text-transform:uppercase;">CHUNKZ</span>
           </td>
         </tr>
@@ -133,8 +133,8 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">IT&rsquo;S HERE.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your <span style="color:#e63946;">${productName}</span>${badge ? ' <span style="font-size:16px;color:#888888;font-weight:400;">(' + badge + ')</span>' : ''} has been delivered.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">IT&rsquo;S HERE.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your <span style="color:#570303;">${productName}</span>${badge ? ' <span style="font-size:16px;color:#888888;font-weight:400;">(' + badge + ')</span>' : ''} has been delivered.</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Thank you for rocking with Chunkz &mdash; for real.</p>
   </td>
 </tr>
@@ -163,10 +163,10 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
 
 <tr>
   <td class="cp" style="padding:24px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-left:3px solid #e63946;background-color:#141414;border-radius:0 6px 6px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-left:3px solid #570303;background-color:#141414;border-radius:0 6px 6px 0;">
       <tr>
         <td style="padding:14px 16px;">
-          <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#e63946;">KEEP IT FRESH</p>
+          <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#570303;">KEEP IT FRESH</p>
           <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#888888;line-height:1.65;">Cold wash, inside out and air dry. Iron on reverse. Treat it right and it&rsquo;ll outlast the hype.</p>
         </td>
       </tr>
@@ -176,7 +176,7 @@ function buildDay0({ token, customerName, orderRef, items, totalNGN, colourPrefe
 
 <tr>
   <td class="cp" style="padding:22px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Wearing it? Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> and we will repost.</p>
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Wearing it? Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#570303;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> and we will repost.</p>
   </td>
 </tr>
 
@@ -200,8 +200,8 @@ function buildDay3({ token, customerName, items, colourPreference }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">3 DAYS IN.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, how&rsquo;s <span style="color:#e63946;">${productName}</span> working out?</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">3 DAYS IN.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, how&rsquo;s <span style="color:#570303;">${productName}</span> working out?</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Fit right? Feeling good? Tap below and let us know &mdash; takes 10 seconds. If something&rsquo;s off, we want to hear it first.</p>
   </td>
 </tr>
@@ -213,7 +213,7 @@ function buildDay3({ token, customerName, items, colourPreference }) {
         <td width="49%" align="center">
           <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width:100%;">
             <tr>
-              <td align="center" bgcolor="#e63946" style="border-radius:6px;">
+              <td align="center" bgcolor="#570303" style="border-radius:6px;">
                 <a href="${positiveUrl}" target="_blank" style="display:block;padding:14px 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#ffffff;text-decoration:none;text-align:center;">LOVING IT &#x1F525;</a>
               </td>
             </tr>
@@ -258,10 +258,10 @@ function buildDay6({ token, customerName, items }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">ONE QUICK THING.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">You&rsquo;ve had <span style="color:#e63946;">${productName}</span> for about a week now.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">ONE QUICK THING.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">You&rsquo;ve had <span style="color:#570303;">${productName}</span> for about a week now.</p>
     <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">If it&rsquo;s been good to you, a quick word from you goes a long way for the next person deciding whether to cop. Thirty seconds, that&rsquo;s all.</p>
-    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;"><a href="${followUpUrl}" target="_blank" style="color:#e63946;font-weight:700;text-decoration:none;">Tap here to drop your feedback &rarr;</a></p>
+    <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;"><a href="${followUpUrl}" target="_blank" style="color:#570303;font-weight:700;text-decoration:none;">Tap here to drop your feedback &rarr;</a></p>
   </td>
 </tr>
 
@@ -325,8 +325,8 @@ function buildDay8({ token, customerName, items, upsell, promo }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">THOUGHT YOU&rsquo;D LIKE THIS.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">Since you got the <span style="color:#e63946;">${productName}</span>, this one caught our eye for you.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">THOUGHT YOU&rsquo;D LIKE THIS.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">Since you got the <span style="color:#570303;">${productName}</span>, this one caught our eye for you.</p>
     <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${pitch}</p>
   </td>
 </tr>
@@ -339,7 +339,7 @@ ${productImageRow}
         <td style="padding:18px 20px;">
           <p style="margin:0 0 2px;font-family:'Segoe UI',Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;">${recName}</p>
           ${priceRow}
-          <p style="margin:12px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;"><a href="${buyNowUrl}" target="_blank" style="color:#e63946;font-weight:700;text-decoration:none;">Take a look &rarr;</a></p>
+          <p style="margin:12px 0 0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;"><a href="${buyNowUrl}" target="_blank" style="color:#570303;font-weight:700;text-decoration:none;">Take a look &rarr;</a></p>
         </td>
       </tr>
     </table>
@@ -387,7 +387,7 @@ a[x-apple-data-detectors] { color:inherit!important; text-decoration:none!import
 
         <!-- brand header -->
         <tr>
-          <td bgcolor="#e63946" style="border-radius:10px 10px 0 0;padding:18px 32px;text-align:center;">
+          <td bgcolor="#570303" style="border-radius:10px 10px 0 0;padding:18px 32px;text-align:center;">
             <span style="font-family:'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:900;letter-spacing:7px;color:#ffffff;text-transform:uppercase;">CHUNKZ</span>
           </td>
         </tr>
@@ -497,7 +497,7 @@ function buildAwaitingPaymentReminder({ customerName, orderRef, items, totalNGN,
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">${cfg.label}</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">${cfg.label}</p>
     <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${cfg.headline(name)}</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">${cfg.body}</p>
   </td>
@@ -509,7 +509,7 @@ ${ctaButton('COMPLETE YOUR ORDER &rarr;', SITE_URL)}
 
 <tr>
   <td class="cp" style="padding:18px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;line-height:1.6;">Questions? Reach us on Instagram <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a></p>
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#444444;text-align:center;line-height:1.6;">Questions? Reach us on Instagram <a href="https://instagram.com/chunkz_thebrand" style="color:#570303;text-decoration:none;font-weight:700;">@chunkz_thebrand</a></p>
   </td>
 </tr>`;
 
@@ -526,7 +526,7 @@ function buildConfirmed({ customerName, orderRef, items, totalNGN }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">CONFIRMED.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">CONFIRMED.</p>
     <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your order is confirmed. We&rsquo;ve got you.</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Payment received and order locked in. We&rsquo;ll start getting it ready and keep you posted every step of the way.</p>
   </td>
@@ -560,7 +560,7 @@ function buildProcessing({ customerName, orderRef, items, totalNGN }) {
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">IN THE WORKS.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">IN THE WORKS.</p>
     <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, we&rsquo;re prepping your order right now.</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Your Chunkz is being packed and prepared. We&rsquo;ll hit you again the moment it ships.</p>
   </td>
@@ -603,8 +603,8 @@ function buildDispatched({ customerName, orderRef, items, totalNGN, trackingNumb
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
-    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">ON ITS WAY.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your <span style="color:#e63946;">${productName}</span> has been dispatched.</p>
+    <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#570303;">ON ITS WAY.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, your <span style="color:#570303;">${productName}</span> has been dispatched.</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Your order is on its way. Expect delivery within the next few days.</p>
   </td>
 </tr>
@@ -615,7 +615,7 @@ ${trackingBlock}
 
 <tr>
   <td class="cp" style="padding:24px 32px 0;">
-    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Once it lands, wear it with pride. Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#e63946;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> 🔥</p>
+    <p style="margin:0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;">Once it lands, wear it with pride. Tag us <a href="https://instagram.com/chunkz_thebrand" style="color:#570303;text-decoration:none;font-weight:700;">@chunkz_thebrand</a> 🔥</p>
   </td>
 </tr>`;
 
