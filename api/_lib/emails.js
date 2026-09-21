@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const SITE_URL = process.env.SITE_URL || 'https://chunkzthebrand.com';
 
@@ -191,8 +191,9 @@ ${ctaButton('VIEW YOUR ORDER &rarr;', followUpUrl)}`;
 // ── Day 3 — Check-in ──────────────────────────────────────────────────────────
 function buildDay3({ token, customerName, items, colourPreference }) {
   const name = htmlFirst(customerName);
+  const multi = Array.isArray(items) && items.length > 1;
   const item = primaryItem(items);
-  const productName = escHtml(item.name || item.collection || 'your order');
+  const productName = multi ? 'your order' : escHtml(item.name || item.collection || 'your order');
   const positiveUrl = SITE_URL + '/follow-up/' + token + '?stage=day3&r=positive';
   const negativeUrl = SITE_URL + '/follow-up/' + token + '?stage=day3&r=negative';
 
@@ -200,7 +201,7 @@ function buildDay3({ token, customerName, items, colourPreference }) {
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
     <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">3 DAYS IN.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, how&rsquo;s the <span style="color:#e63946;">${productName}</span> working out?</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">${name}, how&rsquo;s <span style="color:#e63946;">${productName}</span> working out?</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">Fit right? Feeling good? Tap below and let us know &mdash; takes 10 seconds. If something&rsquo;s off, we want to hear it first.</p>
   </td>
 </tr>
@@ -239,9 +240,9 @@ function buildDay3({ token, customerName, items, colourPreference }) {
   </td>
 </tr>`;
 
-  const rawItem = item.name || item.collection || 'your order';
+  const rawItem = multi ? 'your order' : (item.name || item.collection || 'your order');
   return {
-    subject: `How’s the ${rawItem} treating you? 👀`,
+    subject: `How's ${rawItem} treating you? 👀`,
     html: emailWrapper({ preheader: 'Be honest — we can take it.', token, bodyRows }),
   };
 }
@@ -249,15 +250,16 @@ function buildDay3({ token, customerName, items, colourPreference }) {
 // ── Day 6 — Review request ────────────────────────────────────────────────────
 function buildDay6({ token, customerName, items }) {
   const name = htmlFirst(customerName);
+  const multi = Array.isArray(items) && items.length > 1;
   const item = primaryItem(items);
-  const productName = escHtml(item.name || item.collection || 'your order');
+  const productName = multi ? 'your Chunkz order' : escHtml(item.name || item.collection || 'your order');
   const followUpUrl = SITE_URL + '/follow-up/' + token + '?stage=day6';
 
   const bodyRows = `
 <tr>
   <td class="cp" style="padding:36px 32px 0;">
     <p style="margin:0 0 6px;font-family:'Segoe UI',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#e63946;">ONE QUICK THING.</p>
-    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">You&rsquo;ve had the <span style="color:#e63946;">${productName}</span> for about a week now.</p>
+    <p style="margin:0 0 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;line-height:1.25;">You&rsquo;ve had <span style="color:#e63946;">${productName}</span> for about a week now.</p>
     <p style="margin:0 0 20px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;">If it&rsquo;s been good to you, a quick word from you goes a long way for the next person deciding whether to cop. Thirty seconds, that&rsquo;s all.</p>
     <p style="margin:0 0 28px;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#888888;line-height:1.6;"><a href="${followUpUrl}" target="_blank" style="color:#e63946;font-weight:700;text-decoration:none;">Tap here to drop your feedback &rarr;</a></p>
   </td>
@@ -278,8 +280,9 @@ function buildDay6({ token, customerName, items }) {
 // ── Day 8 — Upsell + promo ────────────────────────────────────────────────────
 function buildDay8({ token, customerName, items, upsell, promo }) {
   const name = htmlFirst(customerName);
+  const multi = Array.isArray(items) && items.length > 1;
   const item = primaryItem(items);
-  const productName = escHtml(item.name || item.collection || 'your order');
+  const productName = multi ? 'your last order' : escHtml(item.name || item.collection || 'your order');
   const followUpUrl = SITE_URL + '/follow-up/' + token + '?stage=day8';
 
   const rec     = upsell || {};
@@ -345,9 +348,9 @@ ${productImageRow}
 
 ${promoSection}`;
 
-  const rawItem = item.name || item.collection || 'your order';
+  const rawItem = multi ? 'your last order' : (item.name || item.collection || 'your order');
   return {
-    subject: `${rawFirst(customerName)}, this pairs with your ${rawItem}`,
+    subject: multi ? `${rawFirst(customerName)}, we picked this for you` : `${rawFirst(customerName)}, this pairs with your ${rawItem}`,
     html: transactionalWrapper({ preheader: `We picked something that goes with what you got.`, bodyRows }),
   };
 }
