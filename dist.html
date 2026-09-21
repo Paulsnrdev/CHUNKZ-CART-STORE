@@ -1675,7 +1675,7 @@ function buildFollowUpHtml(fu, docId) {
       '<span class="fu-stage-lbl">' + STAGE_LABELS[stage] + '</span>' +
       '<span class="st-badge ' + cls + '">' + status + '</span>' +
       '<div class="fu-stage-actions">' +
-        (status === 'pending'   ? '<button class="fu-btn primary" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'trigger\',this);event.stopPropagation()">Send Now</button>' : '') +
+        (status === 'pending' || status === 'skipped' ? '<button class="fu-btn primary" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'trigger\',this);event.stopPropagation()">Send Now</button>' : '') +
         (status !== 'pending' && status !== 'cancelled' && status !== 'skipped' ? '<button class="fu-btn" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'resend\',this);event.stopPropagation()">Resend</button>' : '') +
         (status === 'pending' || status === 'sent' ? '<button class="fu-btn danger" onclick="fuAction(\'' + docId + '\',\'' + stage + '\',\'cancel\',this);event.stopPropagation()">Cancel</button>' : '') +
         (stage === 'day8' ? '<button class="fu-btn" onclick="openEmailPreview(\'' + docId + '\');event.stopPropagation()">Preview</button>' : '') +
