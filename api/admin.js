@@ -14,12 +14,13 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'ji
   .filter(Boolean);
 
 async function verifyAdminToken(idToken) {
-  if (!idToken) return false;
+  if (!idToken) return { ok: false, reason: 'no_token' };
   try {
     const decoded = await admin.auth().verifyIdToken(idToken);
     const email   = String(decoded.email || '').trim().toLowerCase();
-    return ADMIN_EMAILS.includes(email);
-  } catch (e) { return false; }
+    if (!ADMIN_EMAILS.includes(email)) return { ok: false, reason: 'email_not_admin:' + email };
+    return { ok: true };
+  } catch (e) { return { ok: false, reason: 'sdk_error:' + e.message }; }
 }
 
 module.exports = async function handler(req, res) {
@@ -32,7 +33,8 @@ module.exports = async function handler(req, res) {
 
   const authHeader = (req.headers.authorization || '').trim();
   const idToken    = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (!await verifyAdminToken(idToken)) return res.status(401).json({ error: 'Unauthorized' });
+  const authResult = await verifyAdminToken(idToken);
+  if (!authResult.ok) return res.status(401).json({ error: 'Unauthorized', reason: authResult.reason });
 
   const action = (req.query.action || '').toLowerCase();
 
