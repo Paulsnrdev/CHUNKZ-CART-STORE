@@ -1,6 +1,6 @@
 'use strict';
 
-const { db, storageSrcToUrl } = require('./_lib/firebase-admin');
+const { admin, db, storageSrcToUrl } = require('./_lib/firebase-admin');
 const { sendEmail } = require('./_lib/resend');
 const { buildDay0, buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
 const { resolveRecommendation } = require('./_lib/recommend');
@@ -8,19 +8,17 @@ const { createPromo }           = require('./_lib/promo');
 
 const BUILDERS = { day0: buildDay0, day3: buildDay3, day6: buildDay6, day8: buildDay8 };
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'brodahsegunofib@gmail.com')
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'jibadepaul@gmail.com,brodahsegunofib@gmail.com')
   .split(',')
   .map(email => String(email).trim().toLowerCase())
   .filter(Boolean);
 
-function verifyAdminToken(idToken) {
+async function verifyAdminToken(idToken) {
   if (!idToken) return false;
   try {
-    const parts   = idToken.split('.');
-    if (parts.length !== 3) return false;
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
-    const email = String(payload.email || '').trim().toLowerCase();
-    return payload.aud === 'chunkz-store' && ADMIN_EMAILS.includes(email);
+    const decoded = await admin.auth().verifyIdToken(idToken);
+    const email   = String(decoded.email || '').trim().toLowerCase();
+    return ADMIN_EMAILS.includes(email);
   } catch (e) { return false; }
 }
 
@@ -34,7 +32,7 @@ module.exports = async function handler(req, res) {
 
   const authHeader = (req.headers.authorization || '').trim();
   const idToken    = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (!verifyAdminToken(idToken)) return res.status(401).json({ error: 'Unauthorized' });
+  if (!await verifyAdminToken(idToken)) return res.status(401).json({ error: 'Unauthorized' });
 
   const action = (req.query.action || '').toLowerCase();
 
