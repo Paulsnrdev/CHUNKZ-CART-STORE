@@ -1,6 +1,6 @@
 'use strict';
 
-const { admin, db, storageSrcToUrl } = require('./_lib/firebase-admin');
+const { db, storageSrcToUrl } = require('./_lib/firebase-admin');
 const { sendEmail } = require('./_lib/resend');
 const { buildDay0, buildDay3, buildDay6, buildDay8 } = require('./_lib/emails');
 const { resolveRecommendation } = require('./_lib/recommend');
@@ -13,14 +13,20 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'ji
   .map(email => String(email).trim().toLowerCase())
   .filter(Boolean);
 
+const FIREBASE_WEB_KEY = 'AIzaSyDe0nlY-5Z2zbQeU3QMoHfRyI1Ah7cyNH0';
+
 async function verifyAdminToken(idToken) {
-  if (!idToken) return { ok: false, reason: 'no_token' };
+  if (!idToken) return false;
   try {
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    const email   = String(decoded.email || '').trim().toLowerCase();
-    if (!ADMIN_EMAILS.includes(email)) return { ok: false, reason: 'email_not_admin:' + email };
-    return { ok: true };
-  } catch (e) { return { ok: false, reason: 'sdk_error:' + e.message }; }
+    const r = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_WEB_KEY}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) }
+    );
+    if (!r.ok) return false;
+    const data  = await r.json();
+    const email = String(data.users?.[0]?.email || '').trim().toLowerCase();
+    return ADMIN_EMAILS.includes(email);
+  } catch (e) { return false; }
 }
 
 module.exports = async function handler(req, res) {
@@ -33,8 +39,7 @@ module.exports = async function handler(req, res) {
 
   const authHeader = (req.headers.authorization || '').trim();
   const idToken    = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  const authResult = await verifyAdminToken(idToken);
-  if (!authResult.ok) return res.status(401).json({ error: 'Unauthorized', reason: authResult.reason });
+  if (!await verifyAdminToken(idToken)) return res.status(401).json({ error: 'Unauthorized' });
 
   const action = (req.query.action || '').toLowerCase();
 
