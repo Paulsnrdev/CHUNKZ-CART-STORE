@@ -495,6 +495,11 @@
         <label class="disc-label">Sale Label</label>
         <input class="disc-input" id="discountLabel" type="text" placeholder="e.g. Holiday Sale" maxlength="30">
       </div>
+      <div class="disc-field">
+        <label class="disc-label">Expiry (local)</label>
+        <input class="disc-input" id="discountExpiry" type="datetime-local" placeholder="YYYY-MM-DD HH:MM">
+        <div class="field-hint" style="margin-top:6px">Optional — when set the sale auto-expires at this local date & time.</div>
+      </div>
     </div>
     <button class="btn-save-discount" onclick="saveDiscount()">Save Discount Settings</button>
     <div class="discount-live" id="discountLive">🔥 Sale is LIVE on the store</div>
@@ -842,6 +847,15 @@ async function loadDiscountSettings() {
       document.getElementById('discountToggle').checked = !!d.discountActive;
       if (d.discountPercent) document.getElementById('discountPercent').value = d.discountPercent;
       if (d.discountLabel)   document.getElementById('discountLabel').value   = d.discountLabel;
+      if (d.discountExpiry) {
+        // convert ISO -> local datetime-local value
+        try {
+          const dt = new Date(d.discountExpiry);
+          const tzoffset = dt.getTimezoneOffset() * 60000;
+          const local = new Date(dt - tzoffset).toISOString().slice(0,16);
+          document.getElementById('discountExpiry').value = local;
+        } catch(_) {}
+      }
       updateDiscountCard(!!d.discountActive);
     }
   } catch(e) {}
@@ -860,12 +874,16 @@ async function saveDiscount() {
   const active  = document.getElementById('discountToggle').checked;
   const percent = parseFloat(document.getElementById('discountPercent').value) || 20;
   const label   = document.getElementById('discountLabel').value.trim();
+  const expiryVal = (document.getElementById('discountExpiry') || {}).value || '';
   if (percent < 1 || percent > 99) { showToast('Discount must be between 1 and 99%', true); return; }
+  let expiryIso = null;
+  if (expiryVal) {
+    try { expiryIso = new Date(expiryVal).toISOString(); } catch(_) { expiryIso = null; }
+  }
   try {
-    await db.collection('settings').doc('siteConfig').set(
-      { discountActive: active, discountPercent: percent, discountLabel: label },
-      { merge: true }
-    );
+    const payload = { discountActive: active, discountPercent: percent, discountLabel: label };
+    if (expiryIso) payload.discountExpiry = expiryIso;
+    await db.collection('settings').doc('siteConfig').set(payload, { merge: true });
     updateDiscountCard(active);
     showToast(active ? 'Sale is now LIVE on the store!' : 'Discount turned off');
   } catch(e) {

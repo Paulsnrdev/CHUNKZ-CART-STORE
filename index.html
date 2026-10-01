@@ -145,7 +145,12 @@
       .hero-cta{width:100%;text-align:center}
     }
     /* ── Sale Banner ── */
-    #saleBanner{display:none;background:var(--accent);color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
+    #saleBanner{display:none;background:#8B0000;color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
+    /* Small sale badge shown on product cards */
+    .prod-badge{position:absolute;top:10px;left:10px;z-index:20}
+    .sale-badge{background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:6px 8px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);text-transform:uppercase}
+    /* Quick-view sale label */
+    .pv-sale-label{margin-top:8px;font-size:13px;font-weight:800;color:var(--accent)}
     .hero-marquee{position:relative;overflow:hidden;background:#0a0a0a;border-top:1px solid rgba(255,255,255,.1);width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 22s linear infinite;animation:marqueeScroll 22s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -899,6 +904,7 @@
         <h2 class="pv-name" id="pvName"></h2>
         <div class="pv-price-row">
           <div class="pv-price" id="pvPrice"></div>
+          <div class="pv-sale-label" id="pvSaleLabel"></div>
         </div>
         <div class="pv-sub" id="pvSub"></div>
         <hr class="pv-divider">
@@ -1584,6 +1590,16 @@ function getPrice(cat) {
 }
 
 function fmt(priceObj) {
+  if (!priceObj) return 'Price on request';
+  var base = priceObj.symbol + priceObj.amount.toLocaleString();
+  if (siteDiscount.active && siteDiscount.percent > 0) {
+    var discAmount = Math.round(priceObj.amount * (1 - siteDiscount.percent / 100));
+    return priceObj.symbol + discAmount.toLocaleString();
+  }
+  return base;
+}
+
+function fmtHtml(priceObj) {
   if (!priceObj) return '<span style="color:#999;font-size:.85em;font-weight:500">Price on request</span>';
   var base = priceObj.symbol + priceObj.amount.toLocaleString();
   if (siteDiscount.active && siteDiscount.percent > 0) {
@@ -1740,14 +1756,16 @@ function appendGalleryItems(catKey, from, to) {
     const name   = entry.name || cleanImageName(src);
     const card   = document.createElement('div');
     card.className = 'prod-card';
+    var badgeHtml = (siteDiscount && siteDiscount.active && siteDiscount.label) ? '<div class="prod-badge"><span class="sale-badge">' + esc(siteDiscount.label) + '</span></div>' : '';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
         '<img src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async" onload="markImageReady(this)">' +
       '</div>' +
       '<div class="prod-body">' +
+        badgeHtml +
         '<div class="prod-name">' + name + '</div>' +
         '<div class="prod-sub">' + cat.subtitle + '</div>' +
-        '<div class="prod-price">' + fmt(itemPr) + '</div>' +
+        '<div class="prod-price">' + fmtHtml(itemPr) + '</div>' +
         (itemPr ? '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' : '<button class="prod-atc" style="opacity:.4;cursor:not-allowed" disabled>Add to Cart</button>') +
       '</div>';
     const img = card.querySelector('img');
@@ -1802,7 +1820,9 @@ function updateLightboxImage() {
   document.getElementById('lbImg').alt = name;
   document.getElementById('lbCounter').textContent = (activeLightboxIndex + 1) + ' / ' + cat.images.length;
   document.getElementById('pvName').textContent = name.toUpperCase();
-  document.getElementById('pvPrice').textContent = pr ? fmt(pr) : '';
+  document.getElementById('pvPrice').innerHTML = pr ? fmtHtml(pr) : '';
+  var pvSale = document.getElementById('pvSaleLabel');
+  if (pvSale) pvSale.textContent = (siteDiscount && siteDiscount.active && siteDiscount.label) ? siteDiscount.label : '';
 }
 
 function pvPickSize(btn, size) {
@@ -2566,6 +2586,15 @@ if (FIREBASE_READY) {
   firebase.firestore().collection('settings').doc('siteConfig').get().then(function(doc) {
     if (doc.exists) {
       var d = doc.data();
+      var now = Date.now();
+      var expiry = d && d.discountExpiry ? new Date(d.discountExpiry).getTime() : null;
+
+      // If expiry exists and is already in the past, treat it as expired (do not enable)
+      if (expiry && now >= expiry) {
+        // expired — leave siteDiscount inactive
+        return;
+      }
+
       if (d.discountActive && d.discountPercent > 0) {
         siteDiscount = { active: true, percent: d.discountPercent, label: d.discountLabel || '' };
         var banner = document.getElementById('saleBanner');
@@ -2573,6 +2602,18 @@ if (FIREBASE_READY) {
         banner.textContent = '🔥 ' + (d.discountLabel || 'SPECIAL SALE') + ' — ' + pct + '% OFF ALL ITEMS';
         banner.style.display = 'block';
         renderCategories();
+
+        // If an expiry is set in the future, schedule auto-hide when it elapses
+        if (expiry && expiry > now) {
+          var ms = expiry - now;
+          // setTimeout max on browsers is capped ~2^31-1; clamp to safe range
+          var clamp = Math.min(ms, 2147483647);
+          setTimeout(function() {
+            siteDiscount.active = false;
+            var b = document.getElementById('saleBanner'); if (b) b.style.display = 'none';
+            renderCategories();
+          }, clamp);
+        }
       }
     }
   }).catch(function() {});
