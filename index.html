@@ -146,12 +146,7 @@
     }
     /* ── Sale Banner ── */
     #saleBanner{display:none;background:#C6011F;color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
-    /* Small sale badge shown on product cards */
-    .prod-card{position:relative}
-    .prod-badge{position:absolute;top:10px;left:10px;z-index:20}
-    .sale-badge{background:#C6011F;color:#fff;font-size:11px;font-weight:800;padding:6px 8px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);text-transform:uppercase}
-    /* Quick-view sale label */
-    .pv-sale-label{margin-top:8px;font-size:13px;font-weight:800;color:#C6011F}
+    /* Storefront sale banner only — no per-item label */
     .hero-marquee{position:relative;overflow:hidden;background:#0a0a0a;border-top:1px solid rgba(255,255,255,.1);width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 22s linear infinite;animation:marqueeScroll 22s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -905,7 +900,6 @@
         <h2 class="pv-name" id="pvName"></h2>
         <div class="pv-price-row">
           <div class="pv-price" id="pvPrice"></div>
-          <div class="pv-sale-label" id="pvSaleLabel"></div>
         </div>
         <div class="pv-sub" id="pvSub"></div>
         <hr class="pv-divider">
@@ -1757,13 +1751,11 @@ function appendGalleryItems(catKey, from, to) {
     const name   = entry.name || cleanImageName(src);
     const card   = document.createElement('div');
     card.className = 'prod-card';
-    var badgeHtml = (siteDiscount && siteDiscount.active && siteDiscount.label) ? '<div class="prod-badge"><span class="sale-badge">' + esc(siteDiscount.label) + '</span></div>' : '';
     card.innerHTML =
       '<div class="prod-img-wrap" onclick="openLightbox(\'' + catKey + '\',' + i + ')">' +
         '<img src="' + esc(src) + '" alt="' + esc(name) + '" decoding="async" onload="markImageReady(this)">' +
       '</div>' +
       '<div class="prod-body">' +
-        badgeHtml +
         '<div class="prod-name">' + name + '</div>' +
         '<div class="prod-sub">' + cat.subtitle + '</div>' +
         '<div class="prod-price">' + fmtHtml(itemPr) + '</div>' +
@@ -1822,8 +1814,6 @@ function updateLightboxImage() {
   document.getElementById('lbCounter').textContent = (activeLightboxIndex + 1) + ' / ' + cat.images.length;
   document.getElementById('pvName').textContent = name.toUpperCase();
   document.getElementById('pvPrice').innerHTML = pr ? fmtHtml(pr) : '';
-  var pvSale = document.getElementById('pvSaleLabel');
-  if (pvSale) pvSale.textContent = (siteDiscount && siteDiscount.active && siteDiscount.label) ? siteDiscount.label : '';
 }
 
 function pvPickSize(btn, size) {
