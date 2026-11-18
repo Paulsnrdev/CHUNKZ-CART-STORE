@@ -241,6 +241,16 @@
       .mob-menu{display:flex}
       .nav-links{display:none}
     }
+    /* Small phones (360–480px): the desktop-sized logo, wordmark and 32px
+       gutters push the hamburger off-screen and wrap the cart label. */
+    @media(max-width:480px){
+      .hdr{padding:0 16px}
+      .logo{gap:8px}
+      .logo-img-wrap{width:42px;height:42px}
+      .logo-name{font-size:20px;letter-spacing:3px}
+      .hdr-right{gap:12px}
+      .cart-btn{padding:8px 14px;white-space:nowrap}
+    }
 
     /* ── Gallery Modal ── */
     .gallery-modal{display:none;position:fixed;inset:0;z-index:350;background:var(--gray-light);flex-direction:column;overflow-y:auto}
