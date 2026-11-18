@@ -112,14 +112,10 @@
     .hero-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-repeat:no-repeat;opacity:0;transition:opacity 1.8s ease}
     .hero-bg.is-active{opacity:1}
     .hero-bg-1{background-image:url('Hero Images/IMG_7058.jpg');background-position:center 18%}
-    /* Blokecore: portrait 2-model shot. Full-bleed it would put the left
-       model under the darkest part of .hero-scrim, so on landscape screens
-       it's framed as a square anchored right with a feathered left edge,
-       keeping both faces clear of the headline column. */
-    .hero-bg-2::before{content:'';position:absolute;inset:0;background:url('Hero Images/Blokecore Model.webp') 64% 45%/cover no-repeat}
-    @media(min-width:781px) and (min-aspect-ratio:1/1){
-      .hero-bg-2::before{inset:0 0 auto auto;height:100%;aspect-ratio:1/1;background-position:center 58%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 38%);mask-image:linear-gradient(90deg,transparent 0,#000 38%)}
-    }
+    /* Blokecore: portrait 2-model shot, full-bleed like the other slides.
+       x=64% only matters on portrait screens (keeps both models in frame on
+       phones); y=52% only matters on landscape screens (faces + tees band). */
+    .hero-bg-2{background-image:url('Hero Images/Blokecore Model.webp');background-position:64% 52%}
     .hero-bg-3{background-image:url('Hero Images/IMG_7012.jpg');background-position:center 10%}
     /* Below 780px, this landscape 3-person photo would either crop awkwardly
        (cover) or leave a letterboxed seam (contain). Zoom in tight enough to
