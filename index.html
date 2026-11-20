@@ -72,6 +72,38 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap"></noscript>
+  <!-- ── Black Friday window: 27 Nov 2026 00:00:00 → 2 Dec 2026 23:59:59 WAT (UTC+1) ──
+       Runs before first paint so the right hero renders straight away (no flicker, no CLS).
+       ?preview=bf      force the sale on early: hero, prices, cart and checkout
+       ?preview=bf-end  same, but the sale "ends" 15s after load, to watch the live revert -->
+  <script>
+  (function (w, d) {
+    var mode = new URLSearchParams(w.location.search).get('preview');
+    var bf = {
+      start:   Date.parse('2026-11-27T00:00:00+01:00'),
+      end:     mode === 'bf-end' ? Date.now() + 15000 : Date.parse('2026-12-02T23:59:59+01:00'),
+      preview: mode === 'bf' || mode === 'bf-end',
+      active:  false,
+      _subs:   [],
+      isLive: function (now) {
+        now = now || Date.now();
+        return now < bf.end && (bf.preview || now >= bf.start);
+      },
+      onChange: function (fn) { bf._subs.push(fn); },
+      // Re-checks the window; flips html.bf-on and notifies subscribers only on a real change.
+      sync: function () {
+        var on = bf.isLive();
+        if (on === bf.active) return;
+        bf.active = on;
+        d.documentElement.classList.toggle('bf-on', on);
+        bf._subs.forEach(function (fn) { try { fn(on); } catch (e) { console.error(e); } });
+      }
+    };
+    bf.active = bf.isLive();
+    if (bf.active) d.documentElement.classList.add('bf-on');
+    w.ChunkzBF = bf;
+  })(window, document);
+  </script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -147,6 +179,63 @@
     /* ── Sale Banner ── */
     #saleBanner{display:none;background:#C6011F;color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:1px;position:sticky;top:82px;z-index:90}
     /* Storefront sale banner only — no per-item label */
+
+    /* ── Black Friday hero — visible only while html.bf-on (set in <head> before first paint) ── */
+    #black-friday-hero{display:none}
+    html.bf-on #black-friday-hero{display:block}
+    html.bf-on #default-hero{display:none}
+    html.bf-on #saleBanner{display:none!important} /* tiered BF pricing replaces any admin "% OFF" sale */
+    .bf-hero{--bf-red:#961820;position:relative;overflow:hidden;isolation:isolate;background:#0A0A0A;color:#fff}
+    .bf-hero::before{content:'';position:absolute;inset:0;z-index:1;opacity:.05;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    /* Darkens the model photos (reused .hero-bg layers) so the text and countdown stay readable */
+    .bf-scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 12% 108%,rgba(150,24,32,.42),transparent 70%),linear-gradient(100deg,rgba(6,6,6,.96) 0%,rgba(6,6,6,.84) 34%,rgba(6,6,6,.42) 62%,rgba(6,6,6,.2) 85%),linear-gradient(0deg,rgba(6,6,6,.8) 0%,transparent 45%)}
+    .bf-inner{position:relative;z-index:3;min-height:75vh;max-width:1400px;width:100%;margin:0 auto;padding:96px 32px 56px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left}
+    .bf-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--bf-red);background:rgba(150,24,32,.18);font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}
+    .bf-headline{font-family:'Anton',Impact,'Segoe UI',sans-serif;font-weight:400;font-size:clamp(48px,7.4vw,112px);line-height:.92;letter-spacing:1px;text-transform:uppercase;margin-bottom:22px}
+    .bf-hl-line{display:block}
+    .bf-hl-slab{display:inline-block;font-style:normal;background:var(--bf-red);padding:.06em .3em 0;margin-top:.1em}
+    .bf-sub{font-size:17px;line-height:1.6;color:#e2e2e2;max-width:440px;margin-bottom:30px;text-wrap:balance}
+    .bf-countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%;max-width:500px;margin-bottom:34px}
+    .bf-unit{border:1.5px solid var(--bf-red);border-radius:12px;background:rgba(8,8,8,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:inset 0 0 24px rgba(150,24,32,.2);padding:18px 6px 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .bf-num{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;font-size:clamp(30px,5vw,54px);font-weight:800;line-height:1;letter-spacing:1px}
+    .bf-label{font-size:11px;font-weight:700;letter-spacing:2.5px;color:#a8a8a8;text-transform:uppercase}
+    .bf-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--bf-red);color:#fff;text-decoration:none;font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:17px 42px;border-radius:30px;box-shadow:0 10px 30px rgba(150,24,32,.35);transition:transform .2s,background .2s,box-shadow .2s}
+    .bf-cta:hover{background:#ad1d26;transform:translateY(-2px);box-shadow:0 14px 36px rgba(150,24,32,.5)}
+    .bf-cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+    .bf-badge,.bf-headline,.bf-sub,.bf-countdown,.bf-cta{animation:heroRise .7s ease both}
+    .bf-headline{animation-delay:.08s}.bf-sub{animation-delay:.16s}.bf-countdown{animation-delay:.24s}.bf-cta{animation-delay:.32s}
+    @media(prefers-reduced-motion:reduce){.bf-badge,.bf-headline,.bf-sub,.bf-countdown,.bf-cta{animation:none!important}}
+    @media(max-width:1024px){.bf-inner{padding-top:112px}}
+    /* Laptop-height screens (e.g. 1366x768): sizes scale with screen height so "Shop the Sale" stays above the fold */
+    @media(min-width:601px) and (max-height:820px){
+      .bf-inner{padding-top:40px;padding-bottom:40px}
+      .bf-badge{margin-bottom:16px}
+      .bf-headline{font-size:clamp(44px,10vh,84px);margin-bottom:14px}
+      .bf-sub{max-width:560px;margin-bottom:18px}
+      .bf-countdown{max-width:460px;margin-bottom:20px}
+      .bf-unit{padding:10px 6px 8px;gap:5px}
+      .bf-num{font-size:clamp(26px,5.2vh,42px)}
+      .bf-cta{padding:15px 38px}
+    }
+    @media(max-width:600px){
+      .bf-inner{min-height:75vh;padding:64px 16px 40px}
+      .bf-scrim{background:radial-gradient(ellipse 90% 40% at 50% 108%,rgba(150,24,32,.4),transparent 70%),linear-gradient(0deg,rgba(6,6,6,.95) 0%,rgba(6,6,6,.86) 48%,rgba(6,6,6,.45) 75%,rgba(6,6,6,.3) 100%)}
+      .bf-badge{font-size:10px;letter-spacing:2px;padding:7px 14px;margin-bottom:22px}
+      .bf-headline{font-size:clamp(46px,14vw,64px);margin-bottom:18px}
+      .bf-sub{font-size:15px;margin-bottom:28px}
+      .bf-countdown{gap:8px;margin-bottom:30px}
+      .bf-unit{padding:14px 4px 11px;border-radius:10px;gap:6px}
+      .bf-num{font-size:clamp(26px,8vw,34px)}
+      .bf-label{font-size:9px;letter-spacing:1.5px}
+      .bf-cta{width:100%}
+    }
+
+    /* ── Sale pricing: original struck through in grey, sale price in bold. No % badges by design. ── */
+    .price-sale{display:inline-flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;row-gap:2px}
+    .price-was{color:#999;font-weight:500;font-size:.85em;text-decoration:line-through;text-decoration-thickness:1px}
+    .price-now{color:var(--accent);font-weight:800;text-decoration:none}
+    .c-item-sub .price-was{font-size:1em}
+
     .hero-marquee{position:relative;overflow:hidden;background:#0a0a0a;border-top:1px solid rgba(255,255,255,.1);width:100%;display:block}
     .hero-marquee-track{display:flex;min-width:max-content;flex-wrap:nowrap;-webkit-animation:marqueeScroll 22s linear infinite;animation:marqueeScroll 22s linear infinite;will-change:transform}
     .hero-marquee-track:hover{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -532,7 +621,7 @@
 </div>
 
 <!-- ══════════════ HERO ══════════════ -->
-<section class="hero" role="img" aria-label="Chunkz streetwear campaign photos, alternating between the jersey collection and the white-tee collection">
+<section class="hero" id="default-hero" role="img" aria-label="Chunkz streetwear campaign photos, alternating between the jersey collection and the white-tee collection">
   <div class="hero-bg hero-bg-1 is-active" id="heroBg1"></div>
   <div class="hero-bg hero-bg-2" id="heroBg2"></div>
   <div class="hero-scrim" aria-hidden="true"></div>
@@ -548,6 +637,92 @@
     </div>
   </div>
 </section>
+
+<!-- ══════════════ BLACK FRIDAY HERO ══════════════
+     Hidden by default; html.bf-on (set in <head>) swaps it in for #default-hero. -->
+<section id="black-friday-hero" class="bf-hero" aria-labelledby="bfHeadline">
+  <div class="hero-bg hero-bg-1 is-active" aria-hidden="true"></div>
+  <div class="hero-bg hero-bg-2" aria-hidden="true"></div>
+  <div class="bf-scrim" aria-hidden="true"></div>
+  <div class="bf-inner">
+    <p class="bf-badge">Black Friday <span aria-hidden="true">&bull;</span> 5 Days Only</p>
+    <h1 class="bf-headline" id="bfHeadline"><span class="bf-hl-line">Black Friday</span> <em class="bf-hl-slab">Sale</em></h1>
+    <p class="bf-sub">Exclusive markdowns across the store until Dec&nbsp;2.</p>
+    <div class="bf-countdown" role="timer" aria-label="Time left in the Black Friday sale">
+      <div class="bf-unit"><span class="bf-num" id="bfDays">00</span><span class="bf-label">Days</span></div>
+      <div class="bf-unit"><span class="bf-num" id="bfHours">00</span><span class="bf-label">Hours</span></div>
+      <div class="bf-unit"><span class="bf-num" id="bfMins">00</span><span class="bf-label">Mins</span></div>
+      <div class="bf-unit"><span class="bf-num" id="bfSecs">00</span><span class="bf-label">Secs</span></div>
+    </div>
+    <a href="#products" class="bf-cta" id="bfShopCta">Shop the Sale <span aria-hidden="true">&rarr;</span></a>
+  </div>
+</section>
+<script>
+/* Black Friday countdown. Inline so the digits are filled in on first paint.
+   Ticks on each whole second (self-correcting, never drifts or skips), switches the
+   sale ON live at the start if the page is already open, and OFF live at 00:00:00:00. */
+(function (bf) {
+  var MAX_DELAY = 2147483647; // setTimeout ceiling (~24.8 days)
+  var els = ['bfDays', 'bfHours', 'bfMins', 'bfSecs'].map(function (id) { return document.getElementById(id); });
+  var timer = null;
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function render(msLeft) {
+    var s = Math.max(0, Math.ceil(msLeft / 1000));
+    var parts = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+    for (var i = 0; i < 4; i++) {
+      var txt = pad(parts[i]);
+      if (els[i].textContent !== txt) els[i].textContent = txt;
+    }
+  }
+
+  function tick() {
+    var left = bf.end - Date.now();
+    render(left);
+    if (left <= 0) { timer = null; bf.sync(); return; }   // reached zero: revert hero + prices
+    timer = setTimeout(tick, (left % 1000 || 1000) + 15);  // wake just after the next whole second
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    timer = null;
+    bf.sync();
+    var now = Date.now();
+    if (bf.active) return tick();
+    if (now < bf.start) timer = setTimeout(schedule, Math.min(bf.start - now, MAX_DELAY));
+  }
+
+  // Background tabs throttle or freeze timers, so re-check the moment the tab is visible again.
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) schedule(); });
+
+  // "Shop the Sale": smooth-scroll to the product grid, clearing the sticky header.
+  document.getElementById('bfShopCta').addEventListener('click', function (e) {
+    var target = document.getElementById('products');
+    if (!target) return;
+    e.preventDefault();
+    var hdr = document.querySelector('header');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.pageYOffset - (hdr ? hdr.offsetHeight : 0) - 16,
+      behavior: reduce ? 'auto' : 'smooth'
+    });
+  });
+
+  // Same model photos and 10s crossfade as the default hero (that hero's own code is untouched).
+  var photos = document.querySelectorAll('#black-friday-hero .hero-bg');
+  if (photos.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var shown = 0;
+    setInterval(function () {
+      photos[shown].classList.remove('is-active');
+      shown = (shown + 1) % photos.length;
+      photos[shown].classList.add('is-active');
+    }, 10000);
+  }
+
+  schedule();
+})(window.ChunkzBF);
+</script>
 <div class="hero-marquee">
   <div class="hero-marquee-track">
     <span>All items available in all colours &bull; Place your order now</span>
@@ -1589,13 +1764,38 @@ async function detectCountry() {
   renderCategories();
 }
 
+/* Returns the visitor's price plus `ngnRef` (the item's Naira price), which picks
+   the Black Friday tier for every currency. Returns a copy, never the catalog object. */
 function getPrice(cat) {
   if (!cat.prices) return null;
-  return cat.prices[userCountry] || cat.prices['US'];
+  var p = cat.prices[userCountry] || cat.prices['US'];
+  if (!p) return null;
+  var ng = cat.prices['NG'];
+  return {
+    amount:   p.amount,
+    currency: p.currency,
+    symbol:   p.symbol,
+    ngnRef:   ng ? ng.amount : Math.round(p.amount * (PROMO_RATES[p.currency] || 1))
+  };
+}
+
+/* ── Black Friday tiered pricing ──
+   ≥ ₦25,000 → 20% off · below ₦25,000 → 17% off. The tier is decided on the Naira
+   price so every currency gets the same rate. Rounded to whole units (₦XX,XXX). */
+const BF_TIER_NGN = 25000;
+function bfSalePrice(amount, ngnRef) {
+  return Math.round(amount * (ngnRef >= BF_TIER_NGN ? 0.80 : 0.83));
+}
+function salePriceHtml(symbol, was, now) {
+  return '<span class="price-sale">' +
+    '<del class="price-was"><span class="sr-only">Original price </span>' + symbol + was.toLocaleString() + '</del>' +
+    '<ins class="price-now"><span class="sr-only">Sale price </span>' + symbol + now.toLocaleString() + '</ins>' +
+  '</span>';
 }
 
 function fmt(priceObj) {
   if (!priceObj) return 'Price on request';
+  if (ChunkzBF.active) return priceObj.symbol + bfSalePrice(priceObj.amount, priceObj.ngnRef).toLocaleString();
   var base = priceObj.symbol + priceObj.amount.toLocaleString();
   if (siteDiscount.active && siteDiscount.percent > 0) {
     var discAmount = Math.round(priceObj.amount * (1 - siteDiscount.percent / 100));
@@ -1606,6 +1806,7 @@ function fmt(priceObj) {
 
 function fmtHtml(priceObj) {
   if (!priceObj) return '<span style="color:#999;font-size:.85em;font-weight:500">Price on request</span>';
+  if (ChunkzBF.active) return salePriceHtml(priceObj.symbol, priceObj.amount, bfSalePrice(priceObj.amount, priceObj.ngnRef));
   var base = priceObj.symbol + priceObj.amount.toLocaleString();
   if (siteDiscount.active && siteDiscount.percent > 0) {
     var discAmount = Math.round(priceObj.amount * (1 - siteDiscount.percent / 100));
@@ -1768,7 +1969,7 @@ function appendGalleryItems(catKey, from, to) {
       '<div class="prod-body">' +
         '<div class="prod-name">' + name + '</div>' +
         '<div class="prod-sub">' + cat.subtitle + '</div>' +
-        '<div class="prod-price">' + fmtHtml(itemPr) + '</div>' +
+        '<div class="prod-price" data-i="' + i + '">' + fmtHtml(itemPr) + '</div>' +
         (itemPr ? '<button class="prod-atc" onclick="addToCart(\'' + catKey + '\',' + i + ')">Add to Cart</button>' : '<button class="prod-atc" style="opacity:.4;cursor:not-allowed" disabled>Add to Cart</button>') +
       '</div>';
     const img = card.querySelector('img');
@@ -1869,6 +2070,35 @@ document.addEventListener('keydown', function(e) {
 /* ═══════════════════════════════════════════════════
    CART OPERATIONS
 ═══════════════════════════════════════════════════ */
+const XXL_SURCHARGE = { NGN: 1500, GBP: 2, USD: 2.5, CAD: 3 };
+
+/* Unit price charged for a cart line — always the same price the shop displays:
+   Black Friday price while that sale is live, else the admin "Sale Discount" price
+   (catalog-admin) if one is on, else full price. The XXL surcharge is never discounted.
+   Each line's `price` is kept equal to this, so checkout totals, Paystack, Formspree,
+   Firestore and promo validation all read the live figure without further changes. */
+function cartUnitPrice(i) {
+  var unit = i.basePrice;
+  if (ChunkzBF.active) {
+    unit = bfSalePrice(i.basePrice, i.ngnRef);
+  } else if (siteDiscount.active && siteDiscount.percent > 0) {
+    unit = Math.round(i.basePrice * (1 - siteDiscount.percent / 100)); // same rounding as fmtHtml
+  }
+  return unit + (i.surcharge || 0);
+}
+
+function repriceCart() {
+  cart.forEach(function(i) {
+    if (typeof i.basePrice !== 'number') {
+      // Carts saved before sale pricing existed stored only `price` (full price + any XXL surcharge)
+      i.surcharge = i.size === 'XXL' ? (XXL_SURCHARGE[i.currency] || XXL_SURCHARGE['USD']) : 0;
+      i.basePrice = i.price - i.surcharge;
+    }
+    if (typeof i.ngnRef !== 'number') i.ngnRef = Math.round(i.basePrice * (PROMO_RATES[i.currency] || 1));
+    i.price = cartUnitPrice(i);
+  });
+}
+
 /* ─ Size picker state ─ */
 var _szPending  = null;
 var _szSelected = null;
@@ -1938,24 +2168,27 @@ function _doAddToCart(catKey, imgIndex, size) {
 
   if (!pr) { showToast('Price not available — contact us'); return; }
 
-  const XXL_SURCHARGE = { NGN: 1500, GBP: 2, USD: 2.5, CAD: 3 };
   const surcharge = size === 'XXL' ? (XXL_SURCHARGE[pr.currency] || XXL_SURCHARGE['USD']) : 0;
 
   const existing = cart.find(function(i) { return i.key === itemKey; });
   if (existing) {
     existing.qty++;
   } else {
-    cart.push({
-      key:      itemKey,
-      pid:      catKey,
-      src:      itemSrc,
-      name:     itemName,
-      size:     size,
-      price:    pr.amount + surcharge,
-      symbol:   pr.symbol,
-      currency: pr.currency,
-      qty:      1
-    });
+    const item = {
+      key:       itemKey,
+      pid:       catKey,
+      src:       itemSrc,
+      name:      itemName,
+      size:      size,
+      basePrice: pr.amount,  // full catalogue price; the sale price is always derived from this
+      surcharge: surcharge,
+      ngnRef:    pr.ngnRef,  // Naira price that picks the Black Friday tier
+      symbol:    pr.symbol,
+      currency:  pr.currency,
+      qty:       1
+    };
+    item.price = cartUnitPrice(item);
+    cart.push(item);
   }
   saveCart();
   refreshCartUI();
@@ -1997,6 +2230,7 @@ function loadCart() {
     const raw = localStorage.getItem('chunkz_v3_cart');
     if (raw) cart = JSON.parse(raw);
   } catch(e) { cart = []; }
+  repriceCart(); // a cart saved before/during the sale picks up the price that applies right now
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2006,11 +2240,14 @@ function buildCartHTML() {
   if (!cart.length) return '<div class="cart-empty-msg">🛍️<br>Your cart is empty</div>';
   const sym = cartSymbol();
   return cart.map(function(i) {
+    var full = i.basePrice + (i.surcharge || 0);
+    var unit = (i.price < full ? '<del class="price-was">' + sym + full.toLocaleString() + '</del> ' : '') +
+               sym + i.price.toLocaleString();
     return '<div class="c-item">' +
       '<div>' +
         '<div class="c-item-name">' + i.name + '</div>' +
         (i.size ? '<div class="c-item-size">Size: ' + i.size + '</div>' : '') +
-        '<div class="c-item-sub">' + sym + i.price.toLocaleString() + ' × ' + i.qty + '</div>' +
+        '<div class="c-item-sub">' + unit + ' × ' + i.qty + '</div>' +
       '</div>' +
       '<div class="c-item-right">' +
         '<div class="c-item-price">' + sym + (i.price * i.qty).toLocaleString() + '</div>' +
@@ -2077,13 +2314,7 @@ function closeDrawer() {
 /* ═══════════════════════════════════════════════════
    CHECKOUT MODAL
 ═══════════════════════════════════════════════════ */
-function openCheckout() {
-  if (!cart.length) { showToast('Your cart is empty!'); return; }
-  document.getElementById('formState').style.display    = 'block';
-  document.getElementById('successState').style.display = 'none';
-  document.getElementById('formErr').style.display      = 'none';
-  document.getElementById('payRetryMsg').style.display  = 'none';
-
+function renderCheckoutItems() {
   const sym = cartSymbol();
   var hasXXL = cart.some(function(i) { return i.size === 'XXL'; });
   document.getElementById('osSummaryItems').innerHTML = cart.map(function(i) {
@@ -2092,6 +2323,18 @@ function openCheckout() {
       '<span>' + sym + (i.price * i.qty).toLocaleString() + '</span></div>';
   }).join('') + (hasXXL ? '<div style="font-size:11px;color:#888;margin-top:6px">* XXL size includes a size surcharge</div>' : '');
   document.getElementById('osSummaryTotal').textContent = sym + cartTotal().toLocaleString();
+}
+
+function openCheckout() {
+  if (!cart.length) { showToast('Your cart is empty!'); return; }
+  ChunkzBF.sync();         // catch a sale start/end that a sleeping tab missed, before showing totals
+  checkAdminSaleExpiry();
+  document.getElementById('formState').style.display    = 'block';
+  document.getElementById('successState').style.display = 'none';
+  document.getElementById('formErr').style.display      = 'none';
+  document.getElementById('payRetryMsg').style.display  = 'none';
+
+  renderCheckoutItems();
   // Reset delivery zone, then populate options based on detected country
   document.getElementById('osDeliveryRow').style.display  = 'none';
   document.getElementById('osDeliveryNote').style.display = 'none';
@@ -2278,6 +2521,8 @@ function redeemPromo(code, orderId, email) {
 ═══════════════════════════════════════════════════ */
 async function submitOrder(e) {
   e.preventDefault();
+  ChunkzBF.sync();         // never charge a stale price if a sale started/ended while the form was open
+  checkAdminSaleExpiry();
   const name    = document.getElementById('cName').value.trim();
   const email   = document.getElementById('cEmail').value.trim();
   const phone   = document.getElementById('cPhone').value.trim();
@@ -2332,6 +2577,12 @@ async function submitOrder(e) {
     order_total:       sym + finalTotal.toLocaleString() + ' ' + currCode,
     promo_code:        appliedPromo ? appliedPromo.code : '',
     promo_discount:    appliedPromo ? (sym + promoDiscount.toLocaleString()) : '',
+    // Tells the merchant why item prices are below catalogue; flags orders placed via a ?preview= link
+    sale_pricing:      ChunkzBF.active
+                         ? (Date.now() < ChunkzBF.start ? 'Black Friday (PREVIEW LINK, sale not started)' : 'Black Friday')
+                     : (siteDiscount.active && siteDiscount.percent > 0)
+                         ? (siteDiscount.label || 'Sale') + ' (' + siteDiscount.percent + '% off)'
+                         : '',
     currency:          currCode,
     order_date:        new Date().toLocaleString('en-NG')
   };
@@ -2483,13 +2734,13 @@ window.addEventListener('resize', function() {
   if (window.innerWidth > 1040) closeMobileNav();
 });
 
-(function() {
-  var hdr  = document.querySelector('header');
-  var hero = document.querySelector('.hero');
-  window.addEventListener('scroll', function() {
-    hdr.classList.toggle('scrolled', hero.getBoundingClientRect().bottom <= 0);
-  }, { passive: true });
-})();
+/* Header turns white once the visible hero (default or Black Friday) has scrolled away */
+var _hdrEl = document.querySelector('header');
+function updateHeaderTheme() {
+  var hero = document.getElementById(ChunkzBF.active ? 'black-friday-hero' : 'default-hero');
+  if (hero) _hdrEl.classList.toggle('scrolled', hero.getBoundingClientRect().bottom <= 0);
+}
+window.addEventListener('scroll', updateHeaderTheme, { passive: true });
 
 /* ═══════════════════════════════════════════════════
    CONTACT FORM
@@ -2554,6 +2805,46 @@ async function sendContactMessage(e) {
 })();
 
 /* ═══════════════════════════════════════════════════
+   BLACK FRIDAY — LIVE START / END
+   ChunkzBF (defined in <head>) flips html.bf-on, which swaps the heroes in CSS.
+   This brings every price on screen, the cart and an open checkout into line,
+   with no reload.
+═══════════════════════════════════════════════════ */
+function refreshOpenPrices() {
+  var cat = catalog[activeGalleryCat];
+  if (!cat) return;
+  if (document.getElementById('galleryModal').classList.contains('open')) {
+    document.querySelectorAll('#galleryGrid .prod-price[data-i]').forEach(function(el) {
+      var entry = cat.images[+el.getAttribute('data-i')];
+      if (entry) el.innerHTML = fmtHtml(getPrice({ prices: imgPrices(cat, entry) }));
+    });
+  }
+  if (document.getElementById('pvOverlay').classList.contains('open')) {
+    var entry = cat.images[activeLightboxIndex];
+    var pr    = entry ? getPrice({ prices: imgPrices(cat, entry) }) : null;
+    document.getElementById('pvPrice').innerHTML = pr ? fmtHtml(pr) : '';
+  }
+}
+
+/* Any sale starting or ending (Black Friday or the admin Sale Discount):
+   re-price the cart and everything showing a price. */
+function refreshPricing() {
+  repriceCart();
+  saveCart();
+  refreshCartUI();
+  refreshOpenPrices();
+  if (document.getElementById('checkoutModal').classList.contains('on')) {
+    renderCheckoutItems();
+    updateDeliveryFee(); // re-applies delivery fee + promo on top of the new subtotal
+  }
+}
+
+ChunkzBF.onChange(function() {
+  refreshPricing();
+  updateHeaderTheme();
+});
+
+/* ═══════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════ */
 loadCart();
@@ -2582,6 +2873,25 @@ if (FIREBASE_READY) {
   }).catch(function() {});
 }
 
+// Admin "Sale Discount" (catalog-admin): applies to displayed AND charged prices.
+function endAdminSale() {
+  siteDiscount.active = false;
+  var b = document.getElementById('saleBanner'); if (b) b.style.display = 'none';
+  renderCategories();
+  refreshPricing();
+}
+// Ends the sale once its expiry passes, otherwise re-arms itself. Also called at checkout,
+// so a tab left asleep past the expiry never charges the sale price.
+var _adminSaleTimer = null;
+function checkAdminSaleExpiry() {
+  if (!siteDiscount.active || !siteDiscount.expiry) return;
+  var left = siteDiscount.expiry - Date.now();
+  if (left <= 0) { clearTimeout(_adminSaleTimer); endAdminSale(); return; }
+  clearTimeout(_adminSaleTimer);
+  // timers can wake a hair early, and are capped at ~24.8 days, so re-check rather than assume
+  _adminSaleTimer = setTimeout(checkAdminSaleExpiry, Math.min(left + 50, 2147483647));
+}
+
 // Load discount settings from Firestore and apply to store prices.
 if (FIREBASE_READY) {
   firebase.firestore().collection('settings').doc('siteConfig').get().then(function(doc) {
@@ -2597,24 +2907,14 @@ if (FIREBASE_READY) {
       }
 
       if (d.discountActive && d.discountPercent > 0) {
-        siteDiscount = { active: true, percent: d.discountPercent, label: d.discountLabel || '' };
+        siteDiscount = { active: true, percent: d.discountPercent, label: d.discountLabel || '', expiry: expiry };
         var banner = document.getElementById('saleBanner');
         var pct    = Math.round(d.discountPercent);
         banner.textContent = '🔥 ' + (d.discountLabel || 'SPECIAL SALE') + ' — ' + pct + '% OFF ALL ITEMS';
         banner.style.display = 'block';
         renderCategories();
-
-        // If an expiry is set in the future, schedule auto-hide when it elapses
-        if (expiry && expiry > now) {
-          var ms = expiry - now;
-          // setTimeout max on browsers is capped ~2^31-1; clamp to safe range
-          var clamp = Math.min(ms, 2147483647);
-          setTimeout(function() {
-            siteDiscount.active = false;
-            var b = document.getElementById('saleBanner'); if (b) b.style.display = 'none';
-            renderCategories();
-          }, clamp);
-        }
+        refreshPricing(); // cart + checkout now charge the sale price, not just display it
+        checkAdminSaleExpiry(); // if an expiry is set, end the sale automatically when it passes
       }
     }
   }).catch(function() {});
